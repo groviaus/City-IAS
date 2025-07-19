@@ -236,9 +236,16 @@ export default function HomePage() {
               initial="initial"
               animate="animate"
             >
-              <motion.div className="space-y-8" variants={fadeInUp}>
+              <motion.div
+                className="space-y-8 text-center lg:text-left"
+                variants={fadeInUp}
+              >
                 <div className="space-y-6">
-                  <motion.div variants={pulseAnimation} animate="animate">
+                  <motion.div
+                    variants={pulseAnimation}
+                    animate="animate"
+                    className="flex justify-center lg:justify-start"
+                  >
                     <Badge className="bg-red-100 text-red-800 hover:bg-red-200 text-sm px-4 py-2 shadow-md">
                       🚨 Admissions Open - Limited Seats Only!
                     </Badge>
@@ -246,7 +253,7 @@ export default function HomePage() {
 
                   <motion.h1
                     id="hero-heading"
-                    className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight"
+                    className="text-5xl sm:text-5xl lg:text-6xl font-bold leading-tight"
                     variants={fadeInUp}
                   >
                     Your <span className="text-blue-600">IAS Dream</span>{" "}
@@ -256,7 +263,7 @@ export default function HomePage() {
                   </motion.h1>
 
                   <motion.p
-                    className="text-xl text-gray-700 leading-relaxed max-w-2xl"
+                    className="text-xl text-gray-700 leading-relaxed max-w-2xl mx-auto lg:mx-0"
                     variants={fadeInUp}
                   >
                     <strong>What if this is your last chance?</strong> Every
@@ -281,13 +288,13 @@ export default function HomePage() {
                 </div>
 
                 <motion.div
-                  className="flex flex-col sm:flex-row gap-4"
+                  className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
                   variants={fadeInUp}
                 >
                   <motion.div {...scaleOnHover}>
                     <Button
                       size="lg"
-                      className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-lg px-8 shadow-lg"
+                      className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-lg px-8 shadow-lg w-full sm:w-auto"
                     >
                       <Target className="mr-2 h-5 w-5" />
                       Secure Your Seat Now
@@ -297,7 +304,7 @@ export default function HomePage() {
                     <Button
                       variant="outline"
                       size="lg"
-                      className="text-lg px-8 bg-transparent border-2 border-blue-200 hover:bg-blue-50"
+                      className="text-lg px-8 bg-transparent border-2 border-blue-200 hover:bg-blue-50 w-full sm:w-auto"
                     >
                       <Play className="mr-2 h-5 w-5" />
                       Watch Success Stories
@@ -386,25 +393,27 @@ export default function HomePage() {
                 </p>
               </motion.div>
               <motion.div
-                className="flex items-center space-x-4 mt-4 md:mt-0"
+                className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-4 md:mt-0"
                 variants={fadeInUp}
               >
-                {[
-                  { value: "23", label: "Days Left" },
-                  { value: "14", label: "Hours" },
-                  { value: "35", label: "Minutes" },
-                ].map((time, index) => (
-                  <motion.div
-                    key={index}
-                    className="text-center"
-                    whileHover={{ scale: 1.1 }}
-                  >
-                    <div className="text-2xl font-bold">{time.value}</div>
-                    <div className="text-xs">{time.label}</div>
-                  </motion.div>
-                ))}
+                <div className="flex items-center space-x-4">
+                  {[
+                    { value: "23", label: "Days Left" },
+                    { value: "14", label: "Hours" },
+                    { value: "35", label: "Minutes" },
+                  ].map((time, index) => (
+                    <motion.div
+                      key={index}
+                      className="text-center"
+                      whileHover={{ scale: 1.1 }}
+                    >
+                      <div className="text-2xl font-bold">{time.value}</div>
+                      <div className="text-xs">{time.label}</div>
+                    </motion.div>
+                  ))}
+                </div>
                 <motion.div {...scaleOnHover}>
-                  <Button className="bg-white text-red-600 hover:bg-gray-100 ml-4 shadow-lg">
+                  <Button className="bg-white text-red-600 hover:bg-gray-100 shadow-lg w-full sm:w-auto">
                     Apply Now
                   </Button>
                 </motion.div>
@@ -1245,7 +1254,10 @@ export default function HomePage() {
               whileInView="animate"
               viewport={{ once: true }}
             >
-              <motion.div className="space-y-8" variants={fadeInUp}>
+              <motion.div
+                className="space-y-8 text-center lg:text-left"
+                variants={fadeInUp}
+              >
                 <div className="space-y-4">
                   <h2 className="text-3xl sm:text-4xl font-bold">
                     Your <span className="text-amber-300">IAS Dream</span> is
@@ -1322,7 +1334,7 @@ export default function HomePage() {
 
       {/* Sticky CTA Button for Mobile */}
       <motion.div
-        className="fixed bottom-4 rounded-full right-4 z-50 md:hidden"
+        className="fixed bottom-4 rounded-full bg-black right-4 z-50 md:hidden"
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ delay: 2 }}
@@ -1330,11 +1342,6 @@ export default function HomePage() {
         <motion.div
           animate={{
             scale: [1, 1.1, 1],
-            boxShadow: [
-              "0 4px 20px rgba(59, 130, 246, 0.3)",
-              "0 8px 30px rgba(59, 130, 246, 0.5)",
-              "0 4px 20px rgba(59, 130, 246, 0.3)",
-            ],
           }}
           transition={{
             duration: 2,
@@ -1344,7 +1351,7 @@ export default function HomePage() {
         >
           <Button
             size="lg"
-            className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-2xl rounded-full px-6"
+            className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-2xl rounded-full px-6 drop-shadow-2xl"
           >
             <Phone className="mr-2 h-5 w-5" />
             Apply Now
