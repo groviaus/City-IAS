@@ -136,7 +136,7 @@ export default function HomePage() {
         transition={{ duration: 0.6 }}
         className="sticky top-0 z-40 w-full border-b bg-white/95 backdrop-blur-md supports-[backdrop-filter]:bg-white/80 shadow-sm"
       >
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="container sm:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <motion.div
               className="flex items-center space-x-4"
@@ -229,7 +229,7 @@ export default function HomePage() {
           className="relative py-6 lg:py-10 overflow-hidden"
           aria-labelledby="hero-heading"
         >
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="container sm:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
               className="grid lg:grid-cols-2 gap-12 items-center"
               variants={staggerContainer}
@@ -369,7 +369,7 @@ export default function HomePage() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
         >
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="container sm:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
               className="flex flex-col md:flex-row items-center justify-between text-center md:text-left"
               variants={staggerContainer}
@@ -419,7 +419,7 @@ export default function HomePage() {
           aria-labelledby="courses-heading"
           id="courses"
         >
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="container sm:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
               className="text-center space-y-4 mb-16"
               initial={{ opacity: 0, y: 50 }}
@@ -584,7 +584,7 @@ export default function HomePage() {
 
         {/* Important Dates */}
         <section className="py-20 bg-gradient-to-br from-blue-50 to-indigo-50">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="container sm:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
               className="text-center space-y-4 mb-16"
               initial={{ opacity: 0, y: 50 }}
@@ -673,7 +673,7 @@ export default function HomePage() {
           aria-labelledby="faculty-heading"
           id="faculty"
         >
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="container sm:max-w-7xl  mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
               className="text-center space-y-4 mb-16"
               initial={{ opacity: 0, y: 50 }}
@@ -794,7 +794,7 @@ export default function HomePage() {
 
         {/* Testimonials Slider */}
         <section className="py-20 bg-gradient-to-br from-blue-50 to-indigo-50">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="container sm:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
               className="text-center space-y-4 mb-16"
               initial={{ opacity: 0, y: 50 }}
@@ -922,7 +922,7 @@ export default function HomePage() {
           aria-labelledby="facilities-heading"
           id="facilities"
         >
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="container sm:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
               className="text-center space-y-4 mb-16"
               initial={{ opacity: 0, y: 50 }}
@@ -1056,7 +1056,7 @@ export default function HomePage() {
 
         {/* FAQ Section */}
         <section className="py-20 bg-gradient-to-br from-blue-50 to-indigo-50">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="container sm:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
               className="text-center space-y-4 mb-16"
               initial={{ opacity: 0, y: 50 }}
@@ -1127,7 +1127,7 @@ export default function HomePage() {
 
         {/* Application Process */}
         <section className="py-20 bg-white">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="container sm:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
               className="text-center space-y-4 mb-16"
               initial={{ opacity: 0, y: 50 }}
@@ -1237,7 +1237,7 @@ export default function HomePage() {
           className="py-20 bg-gradient-to-r from-blue-600 to-indigo-700 text-white"
           id="contact"
         >
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="container sm:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
               className="grid lg:grid-cols-2 gap-12 items-center"
               variants={staggerContainer}
@@ -1322,7 +1322,7 @@ export default function HomePage() {
 
       {/* Sticky CTA Button for Mobile */}
       <motion.div
-        className="fixed bottom-4 right-4 z-50 md:hidden"
+        className="fixed bottom-4 rounded-full right-4 z-50 md:hidden"
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ delay: 2 }}
@@ -1354,7 +1354,7 @@ export default function HomePage() {
 
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-12">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="container sm:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             className="grid md:grid-cols-2 lg:grid-cols-4 gap-8"
             variants={staggerContainer}
