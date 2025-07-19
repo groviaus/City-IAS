@@ -44,6 +44,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion, useScroll, useSpring } from "framer-motion";
 import { useState, useEffect } from "react";
+import { NumberTicker } from "@/components/magicui/number-ticker";
 
 const fadeInUp = {
   initial: { opacity: 0, y: 60 },
@@ -263,7 +264,7 @@ export default function HomePage() {
                   </motion.h1>
 
                   <motion.p
-                    className="text-xl text-gray-700 leading-relaxed max-w-2xl mx-auto lg:mx-0"
+                    className="text-xl hidden text-gray-700 leading-relaxed max-w-2xl mx-auto lg:mx-0"
                     variants={fadeInUp}
                   >
                     <strong>What if this is your last chance?</strong> Every
@@ -318,31 +319,39 @@ export default function HomePage() {
                 >
                   {[
                     {
-                      number: "500+",
-                      label: "IAS Officers Created",
+                      number: 500,
+                      label: " Officers Created",
                       color: "text-blue-600",
+                      suffix: "+",
                     },
                     {
-                      number: "15+",
+                      number: 15,
                       label: "Years Experience",
                       color: "text-amber-600",
+                      suffix: "+",
                     },
                     {
-                      number: "98%",
+                      number: 98,
                       label: "Success Rate",
                       color: "text-green-600",
+                      suffix: "%",
                     },
                   ].map((stat, index) => (
                     <motion.div
                       key={index}
-                      className="text-center"
+                      className="text-center sm:p-4 p-2 bg-white/80 rounded-lg shadow"
                       variants={fadeInUp}
                       whileHover={{ scale: 1.1 }}
                     >
                       <div className={`text-3xl font-bold ${stat.color}`}>
-                        {stat.number}
+                        <NumberTicker
+                          value={stat.number}
+                          className={`sm:text-4xl text-3xl font-extrabold ${stat.color}`}
+                          delay={index * 0.2}
+                        />
+                        {stat.suffix}
                       </div>
-                      <div className="text-sm text-gray-600">{stat.label}</div>
+                      <div className="text-xs sm:text-sm text-gray-600">{stat.label}</div>
                     </motion.div>
                   ))}
                 </motion.div>
@@ -389,7 +398,9 @@ export default function HomePage() {
                   ⏰ Don't Wait! Seats Filling Fast
                 </h3>
                 <p className="text-orange-100">
-                  Batch starts 13th July 2025 - Only 50 seats available
+                  Batch starts 13th July 2025 - Only{" "}
+                  <NumberTicker value={50} className="text-orange-100" /> seats
+                  available
                 </p>
               </motion.div>
               <motion.div
@@ -398,22 +409,28 @@ export default function HomePage() {
               >
                 <div className="flex items-center space-x-4">
                   {[
-                    { value: "23", label: "Days Left" },
-                    { value: "14", label: "Hours" },
-                    { value: "35", label: "Minutes" },
+                    { value: 23, label: "Days Left" },
+                    { value: 14, label: "Hours" },
+                    { value: 35, label: "Minutes" },
                   ].map((time, index) => (
                     <motion.div
                       key={index}
                       className="text-center"
                       whileHover={{ scale: 1.1 }}
                     >
-                      <div className="text-2xl font-bold">{time.value}</div>
+                      <div className="text-2xl font-bold">
+                        <NumberTicker
+                          value={time.value}
+                          className="text-2xl font-bold text-white p-2 bg-white/20 backdrop-blur-sm rounded-lg"
+                          delay={index * 0.1}
+                        />
+                      </div>
                       <div className="text-xs">{time.label}</div>
                     </motion.div>
                   ))}
                 </div>
                 <motion.div {...scaleOnHover}>
-                  <Button className="bg-white text-red-600 hover:bg-gray-100 shadow-lg w-full sm:w-auto">
+                  <Button className="bg-white text-red-600 hover:bg-gray-100 shadow-lg w-full sm:w-auto sm:ml-5 md:text-xl sm:py-6">
                     Apply Now
                   </Button>
                 </motion.div>
@@ -458,7 +475,7 @@ export default function HomePage() {
             >
               {/* FREE Coaching Program */}
               <motion.div variants={fadeInUp}>
-                <Card className="relative hover:shadow-2xl transition-all duration-300 border-2 border-green-200 overflow-hidden backdrop-blur-sm bg-white/80 h-full pt-10">
+                <Card className="relative hover:shadow-2xl transition-all duration-300 border-2 border-green-200 overflow-hidden backdrop-blur-sm bg-white/80 h-full pt-10 sm:pt-6">
                   <div className="absolute top-0 right-0 bg-green-500 text-white px-4 py-2 text-sm font-bold rounded-bl-lg">
                     MOST POPULAR
                   </div>
@@ -483,14 +500,24 @@ export default function HomePage() {
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
                         <span className="text-3xl font-bold text-gray-900">
-                          ₹0
+                          ₹
+                          <NumberTicker
+                            value={1100}
+                            className="text-3xl font-bold text-gray-900"
+                          />
                         </span>
                         <Badge className="bg-green-100 text-green-800">
                           Limited Seats
                         </Badge>
                       </div>
                       <p className="text-gray-600">
-                        One-time Registration: ₹1,000 + Application: ₹100
+                        One-time Registration: ₹
+                        <NumberTicker
+                          value={1000}
+                          className="text-gray-600"
+                        />{" "}
+                        + Application: ₹
+                        <NumberTicker value={100} className="text-gray-600" />
                       </p>
                     </div>
                   </CardHeader>
@@ -547,7 +574,11 @@ export default function HomePage() {
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
                         <span className="text-3xl font-bold text-gray-900">
-                          ₹30,000
+                          ₹
+                          <NumberTicker
+                            value={30000}
+                            className="text-3xl font-bold text-gray-900"
+                          />
                         </span>
                         <Badge className="bg-blue-100 text-blue-800">
                           10 Months
@@ -590,8 +621,6 @@ export default function HomePage() {
             </motion.div>
           </div>
         </section>
-
-        
 
         {/* Important Dates */}
         <section className="py-20 bg-gradient-to-br from-blue-50 to-indigo-50">
@@ -713,9 +742,9 @@ export default function HomePage() {
             >
               <Card className="hover:shadow-2xl transition-all duration-300 border-0 shadow-lg overflow-hidden backdrop-blur-sm bg-white/90 py-0">
                 <div className="grid md:grid-cols-2 gap-8">
-                  <div className="p-8 space-y-6">
+                  <div className="p-8 space-y-6 text-center md:text-left">
                     <div className="space-y-4">
-                      <motion.div whileHover={{ scale: 1.1 }}>
+                      <motion.div className="flex justify-center md:justify-start" whileHover={{ scale: 1.1 }}>
                         <Avatar className="h-24 w-24 ring-4 ring-blue-100">
                           <AvatarImage src="/placeholder.svg" />
                           <AvatarFallback className="text-2xl bg-blue-100 text-blue-600">
@@ -745,7 +774,7 @@ export default function HomePage() {
                       </p>
 
                       <motion.div
-                        className="grid grid-cols-2 gap-4"
+                        className="grid grid-cols-1 sm:grid-cols-2 gap-4"
                         variants={staggerContainer}
                         initial="initial"
                         whileInView="animate"
@@ -753,14 +782,16 @@ export default function HomePage() {
                       >
                         {[
                           {
-                            number: "500+",
+                            number: 500,
                             label: "IAS Officers Mentored",
                             color: "blue",
+                            suffix: "+",
                           },
                           {
-                            number: "15+",
+                            number: 15,
                             label: "Years Experience",
                             color: "amber",
+                            suffix: "+",
                           },
                         ].map((stat, index) => (
                           <motion.div
@@ -772,7 +803,12 @@ export default function HomePage() {
                             <div
                               className={`text-2xl font-bold text-${stat.color}-600`}
                             >
-                              {stat.number}
+                              <NumberTicker
+                                value={stat.number}
+                                className={`text-2xl font-bold text-${stat.color}-600`}
+                                delay={index * 0.2}
+                              />
+                              {stat.suffix}
                             </div>
                             <div className="text-sm text-gray-600">
                               {stat.label}
@@ -967,9 +1003,14 @@ export default function HomePage() {
                   description:
                     "Safe, secure in-campus accommodation for female students",
                   details: [
-                    { label: "Lodging", price: "₹3,000/month" },
-                    { label: "Mess", price: "₹4,000/month" },
-                    { label: "Total", price: "₹7,000/month", highlight: true },
+                    { label: "Lodging", price: 3000, suffix: "/month" },
+                    { label: "Mess", price: 4000, suffix: "/month" },
+                    {
+                      label: "Total",
+                      price: 7000,
+                      suffix: "/month",
+                      highlight: true,
+                    },
                   ],
                   color: "blue",
                 },
@@ -1031,7 +1072,17 @@ export default function HomePage() {
                                     : "font-semibold"
                                 }
                               >
-                                {detail.price}
+                                ₹
+                                <NumberTicker
+                                  value={detail.price}
+                                  className={
+                                    detail.highlight
+                                      ? "text-blue-600"
+                                      : "font-semibold"
+                                  }
+                                  delay={idx * 0.1}
+                                />
+                                {detail.suffix}
                               </span>
                             </div>
                           ))}
