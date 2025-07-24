@@ -1,0 +1,13 @@
+{
+  "functions": {
+    "src/app/api/submit-application/route.js": {
+      "maxDuration": 30
+    }
+  },
+  "env": {
+    "DB_HOST": "srv1875.hstgr.io",
+    "DB_USER": "u181984996_Tanweer",
+    "DB_NAME": "u181984996_Tanweer",
+    "DB_PORT": "3306"
+  }
+} 

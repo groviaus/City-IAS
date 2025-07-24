@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import pool from '@/lib/db';
+import mysql from 'mysql2/promise';
 import { validateForm } from '@/lib/validation';
 
 /**
@@ -28,8 +28,17 @@ export async function POST(request) {
 
     const cleanData = validation.cleanData;
 
-    // Get database connection
-    const connection = await pool.getConnection();
+    // Create new connection for serverless
+    const connection = await mysql.createConnection({
+      host: process.env.DB_HOST || 'srv1875.hstgr.io',
+      user: process.env.DB_USER || 'u181984996_Tanweer',
+      password: process.env.DB_PASSWORD || 'TanweerSir12@WeM',
+      database: process.env.DB_NAME || 'u181984996_Tanweer',
+      port: process.env.DB_PORT || 3306,
+      connectTimeout: 60000,
+      acquireTimeout: 60000,
+      timeout: 60000,
+    });
 
     try {
       // Create table if it doesn't exist
@@ -136,7 +145,7 @@ export async function POST(request) {
       );
 
     } finally {
-      connection.release();
+      await connection.end();
     }
 
   } catch (error) {
