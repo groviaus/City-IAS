@@ -742,9 +742,9 @@ export default function HomePage() {
             >
               <Card className="hover:shadow-2xl transition-all duration-300 border-0 shadow-lg overflow-hidden backdrop-blur-sm bg-white/90 py-0">
                 <div className="grid md:grid-cols-2 gap-8">
-                  <div className="p-8 space-y-6 text-center md:text-left">
+                  <div className="p-8 space-y-6">
                     <div className="space-y-4">
-                      <motion.div className="flex justify-center md:justify-start" whileHover={{ scale: 1.1 }}>
+                      <motion.div whileHover={{ scale: 1.1 }}>
                         <Avatar className="h-24 w-24 ring-4 ring-blue-100">
                           <AvatarImage src="/placeholder.svg" />
                           <AvatarFallback className="text-2xl bg-blue-100 text-blue-600">
@@ -774,7 +774,7 @@ export default function HomePage() {
                       </p>
 
                       <motion.div
-                        className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+                        className="grid grid-cols-2 gap-4"
                         variants={staggerContainer}
                         initial="initial"
                         whileInView="animate"
