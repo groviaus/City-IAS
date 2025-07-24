@@ -246,7 +246,7 @@ export default function HomePage() {
                   <motion.div
                     variants={pulseAnimation}
                     animate="animate"
-                    className="flex justify-center lg:justify-start"
+                    className="flex justify-center lg:justify-start w-fit"
                   >
                     <Badge className="bg-red-100 text-red-800 hover:bg-red-200 text-sm px-4 py-2 shadow-md">
                       🚨 Admissions Open - Limited Seats Only!
@@ -743,9 +743,9 @@ export default function HomePage() {
             >
               <Card className="hover:shadow-2xl transition-all duration-300 border-0 shadow-lg overflow-hidden backdrop-blur-sm bg-white/90 py-0">
                 <div className="grid md:grid-cols-2 gap-8">
-                  <div className="p-8 space-y-6 text-center md:text-left">
+                  <div className="p-8 space-y-6">
                     <div className="space-y-4">
-                      <motion.div className="flex justify-center md:justify-start" whileHover={{ scale: 1.1 }}>
+                      <motion.div whileHover={{ scale: 1.1 }}>
                         <Avatar className="h-24 w-24 ring-4 ring-blue-100">
                           <AvatarImage src="/placeholder.svg" />
                           <AvatarFallback className="text-2xl bg-blue-100 text-blue-600">
@@ -775,7 +775,7 @@ export default function HomePage() {
                       </p>
 
                       <motion.div
-                        className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+                        className="grid grid-cols-2 gap-4"
                         variants={staggerContainer}
                         initial="initial"
                         whileInView="animate"
@@ -840,6 +840,13 @@ export default function HomePage() {
           </div>
         </section>
 
+
+
+        {/* Gallery */}
+        <Gallery />
+
+
+        
         {/* Testimonials Slider */}
         <section className="py-20 bg-gradient-to-br from-blue-50 to-indigo-50">
           <div className="container sm:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
