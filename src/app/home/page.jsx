@@ -45,6 +45,7 @@ import Image from "next/image";
 import { motion, useScroll, useSpring } from "framer-motion";
 import { useState, useEffect } from "react";
 import { NumberTicker } from "@/components/magicui/number-ticker";
+import ApplicationForm from "@/components/ApplicationForm";
 
 const fadeInUp = {
   initial: { opacity: 0, y: 60 },
@@ -1350,36 +1351,7 @@ export default function HomePage() {
                 </div>
               </motion.div>
 
-              <motion.div
-                className="bg-white/10 backdrop-blur-md p-8 rounded-2xl shadow-2xl"
-                variants={fadeInUp}
-              >
-                <h3 className="text-2xl font-bold mb-6">Ready to Begin?</h3>
-                <div className="space-y-4">
-                  {[
-                    { placeholder: "Your Full Name", type: "text" },
-                    { placeholder: "Your Phone Number", type: "tel" },
-                    { placeholder: "Your Email Address", type: "email" },
-                  ].map((input, index) => (
-                    <motion.div key={index} whileFocus={{ scale: 1.02 }}>
-                      <Input
-                        type={input.type}
-                        placeholder={input.placeholder}
-                        className="bg-white/20 border-white/30 text-white placeholder:text-white/70 focus:bg-white/30 transition-all"
-                      />
-                    </motion.div>
-                  ))}
-                  <motion.div {...scaleOnHover}>
-                    <Button className="w-full bg-amber-500 text-blue-900 hover:bg-amber-400 text-lg py-6 font-bold shadow-lg">
-                      <ArrowRight className="mr-2 h-5 w-5" />
-                      Start My IAS Journey Now
-                    </Button>
-                  </motion.div>
-                </div>
-                <p className="text-sm text-blue-100 mt-4 text-center">
-                  🔒 Your information is 100% secure and confidential
-                </p>
-              </motion.div>
+              <ApplicationForm />
             </motion.div>
           </div>
         </section>
