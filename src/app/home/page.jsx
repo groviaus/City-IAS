@@ -94,7 +94,7 @@ export default function HomePage() {
       content:
         "City IAS Academy transformed my dream into reality. The FREE coaching program gave me the foundation I needed, and Mr. Khan's guidance was invaluable throughout my journey.",
       rating: 5,
-      image: "happy female IAS officer success stories",
+      image: "happy female IAS officer success story",
     },
     {
       name: "Rahul Verma",
@@ -843,7 +843,7 @@ export default function HomePage() {
 
 
         {/* Gallery */}
-        <Gallery />
+        {/* <Gallery /> */}
 
 
         
