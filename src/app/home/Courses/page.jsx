@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,8 +14,11 @@ import { Trophy, Zap, CheckCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import { NumberTicker } from "@/components/magicui/number-ticker";
 import { fadeInUp, staggerContainer, scaleOnHover } from "@/lib/animations";
+import RegistrationDialog from "@/components/RegistrationDialog";
 
 export default function Courses() {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState("");
   const courses = [
     {
       title: "FREE Coaching Program",
@@ -62,6 +66,12 @@ export default function Courses() {
       isPopular: false,
     },
   ];
+
+  // Handle course selection and open dialog
+  const handleCourseSelect = (courseTitle) => {
+    setSelectedCourse(courseTitle);
+    setIsDialogOpen(true);
+  };
 
   return (
     <section
@@ -183,6 +193,7 @@ export default function Courses() {
                   <motion.div {...scaleOnHover}>
                     <Button
                       className={`w-full ${course.buttonColor} text-lg py-6 shadow-lg`}
+                      onClick={() => handleCourseSelect(course.title)}
                     >
                       {course.buttonText}
                     </Button>
@@ -193,6 +204,13 @@ export default function Courses() {
           ))}
         </motion.div>
       </div>
+
+      {/* Registration Dialog */}
+      <RegistrationDialog
+        selectedCourse={selectedCourse}
+        isOpen={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+      />
     </section>
   );
 }
