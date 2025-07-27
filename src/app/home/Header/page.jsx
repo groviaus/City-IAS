@@ -1,9 +1,16 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Award, Phone, Menu } from "lucide-react";
+import { Award, Phone, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 export default function Header() {
   const navItems = ["Courses", "Faculty", "Facilities", "Contact"];
@@ -100,14 +107,66 @@ export default function Header() {
                 Apply Online
               </Button>
             </motion.button>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden"
-              aria-label="Open menu"
-            >
-              <Menu className="h-5 w-5" />
-            </Button>
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="md:hidden"
+                  aria-label="Open menu"
+                >
+                  <Menu className="h-5 w-5" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+                <SheetHeader>
+                  <SheetTitle className="text-left">
+                    <div className="flex items-center mt-8 space-x-3">
+                      <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center shadow-lg">
+                        <Award className="h-6 w-6 text-white" />
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-lg font-bold text-gray-900">
+                          City IAS/PCS Academy
+                        </span>
+                        <span className="text-xs text-blue-600 font-medium">
+                          Aligarh
+                        </span>
+                      </div>
+                    </div>
+                  </SheetTitle>
+                </SheetHeader>
+                
+                <div className="flex flex-col space-y-6">
+                  {/* Navigation Links */}
+                  <div className="space-y-4 px-5">
+                    {/* <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider">
+                      Navigation
+                    </h3> */}
+                    {navItems.map((item, index) => (
+                      <motion.div
+                        key={item}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                      >
+                        <button
+                          onClick={(e) => {
+                            handleSmoothScroll(e, item.toLowerCase());
+                            // Close the sheet after clicking
+                            const closeButton = document.querySelector('[data-slot="sheet-close"]');
+                            if (closeButton) closeButton.click();
+                          }}
+                          className="w-full text-left py-3 px-4 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors font-medium"
+                        >
+                          {item}
+                        </button>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
       </div>
