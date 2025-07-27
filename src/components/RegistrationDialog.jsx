@@ -172,7 +172,7 @@ export default function RegistrationDialog({ selectedCourse, isOpen, onOpenChang
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto scrollbar-hide">
         <DialogHeader className="space-y-4">
           <DialogTitle className="text-2xl font-bold text-center bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
             Join Our IAS Program
