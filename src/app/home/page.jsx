@@ -44,7 +44,7 @@ const ApplicationProcess = dynamic(() => import("./ApplicationProcess/page"), {
 
 const Contact = dynamic(() => import("./Contact/page"), {
   loading: () => (
-    <div className="py-20 bg-gradient-to-r from-blue-600 to-indigo-700">
+    <div id="contact" className="py-20 bg-gradient-to-r from-blue-600 to-indigo-700">
       <div className="container sm:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center text-white">
           <div className="animate-pulse bg-blue-500 h-8 w-64 mx-auto mb-4 rounded"></div>

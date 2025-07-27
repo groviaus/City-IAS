@@ -76,7 +76,9 @@ export default function Header() {
                 Call Now
               </Button>
             </motion.div>
-            <motion.div
+            <motion.a
+              href="#contact"
+              rel="noopener noreferrer"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -86,7 +88,7 @@ export default function Header() {
               >
                 Apply Online
               </Button>
-            </motion.div>
+            </motion.a>
             <Button
               variant="ghost"
               size="icon"

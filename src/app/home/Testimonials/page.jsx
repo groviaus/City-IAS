@@ -17,7 +17,7 @@ export default function Testimonials() {
       content:
         "City IAS Academy transformed my dream into reality. The FREE coaching program gave me the foundation I needed, and Mr. Khan's guidance was invaluable throughout my journey.",
       rating: 5,
-      image: "happy female IAS officer success story",
+      image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
     },
     {
       name: "Rahul Verma",
@@ -26,7 +26,7 @@ export default function Testimonials() {
       content:
         "The comprehensive study material and regular mock tests prepared me thoroughly. The academy's approach to current affairs and answer writing made all the difference.",
       rating: 5,
-      image: "happy male IPS officer success story",
+      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
     },
     {
       name: "Anjali Singh",
@@ -35,7 +35,7 @@ export default function Testimonials() {
       content:
         "From a small town girl to an IAS officer - this academy made it possible. The hostel facilities and 24x7 library support were crucial for my preparation.",
       rating: 5,
-      image: "happy female IAS officer small town success",
+      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
     },
   ];
 
@@ -96,9 +96,10 @@ export default function Testimonials() {
               <CardContent className="text-center">
                 <div className="flex items-center justify-center space-x-4">
                   <Avatar className="h-16 w-16 ring-4 ring-blue-100">
-                    <AvatarImage
-                      src={`/placeholder.svg?height=64&width=64&query=${testimonials[currentTestimonial].image}`}
-                    />
+                    {/* <AvatarImage
+                      src={testimonials[currentTestimonial].image}
+                      alt={testimonials[currentTestimonial].name}
+                    /> */}
                     <AvatarFallback className="bg-blue-100 text-blue-600">
                       {testimonials[currentTestimonial].name
                         .split(" ")
