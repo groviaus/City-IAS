@@ -109,14 +109,14 @@ export default function Header() {
             </motion.button>
             <Sheet>
               <SheetTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="md:hidden"
+                <motion.div
+                  className="md:hidden p-2 rounded-lg hover:bg-gray-100 cursor-pointer"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   aria-label="Open menu"
                 >
-                  <Menu className="h-5 w-5" />
-                </Button>
+                  <Menu className="h-5 w-5 text-gray-700" />
+                </motion.div>
               </SheetTrigger>
               <SheetContent side="right" className="w-[300px] sm:w-[400px]">
                 <SheetHeader>
