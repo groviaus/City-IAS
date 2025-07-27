@@ -156,12 +156,16 @@ export default function Hero() {
             whileHover={{ scale: 1.02 }}
           >
             <div className="relative z-10">
-              <Image
-                src="/hero-video.gif"
+              <video
+                src="/hero-video.mp4"
                 alt="IAS aspirants studying and celebrating success"
                 width={600}
                 height={600}
                 className="rounded-2xl shadow-2xl object-cover"
+                autoPlay
+                muted
+                loop
+                playsInline
               />
             </div>
             <div className="absolute -top-4 -right-4 w-72 h-72 bg-gradient-to-br from-blue-400 to-indigo-400 rounded-full opacity-20 blur-3xl"></div>
