@@ -12,6 +12,17 @@ export default function UrgencyBanner() {
     { value: 35, label: "Minutes" },
   ];
 
+  const handleSmoothScroll = (e, targetId) => {
+    e.preventDefault();
+    const targetElement = document.getElementById(targetId);
+    if (targetElement) {
+      targetElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
+  };
+
   return (
     <motion.section
       className="py-6 bg-gradient-to-r from-red-600 to-orange-600 text-white"
@@ -60,7 +71,7 @@ export default function UrgencyBanner() {
               ))}
             </div>
             <motion.div {...scaleOnHover}>
-              <Button className="bg-white text-red-600 hover:bg-gray-100 shadow-lg w-full sm:w-auto sm:ml-5 md:text-xl sm:py-6">
+              <Button className="bg-white text-red-600 hover:bg-gray-100 shadow-lg w-full sm:w-auto sm:ml-5 md:text-xl sm:py-6" onClick={(e) => handleSmoothScroll(e, 'contact')}>
                 Apply Now
               </Button>
             </motion.div>

@@ -8,6 +8,17 @@ import { motion } from "framer-motion";
 export default function Header() {
   const navItems = ["Courses", "Faculty", "Facilities", "Contact"];
 
+  const handleSmoothScroll = (e, targetId) => {
+    e.preventDefault();
+    const targetElement = document.getElementById(targetId);
+    if (targetElement) {
+      targetElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
+  };
+
   return (
     <motion.header
       initial={{ y: -100 }}
@@ -51,21 +62,22 @@ export default function Header() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
               >
-                <Link
-                  href={`#${item.toLowerCase()}`}
+                <button
+                  onClick={(e) => handleSmoothScroll(e, item.toLowerCase())}
                   className="text-gray-700 hover:text-blue-600 font-medium transition-colors relative group"
                 >
                   {item}
                   <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full"></span>
-                </Link>
+                </button>
               </motion.div>
             ))}
           </nav>
 
           <div className="flex items-center space-x-4">
-            <motion.div
+            <motion.a
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              href="tel:+919818000000"
             >
               <Button
                 variant="ghost"
@@ -75,10 +87,9 @@ export default function Header() {
                 <Phone className="h-4 w-4 mr-2" />
                 Call Now
               </Button>
-            </motion.div>
-            <motion.a
-              href="#contact"
-              rel="noopener noreferrer"
+            </motion.a>
+            <motion.button
+              onClick={(e) => handleSmoothScroll(e, 'contact')}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -88,7 +99,7 @@ export default function Header() {
               >
                 Apply Online
               </Button>
-            </motion.a>
+            </motion.button>
             <Button
               variant="ghost"
               size="icon"

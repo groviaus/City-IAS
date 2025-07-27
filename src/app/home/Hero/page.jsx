@@ -35,6 +35,17 @@ export default function Hero() {
     },
   ];
 
+  const handleSmoothScroll = (e, targetId) => {
+    e.preventDefault();
+    const targetElement = document.getElementById(targetId);
+    if (targetElement) {
+      targetElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
+  };
+
   return (
     <section
       className="relative py-6 lg:py-10 overflow-hidden"
@@ -102,7 +113,7 @@ export default function Hero() {
               className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
               variants={fadeInUp}
             >
-              <motion.div {...scaleOnHover}>
+              <motion.a onClick={(e) => handleSmoothScroll(e, 'contact')} href="#contact" {...scaleOnHover}>
                 <Button
                   size="lg"
                   className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-lg px-8 shadow-lg w-full sm:w-auto"
@@ -110,7 +121,7 @@ export default function Hero() {
                   <Target className="mr-2 h-5 w-5" />
                   Secure Your Seat Now
                 </Button>
-              </motion.div>
+              </motion.a>
               <motion.div {...scaleOnHover}>
                 <Button
                   variant="outline"
