@@ -59,7 +59,7 @@ export default function Faculty() {
                 <div className="space-y-4">
                   <motion.div whileHover={{ scale: 1.1 }}>
                     <Avatar className="h-24 w-24 ring-4 ring-blue-100">
-                      <AvatarImage src="/placeholder.svg" />
+                      <AvatarImage src="/director.jpg" />
                       <AvatarFallback className="text-2xl bg-blue-100 text-blue-600">
                         MK
                       </AvatarFallback>
@@ -125,11 +125,11 @@ export default function Faculty() {
                   transition={{ duration: 0.3 }}
                 >
                   <Image
-                    src="/placeholder.svg"
+                    src="/director-speech_257.jpg"
                     alt="Mr. M.R. Khan, Director of City IAS Academy"
                     width={400}
                     height={400}
-                    className="rounded-xl shadow-lg"
+                    className="rounded-xl object-cover max-h-[400px] shadow-lg"
                   />
                 </motion.div>
               </div>

@@ -11,7 +11,7 @@ import { fadeInUp, staggerContainer, scaleOnHover } from "@/lib/animations";
 const galleryItems = [
   {
     id: 1,
-    src: "/placeholder.svg?height=450&width=320",
+    src: "/facility1.jpg",
     alt: "Modern Architecture",
     category: "facilities",
     title: "State-of-the-Art Classrooms",
@@ -19,7 +19,7 @@ const galleryItems = [
   },
   {
     id: 2,
-    src: "/placeholder.svg?height=280&width=400",
+    src: "/facility2.jpg",
     alt: "Library",
     category: "facilities",
     title: "Extensive Library Collection",
@@ -27,7 +27,7 @@ const galleryItems = [
   },
   {
     id: 3,
-    src: "/placeholder.svg?height=520&width=280",
+    src: "/hostel1.jpg",
     alt: "Hostel",
     category: "hostel",
     title: "Comfortable Hostel Accommodation",
@@ -35,7 +35,7 @@ const galleryItems = [
   },
   {
     id: 4,
-    src: "/placeholder.svg?height=380&width=350",
+    src: "/event3.jpg",
     alt: "Events",
     category: "events",
     title: "Interactive Learning Sessions",
@@ -43,7 +43,7 @@ const galleryItems = [
   },
   {
     id: 5,
-    src: "/placeholder.svg?height=300&width=450",
+    src: "/facility3.jpg",
     alt: "Study Areas",
     category: "facilities",
     title: "Dedicated Study Spaces",
@@ -51,7 +51,7 @@ const galleryItems = [
   },
   {
     id: 6,
-    src: "/placeholder.svg?height=420&width=280",
+    src: "/event1.jpg",
     alt: "Events",
     category: "events",
     title: "Mock Interview Sessions",
@@ -59,7 +59,7 @@ const galleryItems = [
   },
   {
     id: 7,
-    src: "/placeholder.svg?height=350&width=380",
+    src: "/hostel2.jpg",
     alt: "Hostel",
     category: "hostel",
     title: "Modern Hostel Facilities",
@@ -67,7 +67,7 @@ const galleryItems = [
   },
   {
     id: 8,
-    src: "/placeholder.svg?height=480&width=320",
+    src: "/event4.jpg",
     alt: "Events",
     category: "events",
     title: "Group Study Sessions",
@@ -237,47 +237,44 @@ export default function Gallery() {
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
             >
-              <AnimatePresence mode="wait">
-                {filteredItems.map((item, index) => (
+              {filteredItems.map((item, index) => (
+                <motion.div
+                  key={`${activeFilter}-${item.id}`}
+                  className="w-full flex-shrink-0 px-2"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3, delay: index * 0.1 }}
+                >
                   <motion.div
-                    key={item.id}
-                    className="w-full flex-shrink-0 px-2"
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    className="relative group bg-white rounded-2xl overflow-hidden shadow-xl border border-gray-200"
+                    whileHover={{ y: -8, scale: 1.02 }}
+                    transition={{ duration: 0.3 }}
                   >
-                    <motion.div
-                      className="relative group bg-white rounded-2xl overflow-hidden shadow-xl border border-gray-200"
-                      whileHover={{ y: -8, scale: 1.02 }}
+                    <div className="relative aspect-[4/5] overflow-hidden">
+                      <Image
+                        src={item.src || "/placeholder.svg"}
+                        alt={item.alt}
+                        fill
+                        className="object-cover transition-transform duration-700 group-hover:scale-110"
+                      />
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"
+                        initial={{ opacity: 0 }}
+                        whileHover={{ opacity: 1 }}
+                        transition={{ duration: 0.3 }}
+                      />
+                    </div>
+                    {/* <motion.div
+                      className="absolute bottom-0 left-0 right-0 p-6 text-white"
+                      initial={{ y: 16, opacity: 0 }}
+                      whileHover={{ y: 0, opacity: 1 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <div className="relative aspect-[4/5] overflow-hidden">
-                        <Image
-                          src={item.src || "/placeholder.svg"}
-                          alt={item.alt}
-                          fill
-                          className="object-cover transition-transform duration-700 group-hover:scale-110"
-                        />
-                        <motion.div
-                          className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"
-                          initial={{ opacity: 0 }}
-                          whileHover={{ opacity: 1 }}
-                          transition={{ duration: 0.3 }}
-                        />
-                      </div>
-                      <motion.div
-                        className="absolute bottom-0 left-0 right-0 p-6 text-white"
-                        initial={{ y: 16, opacity: 0 }}
-                        whileHover={{ y: 0, opacity: 1 }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <h3 className="text-xl font-bold">{item.title}</h3>
-                      </motion.div>
-                    </motion.div>
+                      <h3 className="text-xl font-bold">{item.title}</h3>
+                    </motion.div> */}
                   </motion.div>
-                ))}
-              </AnimatePresence>
+                </motion.div>
+              ))}
             </motion.div>
 
             {/* Mobile Navigation */}
@@ -316,60 +313,58 @@ export default function Gallery() {
         ) : (
           /* Desktop Masonry Grid */
           <motion.div
-            className="columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-6 space-y-6"
+            className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6"
+            key={activeFilter}
             variants={staggerContainer}
             initial="initial"
-            whileInView="animate"
-            viewport={{ once: true }}
+            animate="animate"
           >
-            <AnimatePresence mode="wait">
-              {filteredItems.map((item, index) => (
+            {filteredItems.map((item, index) => (
+              <motion.div
+                key={`${activeFilter}-${item.id}`}
+                className="break-inside-avoid group cursor-pointer"
+                variants={fadeInUp}
+                whileHover={{ y: -8, scale: 1.02 }}
+              >
                 <motion.div
-                  key={item.id}
-                  className="break-inside-avoid group cursor-pointer"
-                  variants={fadeInUp}
-                  whileHover={{ y: -8, scale: 1.02 }}
+                  className="relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-500 border border-gray-200"
+                  whileHover={{
+                    boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
+                  }}
                 >
-                  <motion.div
-                    className="relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-500 border border-gray-200"
-                    whileHover={{
-                      boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
-                    }}
-                  >
-                    <div className="relative overflow-hidden">
-                      <motion.div
-                        whileHover={{ scale: 1.1 }}
-                        transition={{ duration: 0.7 }}
-                      >
-                        <Image
-                          src={item.src || "/placeholder.svg"}
-                          alt={item.alt}
-                          width={0}
-                          height={0}
-                          sizes="100vw"
-                          className="w-full h-auto object-cover"
-                          style={{ width: "100%", height: "auto" }}
-                        />
-                      </motion.div>
-                      <motion.div
-                        className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"
-                        initial={{ opacity: 0 }}
-                        whileHover={{ opacity: 1 }}
-                        transition={{ duration: 0.3 }}
-                      />
-                    </div>
+                  <div className="relative overflow-hidden">
                     <motion.div
-                      className="absolute bottom-0 left-0 right-0 p-6 text-white"
-                      initial={{ y: 16, opacity: 0 }}
-                      whileHover={{ y: 0, opacity: 1 }}
-                      transition={{ duration: 0.3 }}
+                      whileHover={{ scale: 1.1 }}
+                      transition={{ duration: 0.7 }}
                     >
-                      <h3 className="text-lg font-bold">{item.title}</h3>
+                      <Image
+                        src={item.src || "/placeholder.svg"}
+                        alt={item.alt}
+                        width={0}
+                        height={0}
+                        sizes="100vw"
+                        className="w-full h-auto object-cover"
+                        style={{ width: "100%", height: "auto" }}
+                      />
                     </motion.div>
-                  </motion.div>
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"
+                      initial={{ opacity: 0 }}
+                      whileHover={{ opacity: 1 }}
+                      transition={{ duration: 0.3 }}
+                    />
+                  </div>
+                  {/* <motion.div
+                    className="absolute bottom-0 left-0 right-0 p-6 text-white"
+                    initial={{ y: 16, opacity: 0 }}
+                    whileHover={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <h3 className="text-lg font-bold">{item.title}</h3>
+                  </motion.div> */}
                 </motion.div>
-              ))}
-            </AnimatePresence>
+              </motion.div>
+            ))}
           </motion.div>
         )}
       </div>
