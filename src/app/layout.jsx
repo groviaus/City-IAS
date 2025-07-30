@@ -1,5 +1,7 @@
 import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Header from "./home/Header/page";
+import Footer from "./home/Footer/page";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -13,15 +15,17 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: "City IAS/PCS Academy",
-  description: "City IAS/PCS Academy is a platform for IAS/PCS aspirants to prepare for the IAS/PCS exam.",
-  
+  description:
+    "City IAS/PCS Academy is a platform for IAS/PCS aspirants to prepare for the IAS/PCS exam.",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${inter.variable} ${geistMono.variable} antialiased`}>
-        {children}
+        <Header />
+        <main>{children}</main>
+        <Footer />
       </body>
     </html>
   );
