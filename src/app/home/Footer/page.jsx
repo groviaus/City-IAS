@@ -31,6 +31,7 @@ export default function Footer() {
         { name: "Privacy Policy", href: "/privacy-policy" },
         { name: "Terms & Conditions", href: "/terms-conditions" },
         { name: "Refund Policy", href: "/refund-policy" },
+        { name: "Course Delivery", href: "/course-delivery" },
       ],
     },
     {
@@ -45,7 +46,6 @@ export default function Footer() {
         },
       ],
     },
-    
   ];
 
   return (
