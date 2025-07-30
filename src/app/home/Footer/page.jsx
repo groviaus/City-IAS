@@ -38,8 +38,7 @@ export default function Footer() {
       title: "Contact Info",
       links: [
         { name: "Kela Nagar, Aligarh", href: "#" },
-        { name: "+91-9286497203", href: "tel:+919286497203" },
-        { name: "+91-9833356140", href: "tel:+919833356140" },
+        { name: "+91 86307 03335", href: "tel:+918630703335" },
         {
           name: "cityiasacademy.aligarh@gmail.com",
           href: "mailto:cityiasacademy.aligarh@gmail.com",

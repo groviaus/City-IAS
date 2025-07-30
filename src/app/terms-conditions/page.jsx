@@ -165,7 +165,7 @@ export default function TermsConditions() {
               <strong>Contact:</strong> cityiasacademy.aligarh@gmail.com
             </p>
             <p>
-              <strong>Phone:</strong> +91-9286497203, +91-9833356140
+              <strong>Phone:</strong> +91 86307 03335
             </p>
             <p>
               <strong>Address:</strong> Kela Nagar, Aligarh
