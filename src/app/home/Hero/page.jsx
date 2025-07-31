@@ -66,9 +66,9 @@ export default function Hero() {
               <motion.div
                 variants={pulseAnimation}
                 animate="animate"
-                className="flex justify-center lg:justify-start w-fit"
+                className="flex justify-center lg:justify-start w-full sm:w-fit"
               >
-                <Badge className="bg-red-100 text-red-800 hover:bg-red-200 text-sm px-4 py-2 shadow-md">
+                <Badge className="bg-orange-100 text-red-800 hover:bg-red-200 text-sm px-4 py-2 shadow-md">
                   🚨 Admissions Open - Limited Seats Only!
                 </Badge>
               </motion.div>
@@ -95,16 +95,16 @@ export default function Hero() {
               </motion.p>
 
               <motion.div
-                className="bg-gradient-to-r from-green-50 to-blue-50 p-6 rounded-xl border-l-4 border-green-500 shadow-lg backdrop-blur-sm"
+                className="bg-gradient-to-r from-green-50 to-blue-50  sm:px-6 py-6 rounded-xl border-l-4 border-green-500 shadow-lg backdrop-blur-sm"
                 variants={fadeInUp}
                 whileHover={{ scale: 1.02 }}
               >
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">
                   🎯 FREE Coaching Available!
                 </h3>
                 <p className="text-gray-700">
-                  Yes, you read that right. Quality IAS coaching at ZERO cost.
-                  Only ₹1000 registration fee.
+                  Yes, you read that right. <span className="font-bold text-blue-500">Quality IAS/PCS</span>  coaching at <span className="text-green-500 font-bold   animate-pulse mt-2">ZERO COST !</span>
+                <br />Only <span className="text-green-500 font-bold sm:text-xl px-[2px]  animate-pulse mt-2">₹100</span> Entrance Test fee.
                 </p>
               </motion.div>
             </div>
@@ -122,16 +122,16 @@ export default function Hero() {
                   Secure Your Seat Now
                 </Button>
               </motion.a>
-              <motion.div {...scaleOnHover}>
+              <motion.a onClick={(e) => handleSmoothScroll(e, 'courses')} href="#courses" {...scaleOnHover}>
                 <Button
                   variant="outline"
                   size="lg"
                   className="text-lg px-8 bg-transparent border-2 border-blue-200 hover:bg-blue-50 w-full sm:w-auto"
                 >
                   <Play className="mr-2 h-5 w-5" />
-                  Watch Success Stories
+                  Join Our Courses
                 </Button>
-              </motion.div>
+              </motion.a>
             </motion.div>
 
             {/* <motion.div

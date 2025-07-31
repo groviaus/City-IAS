@@ -243,7 +243,8 @@ export default function CourseDelivery() {
               <strong>Email:</strong> cityiasacademy.aligarh@gmail.com
             </p>
             <p>
-              <strong>Class Hours:</strong> Monday - Saturday, 9:00 AM - 7:00 PM
+              <strong>Class Hours:</strong> Monday - Saturday, 11:00 AM - 7:00
+              PM
             </p>
             <p>
               <strong>Office Hours:</strong> Monday - Saturday, 8:00 AM - 8:00

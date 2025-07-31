@@ -10,9 +10,9 @@ import Courses from "./Courses/page";
 import ImportantDates from "./ImportantDates/page";
 import Gallery from "./gallery/page";
 import Faculty from "./Faculty/page";
-import Testimonials from "./Testimonials/page";
+// import Testimonials from "./Testimonials/page";
 import Facilities from "./Facilities/page";
-import ProgressBar from "./ProgressBar/page";
+
 
 // Dynamic imports for below-the-fold content
 const FAQ = dynamic(() => import("./FAQ/page"), {
@@ -65,7 +65,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 font-sans">
       {/* Progress Bar */}
-      <ProgressBar />
+      {/* <ProgressBar /> */}
 
       <main>
         {/* Hero Section */}
@@ -87,7 +87,7 @@ export default function HomePage() {
         <Faculty />
 
         {/* Testimonials Slider */}
-        <Testimonials />
+        {/* <Testimonials /> */}
 
         {/* Facilities */}
         <Facilities />

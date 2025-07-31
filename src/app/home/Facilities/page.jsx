@@ -46,7 +46,7 @@ export default function Facilities() {
 
   return (
     <section
-      className="py-20 bg-white"
+      className="pb-20 bg-white"
       aria-labelledby="facilities-heading"
       id="facilities"
     >

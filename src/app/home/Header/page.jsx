@@ -12,6 +12,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import Image from "next/image";
 
 export default function Header() {
   const pathname = usePathname();
@@ -34,7 +35,7 @@ export default function Header() {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.6 }}
-      className="sticky top-0 z-40 w-full border-b bg-white/95 backdrop-blur-md supports-[backdrop-filter]:bg-white/80 shadow-sm"
+      className="sticky top-0 z-40 w-full border-b bg-white backdrop-blur-md shadow-sm"
     >
       <div className="container sm:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
@@ -43,20 +44,8 @@ export default function Header() {
             whileHover={{ scale: 1.02 }}
           >
             <Link href="/" className="flex items-center space-x-3">
-              <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center shadow-lg">
-                <Award className="h-6 w-6 text-white" />
-              </div>
-              <div className="flex flex-col">
-                <span className="hidden md:block text-xl font-sans font-bold text-gray-900">
-                  City IAS/PCS Academy
-                </span>
-                <span className="sm:hidden block text-xl font-sans font-bold text-gray-900">
-                  City IAS
-                </span>
-                <span className="text-xs text-blue-600 font-medium">
-                  Aligarh
-                </span>
-              </div>
+              <Image src="/CityIASLOGO.png" alt="City IAS/PCS Academy" width={500} height={500}  className="w-full h-14 sm:h-14 object-contain "/>
+              <Image src="/CityIASLOGOM.png" alt="City IAS/PCS Academy" width={500} height={500}  className="w-full h-10 sm:h-14 object-contain hidden"/>
             </Link>
           </motion.div>
 
@@ -101,18 +90,16 @@ export default function Header() {
                 Call Now
               </Button>
             </motion.a>
-            <motion.button
-              onClick={(e) => handleSmoothScroll(e, "contact")}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
+           
               <Button
                 size="sm"
-                className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-lg"
+                onClick={(e) => handleSmoothScroll(e, "contact")}
+                className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-lg hover:scale-105 transition-all duration-300
+                hidden sm:block"
               >
                 Apply Online
               </Button>
-            </motion.button>
+            
             <Sheet>
               <SheetTrigger asChild>
                 <motion.div
@@ -127,19 +114,7 @@ export default function Header() {
               <SheetContent side="right" className="w-[300px] sm:w-[400px]">
                 <SheetHeader>
                   <SheetTitle className="text-left">
-                    <div className="flex items-center mt-8 space-x-3">
-                      <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center shadow-lg">
-                        <Award className="h-6 w-6 text-white" />
-                      </div>
-                      <div className="flex flex-col">
-                        <span className="text-lg font-bold text-gray-900">
-                          City IAS/PCS Academy
-                        </span>
-                        <span className="text-xs text-blue-600 font-medium">
-                          Aligarh
-                        </span>
-                      </div>
-                    </div>
+                    <Image src="/CityIASLOGO.png" alt="City IAS/PCS Academy" width={500} height={500}  className="w-full h-10 sm:h-14 object-contain"/>
                   </SheetTitle>
                 </SheetHeader>
 

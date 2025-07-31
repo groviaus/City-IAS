@@ -10,12 +10,12 @@ export default function Contact() {
     { icon: Phone, text: ["+91 86307 03335"] },
     { icon: Mail, text: ["cityiasacademy.aligarh@gmail.com"] },
     { icon: MapPin, text: ["Kela Nagar, Aligarh", "Uttar Pradesh"] },
-    { icon: Clock, text: ["Monday - Saturday", "9:00 AM - 7:00 PM"] },
+    { icon: Clock, text: ["Monday - Saturday", "11:00 AM - 7:00 PM"] },
   ];
 
   return (
     <section
-      id="contact"
+     
       className="py-20 bg-gradient-to-r from-blue-600 to-indigo-700"
     >
       <div className="container sm:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -76,7 +76,7 @@ export default function Contact() {
               ))}
             </div>
 
-            <motion.div
+            {/* <motion.div
               className="bg-white/10 backdrop-blur-md rounded-2xl p-6"
               variants={fadeInUp}
             >
@@ -105,7 +105,7 @@ export default function Contact() {
                   <span>Comprehensive Study Materials</span>
                 </li>
               </ul>
-            </motion.div>
+            </motion.div> */}
           </motion.div>
 
           {/* Application Form */}
@@ -114,6 +114,7 @@ export default function Contact() {
             initial="initial"
             whileInView="animate"
             viewport={{ once: true }}
+             id="contact"
           >
             <ApplicationForm />
           </motion.div>

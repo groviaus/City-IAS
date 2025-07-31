@@ -86,7 +86,7 @@ export default function Faculty() {
                     achieve extraordinary success."
                   </p>
 
-                  <motion.div
+                  {/* <motion.div
                     className="grid grid-cols-2 gap-4"
                     variants={staggerContainer}
                     initial="initial"
@@ -115,7 +115,7 @@ export default function Faculty() {
                         </div>
                       </motion.div>
                     ))}
-                  </motion.div>
+                  </motion.div> */}
                 </div>
               </div>
 
