@@ -44,8 +44,8 @@ export default function Courses() {
       isPopular: true,
     },
     {
-      title: "Foundation Batch",
-      subtitle: "Prelims + Mains",
+      title: "Foundation Batch for 12th Pass",
+      subtitle: "Prelims + Mains (Direct Admission)",
       price: 30000,
       duration: "10 Months",
       badge: "10 Months",
