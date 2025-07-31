@@ -9,24 +9,40 @@ export default function Footer() {
   const footerSections = [
     {
       title: "Quick Links",
-      links: ["Courses", "Faculty", "Facilities", "Contact"],
+      links: [
+        { name: "Courses", href: "#courses" },
+        { name: "Faculty", href: "#faculty" },
+        { name: "Facilities", href: "#facilities" },
+        { name: "Contact", href: "#contact" },
+      ],
     },
     {
       title: "Programs",
       links: [
-        "FREE Coaching",
-        "Foundation Batch",
-        "Test Series",
-        "Mock Interviews",
+        { name: "FREE Coaching", href: "#" },
+        { name: "Foundation Batch", href: "#" },
+        { name: "Test Series", href: "#" },
+        { name: "Mock Interviews", href: "#" },
+      ],
+    },
+    {
+      title: "Legal",
+      links: [
+        { name: "Privacy Policy", href: "/privacy-policy" },
+        { name: "Terms & Conditions", href: "/terms-conditions" },
+        { name: "Refund Policy", href: "/refund-policy" },
+        { name: "Course Delivery", href: "/course-delivery" },
       ],
     },
     {
       title: "Contact Info",
       links: [
-        "Kela Nagar, Aligarh",
-        "+91-9286497203",
-        "+91-9833356140",
-        "cityiasacademy.aligarh@gmail.com",
+        { name: "Kela Nagar, Aligarh", href: "#" },
+        { name: "+91 86307 03335", href: "tel:+918630703335" },
+        {
+          name: "cityiasacademy.aligarh@gmail.com",
+          href: "mailto:cityiasacademy.aligarh@gmail.com",
+        },
       ],
     },
   ];
@@ -35,7 +51,7 @@ export default function Footer() {
     <footer className="bg-gray-900 text-white py-12">
       <div className="container sm:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
-          className="grid md:grid-cols-2 lg:grid-cols-4 gap-8"
+          className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8"
           variants={staggerContainer}
           initial="initial"
           whileInView="animate"
@@ -43,13 +59,11 @@ export default function Footer() {
         >
           <motion.div className="space-y-4" variants={fadeInUp}>
             <div className="flex items-center space-x-3">
-              <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center shadow-lg">
+              {/* <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center shadow-lg">
                 <Award className="h-6 w-6 text-white" />
-              </div>
+              </div> */}
               <div>
-                <span className="text-xl font-bold">
-                  City IAS/PCS Academy
-                </span>
+                <span className="text-xl font-bold">City IAS/PCS Academy</span>
                 <div className="text-sm text-gray-400">Aligarh</div>
               </div>
             </div>
@@ -71,10 +85,10 @@ export default function Footer() {
                     transition={{ duration: 0.2 }}
                   >
                     <Link
-                      href="#"
+                      href={link.href}
                       className="hover:text-white transition-colors"
                     >
-                      {link}
+                      {link.name}
                     </Link>
                   </motion.li>
                 ))}
@@ -90,11 +104,11 @@ export default function Footer() {
           viewport={{ once: true }}
         >
           <p>
-            &copy; {new Date().getFullYear()} City IAS/PCS Academy, Aligarh.
-            All rights reserved.
+            &copy; {new Date().getFullYear()} City IAS/PCS Academy, Aligarh. All
+            rights reserved.
           </p>
         </motion.div>
       </div>
     </footer>
   );
-} 
+}

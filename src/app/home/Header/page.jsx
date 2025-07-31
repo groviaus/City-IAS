@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Award, Phone, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { usePathname } from "next/navigation";
 import {
   Sheet,
   SheetContent,
@@ -13,6 +14,8 @@ import {
 } from "@/components/ui/sheet";
 
 export default function Header() {
+  const pathname = usePathname();
+  const isHomePage = pathname === "/" || pathname === "/home";
   const navItems = ["Courses", "Faculty", "Facilities", "Contact"];
 
   const handleSmoothScroll = (e, targetId) => {
@@ -20,8 +23,8 @@ export default function Header() {
     const targetElement = document.getElementById(targetId);
     if (targetElement) {
       targetElement.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
+        behavior: "smooth",
+        block: "start",
       });
     }
   };
@@ -57,34 +60,37 @@ export default function Header() {
             </Link>
           </motion.div>
 
-          <nav
-            className="hidden md:flex items-center space-x-8"
-            role="navigation"
-            aria-label="Main navigation"
-          >
-            {navItems.map((item, index) => (
-              <motion.div
-                key={item}
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <button
-                  onClick={(e) => handleSmoothScroll(e, item.toLowerCase())}
-                  className="text-gray-700 hover:text-blue-600 font-medium transition-colors relative group"
+          {/* Navigation Links - Only show on home page */}
+          {isHomePage && (
+            <nav
+              className="hidden md:flex items-center space-x-8"
+              role="navigation"
+              aria-label="Main navigation"
+            >
+              {navItems.map((item, index) => (
+                <motion.div
+                  key={item}
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
                 >
-                  {item}
-                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full"></span>
-                </button>
-              </motion.div>
-            ))}
-          </nav>
+                  <button
+                    onClick={(e) => handleSmoothScroll(e, item.toLowerCase())}
+                    className="text-gray-700 hover:text-blue-600 font-medium transition-colors relative group"
+                  >
+                    {item}
+                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full"></span>
+                  </button>
+                </motion.div>
+              ))}
+            </nav>
+          )}
 
           <div className="flex items-center space-x-4">
             <motion.a
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              href="tel:+919818000000"
+              href="tel:+918630703335"
             >
               <Button
                 variant="ghost"
@@ -96,7 +102,7 @@ export default function Header() {
               </Button>
             </motion.a>
             <motion.button
-              onClick={(e) => handleSmoothScroll(e, 'contact')}
+              onClick={(e) => handleSmoothScroll(e, "contact")}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -136,34 +142,35 @@ export default function Header() {
                     </div>
                   </SheetTitle>
                 </SheetHeader>
-                
+
                 <div className="flex flex-col space-y-6">
-                  {/* Navigation Links */}
-                  <div className="space-y-4 px-5">
-                    {/* <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider">
-                      Navigation
-                    </h3> */}
-                    {navItems.map((item, index) => (
-                      <motion.div
-                        key={item}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                      >
-                        <button
-                          onClick={(e) => {
-                            handleSmoothScroll(e, item.toLowerCase());
-                            // Close the sheet after clicking
-                            const closeButton = document.querySelector('[data-slot="sheet-close"]');
-                            if (closeButton) closeButton.click();
-                          }}
-                          className="w-full text-left py-3 px-4 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors font-medium"
+                  {/* Navigation Links - Only show on home page */}
+                  {isHomePage && (
+                    <div className="space-y-4 px-5">
+                      {navItems.map((item, index) => (
+                        <motion.div
+                          key={item}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: index * 0.1 }}
                         >
-                          {item}
-                        </button>
-                      </motion.div>
-                    ))}
-                  </div>
+                          <button
+                            onClick={(e) => {
+                              handleSmoothScroll(e, item.toLowerCase());
+                              // Close the sheet after clicking
+                              const closeButton = document.querySelector(
+                                '[data-slot="sheet-close"]'
+                              );
+                              if (closeButton) closeButton.click();
+                            }}
+                            className="w-full text-left py-3 px-4 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors font-medium"
+                          >
+                            {item}
+                          </button>
+                        </motion.div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </SheetContent>
             </Sheet>
@@ -172,4 +179,4 @@ export default function Header() {
       </div>
     </motion.header>
   );
-} 
+}
