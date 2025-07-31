@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: "City IAS/PCS Academy",
   description:
-    "City IAS/PCS Academy is a platform for IAS/PCS aspirants to prepare for the IAS/PCS exam.",
+    "City IAS/PCS Academy is a leading platform for IAS/PCS aspirants to prepare for the Civil Services examination with expert guidance and comprehensive study materials.",
   keywords: [
     "IAS",
     "PCS",
@@ -25,6 +25,10 @@ export const metadata = {
     "Exam Preparation",
     "Academy",
     "Coaching",
+    "Government Jobs",
+    "Civil Service Exam",
+    "IAS Coaching",
+    "PCS Coaching",
   ],
   authors: [{ name: "City IAS/PCS Academy" }],
   creator: "City IAS/PCS Academy",
@@ -43,14 +47,14 @@ export const metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://www.cityiasacademy.com", // Replace with your actual domain
+    url: "https://www.cityiasacademy.com",
     siteName: "City IAS/PCS Academy",
     title: "City IAS/PCS Academy - Premier IAS/PCS Coaching Institute",
     description:
       "City IAS/PCS Academy is a leading platform for IAS/PCS aspirants to prepare for the Civil Services examination with expert guidance and comprehensive study materials.",
     images: [
       {
-        url: "/CityIASLOGO.png", // Using your existing logo
+        url: "https://www.cityiasacademy.com/CityIASLOGO.png",
         width: 1200,
         height: 630,
         alt: "City IAS/PCS Academy Logo",
@@ -63,12 +67,12 @@ export const metadata = {
     title: "City IAS/PCS Academy - Premier IAS/PCS Coaching Institute",
     description:
       "City IAS/PCS Academy is a leading platform for IAS/PCS aspirants to prepare for the Civil Services examination.",
-    images: ["/CityIASLOGO.png"], // Using your existing logo
-    creator: "@cityias", // Replace with your actual Twitter handle
-    site: "@cityias", // Replace with your actual Twitter handle
+    images: ["https://www.cityiasacademy.com/CityIASLOGO.png"],
+    creator: "@cityias",
+    site: "@cityias",
   },
   alternates: {
-    canonical: "https://www.cityiasacademy.com", // Replace with your actual domain
+    canonical: "https://www.cityiasacademy.com",
   },
   icons: {
     icon: [
@@ -90,7 +94,22 @@ export const metadata = {
         type: "image/png",
       },
     ],
-    other: [{ url: "/favicon_io/favicon.ico", sizes: "any" }],
+    other: [
+      {
+        url: "/favicon_io/favicon.ico",
+        sizes: "any",
+      },
+      {
+        url: "/favicon_io/android-chrome-192x192.png",
+        sizes: "192x192",
+        type: "image/png",
+      },
+      {
+        url: "/favicon_io/android-chrome-512x512.png",
+        sizes: "512x512",
+        type: "image/png",
+      },
+    ],
   },
   manifest: "/favicon_io/site.webmanifest",
   appleWebApp: {
@@ -108,93 +127,15 @@ export const metadata = {
     yandex: "your-yandex-verification-code", // Optional: Replace with your Yandex verification code
     yahoo: "your-yahoo-verification-code", // Optional: Replace with your Yahoo verification code
   },
+  other: {
+    "theme-color": "#ffffff",
+    "msapplication-TileColor": "#ffffff",
+  },
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <head>
-        <link rel="icon" type="image/x-icon" href="/favicon_io/favicon.ico" />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="16x16"
-          href="/favicon_io/favicon-16x16.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href="/favicon_io/favicon-32x32.png"
-        />
-        <link
-          rel="apple-touch-icon"
-          sizes="180x180"
-          href="/favicon_io/apple-touch-icon.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="192x192"
-          href="/favicon_io/android-chrome-192x192.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="512x512"
-          href="/favicon_io/android-chrome-512x512.png"
-        />
-        <link rel="manifest" href="/favicon_io/site.webmanifest" />
-        <meta name="theme-color" content="#ffffff" />
-        <meta name="msapplication-TileColor" content="#ffffff" />
-
-        {/* Additional SEO meta tags */}
-        <meta name="author" content="City IAS/PCS Academy" />
-        <meta
-          name="keywords"
-          content="IAS, PCS, Civil Services, UPSC, Exam Preparation, Academy, Coaching"
-        />
-        <meta name="robots" content="index, follow" />
-        <meta
-          name="googlebot"
-          content="index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1"
-        />
-
-        {/* Canonical URL */}
-        <link rel="canonical" href="https://www.cityiasacademy.com" />
-
-        {/* Open Graph meta tags */}
-        <meta property="og:type" content="website" />
-        <meta property="og:locale" content="en_US" />
-        <meta property="og:url" content="https://www.cityiasacademy.com" />
-        <meta property="og:site_name" content="City IAS/PCS Academy" />
-        <meta
-          property="og:title"
-          content="City IAS/PCS Academy - Premier IAS/PCS Coaching Institute"
-        />
-        <meta
-          property="og:description"
-          content="City IAS/PCS Academy is a leading platform for IAS/PCS aspirants to prepare for the Civil Services examination with expert guidance and comprehensive study materials."
-        />
-        <meta property="og:image" content="/favicon_io/android-chrome-192x192.png" />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="City IAS/PCS Academy Logo" />
-
-        {/* Twitter Card meta tags */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta
-          name="twitter:title"
-          content="City IAS/PCS Academy - Premier IAS/PCS Coaching Institute"
-        />
-        <meta
-          name="twitter:description"
-          content="City IAS/PCS Academy is a leading platform for IAS/PCS aspirants to prepare for the Civil Services examination."
-        />
-        <meta name="twitter:image" content="/CityIASLOGO.png" />
-        <meta name="twitter:creator" content="@cityias" />
-        <meta name="twitter:site" content="@cityias" />
-      </head>
       <body className={`${inter.variable} ${geistMono.variable} antialiased`}>
         <Header />
         <main>{children}</main>
