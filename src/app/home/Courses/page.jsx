@@ -23,7 +23,7 @@ export default function Courses() {
     {
       title: "FREE Coaching Program",
       subtitle: "Prelims + Mains",
-      price: 1100,
+      price: 100,
       registration: 1000,
       application: 100,
       badge: "MOST POPULAR",
@@ -141,7 +141,7 @@ export default function Courses() {
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <span className="text-3xl font-bold text-gray-900">
-                        ₹
+                       {course.price === 100? "Application Fee:": ""} ₹
                         <NumberTicker
                           value={course.price}
                           className="text-3xl font-bold text-gray-900"
@@ -153,16 +153,8 @@ export default function Courses() {
                     </div>
                     {course.registration && (
                       <p className="text-gray-600">
-                        One-time Registration: ₹
-                        <NumberTicker
-                          value={course.registration}
-                          className="text-gray-600"
-                        />{" "}
-                        + Application: ₹
-                        <NumberTicker
-                          value={course.application}
-                          className="text-gray-600"
-                        />
+                        One-time Registration After Selection Based on Entrance:
+                         ₹ 1000
                       </p>
                     )}
                     {!course.registration && (
