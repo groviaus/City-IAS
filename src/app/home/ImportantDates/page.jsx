@@ -15,26 +15,27 @@ export default function ImportantDates() {
       color: "blue",
     },
     {
+      icon: Target,
+      title: "Entrance Test",
+      date: "10th August",
+      year: "2025 (Sunday)",
+      color: "red",
+    },
+    {
       icon: BookOpen,
       title: "Batch Starts",
-      date: "13th July",
+      date: "20th August",
       year: "2025",
       color: "green",
     },
-    {
-      icon: Target,
-      title: "Entrance Test",
-      date: "3rd August",
-      year: "2025 (Sunday)",
-      color: "amber",
-    },
-    {
-      icon: Play,
-      title: "Classes Begin",
-      date: "20th August",
-      year: "2025",
-      color: "red",
-    },
+   
+    // {
+    //   icon: Play,
+    //   title: "Classes Begin",
+    //   date: "20th August",
+    //   year: "2025",
+    //   color: "red",
+    // },
   ];
 
   return (
@@ -56,7 +57,7 @@ export default function ImportantDates() {
         </motion.div>
 
         <motion.div
-          className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
+          className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
           variants={staggerContainer}
           initial="initial"
           whileInView="animate"

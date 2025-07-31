@@ -1,16 +1,54 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { NumberTicker } from "@/components/magicui/number-ticker";
 import { fadeInUp, staggerContainer, scaleOnHover } from "@/lib/animations";
 
 export default function UrgencyBanner() {
-  const timeData = [
-    { value: 23, label: "Days Left" },
-    { value: 14, label: "Hours" },
-    { value: 35, label: "Minutes" },
-  ];
+  const [timeData, setTimeData] = useState([
+    { value: 0, label: "Days Left" },
+    { value: 0, label: "Hours" },
+    { value: 0, label: "Minutes" },
+  ]);
+
+  useEffect(() => {
+    const calculateTimeUntilBatch = () => {
+      // Batch start date: 20th August 2025
+      const batchStartDate = new Date('2025-08-20T00:00:00');
+      const now = new Date();
+      
+      const timeDifference = batchStartDate.getTime() - now.getTime();
+      
+      if (timeDifference > 0) {
+        const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+        
+        setTimeData([
+          { value: days, label: "Days Left" },
+          { value: hours, label: "Hours" },
+          { value: minutes, label: "Minutes" },
+        ]);
+      } else {
+        // If batch has already started
+        setTimeData([
+          { value: 0, label: "Days Left" },
+          { value: 0, label: "Hours" },
+          { value: 0, label: "Minutes" },
+        ]);
+      }
+    };
+
+    // Calculate initial time
+    calculateTimeUntilBatch();
+    
+    // Update every minute
+    const interval = setInterval(calculateTimeUntilBatch, 60000);
+    
+    return () => clearInterval(interval);
+  }, []);
 
   const handleSmoothScroll = (e, targetId) => {
     e.preventDefault();
@@ -43,7 +81,7 @@ export default function UrgencyBanner() {
               ⏰ Don't Wait! Seats Filling Fast
             </h3>
             <p className="text-orange-100">
-              Batch starts 13th July 2025 - Only{" "}
+              Batch starts 20th August 2025 - Only{" "}
               <NumberTicker value={50} className="text-orange-100" /> seats
               available
             </p>

@@ -134,7 +134,7 @@ export default function Hero() {
               </motion.div>
             </motion.div>
 
-            <motion.div
+            {/* <motion.div
               className="grid grid-cols-3 gap-6 pt-6"
               variants={staggerContainer}
             >
@@ -158,7 +158,7 @@ export default function Hero() {
                   </div>
                 </motion.div>
               ))}
-            </motion.div>
+            </motion.div> */}
           </motion.div>
 
           <motion.div
