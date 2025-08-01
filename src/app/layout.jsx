@@ -148,26 +148,12 @@ export const metadata = {
       "Leading IAS coaching institute in Kela Nagar, Aligarh, Uttar Pradesh. Expert faculty, comprehensive study materials, and proven success in UPSC Civil Services preparation.",
     images: [
       {
-        url: "https://www.cityiasacademy.com/favicon_io/android-chrome-192x192.png?v=1",
+        url: "https://www.cityiasacademy.com/favicon_io/android-chrome-192x192.png?v=2",
         width: 192,
         height: 192,
         alt: "City IAS/PCS Academy - Best IAS Coaching in Aligarh",
         type: "image/png",
       },
-      {
-        url: "https://www.cityiasacademy.com/CityIASLOGO.png?v=1",
-        width: 1200,
-        height: 630,
-        alt: "City IAS/PCS Academy - Best IAS Coaching in Aligarh",
-        type: "image/png",
-      },
-      // {
-      //   url: "https://www.cityiasacademy.com/academy-building.jpg?v=1",
-      //   width: 1200,
-      //   height: 630,
-      //   alt: "City IAS Academy Building in Kela Nagar, Aligarh",
-      //   type: "image/jpeg",
-      // },
     ],
   },
   twitter: {
@@ -176,7 +162,7 @@ export const metadata = {
     description:
       "Leading IAS coaching institute in Kela Nagar, Aligarh. Expert faculty, comprehensive materials, proven UPSC success.",
     images: [
-      "https://www.cityiasacademy.com/favicon_io/android-chrome-192x192.png?v=1",
+      "https://www.cityiasacademy.com/favicon_io/android-chrome-192x192.png?v=2",
     ],
     // creator: "@cityiasacademy", // Add your actual Twitter handle
     // site: "@cityiasacademy", // Add your actual Twitter handle
@@ -185,7 +171,7 @@ export const metadata = {
     canonical: "https://www.cityiasacademy.com",
     languages: {
       "en-IN": "https://www.cityiasacademy.com",
-      "hi-IN": "https://www.cityiasacademy.com/hi",
+      // "hi-IN": "https://www.cityiasacademy.com/hi",
     },
   },
   icons: {
@@ -333,7 +319,7 @@ export default function RootLayout({ children }) {
         {/* WhatsApp-specific meta tags */}
         <meta
           property="og:image"
-          content="https://www.cityiasacademy.com/favicon_io/android-chrome-192x192.png?v=1"
+          content="https://www.cityiasacademy.com/favicon_io/android-chrome-192x192.png?v=2"
         />
         <meta property="og:image:width" content="192" />
         <meta property="og:image:height" content="192" />
@@ -346,7 +332,7 @@ export default function RootLayout({ children }) {
         {/* Additional WhatsApp optimization */}
         <meta
           name="twitter:image"
-          content="https://www.cityiasacademy.com/favicon_io/android-chrome-192x192.png?v=1"
+          content="https://www.cityiasacademy.com/favicon_io/android-chrome-192x192.png?v=2"
         />
         <meta
           name="twitter:image:alt"
@@ -407,8 +393,9 @@ export default function RootLayout({ children }) {
                 height: 400,
               },
               image: [
+                "https://www.cityiasacademy.com/favicon_io/android-chrome-192x192.png?v=2",
                 "https://www.cityiasacademy.com/CityIASLOGO.png",
-                "https://www.cityiasacademy.com/academy-building.jpg",
+                // "https://www.cityiasacademy.com/academy-building.jpg",
               ],
               address: {
                 "@type": "PostalAddress",
