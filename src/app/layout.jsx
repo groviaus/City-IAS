@@ -148,26 +148,26 @@ export const metadata = {
       "Leading IAS coaching institute in Kela Nagar, Aligarh, Uttar Pradesh. Expert faculty, comprehensive study materials, and proven success in UPSC Civil Services preparation.",
     images: [
       {
-        url: "https://www.cityiasacademy.com/favicon_io/android-chrome-192x192.png",
+        url: "https://www.cityiasacademy.com/favicon_io/android-chrome-192x192.png?v=1",
         width: 192,
         height: 192,
         alt: "City IAS/PCS Academy - Best IAS Coaching in Aligarh",
         type: "image/png",
       },
       {
-        url: "https://www.cityiasacademy.com/CityIASLOGO.png",
+        url: "https://www.cityiasacademy.com/CityIASLOGO.png?v=1",
         width: 1200,
         height: 630,
         alt: "City IAS/PCS Academy - Best IAS Coaching in Aligarh",
         type: "image/png",
       },
-      {
-        url: "https://www.cityiasacademy.com/academy-building.jpg",
-        width: 1200,
-        height: 630,
-        alt: "City IAS Academy Building in Kela Nagar, Aligarh",
-        type: "image/jpeg",
-      },
+      // {
+      //   url: "https://www.cityiasacademy.com/academy-building.jpg?v=1",
+      //   width: 1200,
+      //   height: 630,
+      //   alt: "City IAS Academy Building in Kela Nagar, Aligarh",
+      //   type: "image/jpeg",
+      // },
     ],
   },
   twitter: {
@@ -175,7 +175,9 @@ export const metadata = {
     title: "City IAS/PCS Academy - Best IAS Coaching in Aligarh",
     description:
       "Leading IAS coaching institute in Kela Nagar, Aligarh. Expert faculty, comprehensive materials, proven UPSC success.",
-    images: ["https://www.cityiasacademy.com/CityIASLOGO.png"],
+    images: [
+      "https://www.cityiasacademy.com/favicon_io/android-chrome-192x192.png?v=1",
+    ],
     // creator: "@cityiasacademy", // Add your actual Twitter handle
     // site: "@cityiasacademy", // Add your actual Twitter handle
   },
@@ -326,6 +328,29 @@ export default function RootLayout({ children }) {
         <meta
           name="rca.keywords"
           content="RCA Aligarh, Residential Coaching Academy Aligarh, RCA vs City IAS, Residential Coaching Academy vs City IAS Academy, RCA fees, RCA location, RCA interview preparation"
+        />
+
+        {/* WhatsApp-specific meta tags */}
+        <meta
+          property="og:image"
+          content="https://www.cityiasacademy.com/favicon_io/android-chrome-192x192.png?v=1"
+        />
+        <meta property="og:image:width" content="192" />
+        <meta property="og:image:height" content="192" />
+        <meta property="og:image:type" content="image/png" />
+        <meta
+          property="og:image:alt"
+          content="City IAS/PCS Academy - Best IAS Coaching in Aligarh"
+        />
+
+        {/* Additional WhatsApp optimization */}
+        <meta
+          name="twitter:image"
+          content="https://www.cityiasacademy.com/favicon_io/android-chrome-192x192.png?v=1"
+        />
+        <meta
+          name="twitter:image:alt"
+          content="City IAS/PCS Academy - Best IAS Coaching in Aligarh"
         />
       </head>
 
