@@ -17,7 +17,14 @@ import Image from "next/image";
 export default function Header() {
   const pathname = usePathname();
   const isHomePage = pathname === "/" || pathname === "/home";
-  const navItems = ["Courses", "Faculty", "Facilities", "Contact"];
+  const navItems = [
+    "Courses",
+    "Faculty",
+    "Facilities",
+    // "About",
+    // "Success",
+    "Contact",
+  ];
 
   const handleSmoothScroll = (e, targetId) => {
     e.preventDefault();
@@ -44,8 +51,20 @@ export default function Header() {
             whileHover={{ scale: 1.02 }}
           >
             <Link href="/" className="flex items-center space-x-3">
-              <Image src="/CityIASLOGO.png" alt="City IAS/PCS Academy" width={500} height={500}  className="w-full h-14 sm:h-14 object-contain "/>
-              <Image src="/CityIASLOGOM.png" alt="City IAS/PCS Academy" width={500} height={500}  className="w-full h-10 sm:h-14 object-contain hidden"/>
+              <Image
+                src="/CityIASLOGO.png"
+                alt="City IAS/PCS Academy"
+                width={500}
+                height={500}
+                className="w-full h-14 sm:h-14 object-contain "
+              />
+              <Image
+                src="/CityIASLOGOM.png"
+                alt="City IAS/PCS Academy"
+                width={500}
+                height={500}
+                className="w-full h-10 sm:h-14 object-contain hidden"
+              />
             </Link>
           </motion.div>
 
@@ -90,16 +109,16 @@ export default function Header() {
                 Call Now
               </Button>
             </motion.a>
-           
-              <Button
-                size="sm"
-                onClick={(e) => handleSmoothScroll(e, "contact")}
-                className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-lg hover:scale-105 transition-all duration-300
+
+            <Button
+              size="sm"
+              onClick={(e) => handleSmoothScroll(e, "contact")}
+              className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-lg hover:scale-105 transition-all duration-300
                 hidden sm:block"
-              >
-                Apply Online
-              </Button>
-            
+            >
+              Apply Online
+            </Button>
+
             <Sheet>
               <SheetTrigger asChild>
                 <motion.div
@@ -114,7 +133,13 @@ export default function Header() {
               <SheetContent side="right" className="w-[300px] sm:w-[400px]">
                 <SheetHeader>
                   <SheetTitle className="text-left">
-                    <Image src="/CityIASLOGO.png" alt="City IAS/PCS Academy" width={500} height={500}  className="w-full h-10 sm:h-14 object-contain"/>
+                    <Image
+                      src="/CityIASLOGO.png"
+                      alt="City IAS/PCS Academy"
+                      width={500}
+                      height={500}
+                      className="w-full h-10 sm:h-14 object-contain"
+                    />
                   </SheetTitle>
                 </SheetHeader>
 

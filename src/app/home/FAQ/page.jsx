@@ -29,7 +29,7 @@ export default function FAQ() {
     {
       question: "What is the selection process?",
       answer:
-        "Admissions are on a first-come, first-serve basis with limited seats. There's an entrance test on 3rd August 2025 (Sunday) for final selection.",
+        "Admissions are on a first-come, first-serve basis with limited seats. There's an entrance test on 10th August 2025 (Sunday) for final selection.",
     },
     {
       question: "What study materials are provided?",
