@@ -176,8 +176,8 @@ export const metadata = {
     description:
       "Leading IAS coaching institute in Kela Nagar, Aligarh. Expert faculty, comprehensive materials, proven UPSC success.",
     images: ["https://www.cityiasacademy.com/CityIASLOGO.png"],
-    creator: "@cityiasacademy",
-    site: "@cityiasacademy",
+    // creator: "@cityiasacademy", // Add your actual Twitter handle
+    // site: "@cityiasacademy", // Add your actual Twitter handle
   },
   alternates: {
     canonical: "https://www.cityiasacademy.com",
@@ -237,12 +237,12 @@ export const metadata = {
     userScalable: true,
   },
   verification: {
-    google: "your-google-search-console-verification-code", // Replace with actual code
-    yandex: "your-yandex-verification-code", // Optional
-    yahoo: "your-yahoo-verification-code", // Optional
-    other: {
-      "msvalidate.01": "your-bing-verification-code", // Bing Webmaster Tools
-    },
+    // google: "your-google-search-console-verification-code", // Add your actual Google Search Console verification code
+    // yandex: "your-yandex-verification-code", // Optional - Add if using Yandex
+    // yahoo: "your-yahoo-verification-code", // Optional - Add if using Yahoo
+    // other: {
+    //   "msvalidate.01": "your-bing-verification-code", // Bing Webmaster Tools - Add if using Bing
+    // },
   },
   other: {
     "theme-color": "#1f2937",
@@ -330,8 +330,8 @@ export default function RootLayout({ children }) {
       </head>
 
       <body className={`${inter.variable} ${geistMono.variable} antialiased`}>
-        {/* Google Analytics */}
-        <Script
+        {/* Google Analytics - Uncomment and add your GA4 ID */}
+        {/* <Script
           src={`https://www.googletagmanager.com/gtag/js?id=G-YOUR-GA-ID`}
           strategy="afterInteractive"
         />
@@ -345,10 +345,10 @@ export default function RootLayout({ children }) {
               page_location: window.location.href,
             });
           `}
-        </Script>
+        </Script> */}
 
-        {/* Google Search Console */}
-        <Script id="google-search-console" strategy="afterInteractive">
+        {/* Google Custom Search - Uncomment and add your Search Engine ID */}
+        {/* <Script id="google-search-console" strategy="afterInteractive">
           {`
             (function() {
               var gcse = document.createElement('script');
@@ -359,7 +359,7 @@ export default function RootLayout({ children }) {
               s.parentNode.insertBefore(gcse, s);
             })();
           `}
-        </Script>
+        </Script> */}
 
         {/* LocalBusiness Schema Markup */}
         <Script
@@ -470,11 +470,11 @@ export default function RootLayout({ children }) {
                   "@type": "Review",
                   author: {
                     "@type": "Person",
-                    name: "Student Name",
+                    name: "Saniya Siddiqui",
                   },
                   datePublished: "2024-01-15",
                   reviewBody:
-                    "Excellent coaching institute with experienced faculty and comprehensive study materials.",
+                    "Excellent coaching institute with experienced faculty and comprehensive study materials. The personalized mentoring helped me clear my doubts effectively.",
                   reviewRating: {
                     "@type": "Rating",
                     ratingValue: "5",
@@ -488,11 +488,11 @@ export default function RootLayout({ children }) {
                 },
               ],
               sameAs: [
-                "https://www.facebook.com/cityiasacademy",
-                "https://www.twitter.com/cityiasacademy",
-                "https://www.instagram.com/cityiasacademy",
-                "https://www.youtube.com/c/cityiasacademy",
-                "https://www.linkedin.com/company/city-ias-academy",
+                // "https://www.facebook.com/cityiasacademy", // Add your actual Facebook page
+                // "https://www.twitter.com/cityiasacademy", // Add your actual Twitter handle
+                // "https://www.instagram.com/cityiasacademy", // Add your actual Instagram handle
+                // "https://www.youtube.com/c/cityiasacademy", // Add your actual YouTube channel
+                // "https://www.linkedin.com/company/city-ias-academy", // Add your actual LinkedIn page
               ],
               potentialAction: {
                 "@type": "SearchAction",
@@ -570,9 +570,9 @@ export default function RootLayout({ children }) {
                 "query-input": "required name=search_term_string",
               },
               sameAs: [
-                "https://www.facebook.com/cityiasacademy",
-                "https://www.twitter.com/cityiasacademy",
-                "https://www.instagram.com/cityiasacademy",
+                // "https://www.facebook.com/cityiasacademy", // Add your actual Facebook page
+                // "https://www.twitter.com/cityiasacademy", // Add your actual Twitter handle
+                // "https://www.instagram.com/cityiasacademy", // Add your actual Instagram handle
               ],
             }),
           }}
