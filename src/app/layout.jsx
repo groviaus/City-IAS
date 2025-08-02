@@ -569,6 +569,30 @@ export default function RootLayout({ children }) {
                 "Optional Subjects",
                 "Interview Skills",
               ],
+              hasCourseInstance: {
+                "@type": "CourseInstance",
+                name: "IAS/PCS Foundation Course 2024-25",
+                courseMode: "Blended",
+                startDate: "2024-09-01",
+                endDate: "2025-08-31",
+                instructor: {
+                  "@type": "Person",
+                  name: "Mr. M.R. Khan",
+                  jobTitle: "Director",
+                },
+                location: {
+                  "@type": "Place",
+                  name: "City IAS Academy",
+                  address: {
+                    "@type": "PostalAddress",
+                    streetAddress: "Kela Nagar",
+                    addressLocality: "Aligarh",
+                    addressRegion: "Uttar Pradesh",
+                    postalCode: "202001",
+                    addressCountry: "IN",
+                  },
+                },
+              },
             }),
           }}
         />
