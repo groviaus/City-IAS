@@ -585,9 +585,11 @@ export default function RootLayout({ children }) {
                     "Friday",
                     "Saturday",
                   ],
-                  startTime: "11:00",
-                  endTime: "19:00",
+                  startTime: "T11:00",
+                  endTime: "T19:00",
                   timeZone: "Asia/Kolkata",
+                  repeatCount: 156,
+                  repeatFrequency: "P1W",
                 },
                 instructor: {
                   "@type": "Person",
