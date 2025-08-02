@@ -18,12 +18,19 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: {
-    default: "City IAS/PCS Academy - Best IAS Coaching in Aligarh | Kela Nagar",
-    template: "%s | City IAS/PCS Academy - Top IAS Coaching Aligarh",
+    default:
+      "City IAS Academy - Best IAS & PCS Coaching in Aligarh | Top UPSC Preparation",
+    template: "%s | City IAS Academy - Best IAS & PCS Coaching Aligarh",
   },
   description:
-    "City IAS/PCS Academy in Kela Nagar, Aligarh - Leading IAS coaching institute in Uttar Pradesh. Best UPSC coaching with expert faculty, comprehensive study materials, and proven track record. Join Aligarh's top IAS academy for Civil Services preparation.",
+    "City IAS Academy - #1 IAS & PCS Coaching in Aligarh. Best UPSC preparation with expert faculty, comprehensive study materials, and proven success. Join Aligarh's top IAS academy for Civil Services preparation. Free Foundation Batch available.",
   keywords: [
+    "city ias",
+    "city ias pcs",
+    "pcs coaching aligarh",
+    "pcs keywords",
+    "city ias academy",
+    "city ias pcs academy",
     "best IAS coaching in Aligarh",
     "IAS coaching Aligarh",
     "UPSC coaching Aligarh",
@@ -142,10 +149,11 @@ export const metadata = {
     type: "website",
     locale: "en_IN",
     url: "https://www.cityiasacademy.com",
-    siteName: "City IAS/PCS Academy",
-    title: "City IAS/PCS Academy - Best IAS Coaching in Aligarh | Kela Nagar",
+    siteName: "City IAS Academy",
+    title:
+      "City IAS Academy - Best IAS & PCS Coaching in Aligarh | Top UPSC Preparation",
     description:
-      "Leading IAS coaching institute in Kela Nagar, Aligarh, Uttar Pradesh. Expert faculty, comprehensive study materials, and proven success in UPSC Civil Services preparation.",
+      "City IAS Academy - #1 IAS & PCS Coaching in Aligarh. Expert faculty, comprehensive materials, proven UPSC success. Free Foundation Batch available.",
     images: [
       {
         url: "https://www.cityiasacademy.com/favicon_io/android-chrome-192x192.png?v=2",
@@ -158,9 +166,9 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "City IAS/PCS Academy - Best IAS Coaching in Aligarh",
+    title: "City IAS Academy - Best IAS & PCS Coaching in Aligarh",
     description:
-      "Leading IAS coaching institute in Kela Nagar, Aligarh. Expert faculty, comprehensive materials, proven UPSC success.",
+      "City IAS Academy - #1 IAS & PCS Coaching in Aligarh. Expert faculty, comprehensive materials, proven UPSC success. Free Foundation Batch available.",
     images: [
       "https://www.cityiasacademy.com/favicon_io/android-chrome-192x192.png?v=2",
     ],
@@ -337,6 +345,12 @@ export default function RootLayout({ children }) {
         <meta
           name="twitter:image:alt"
           content="City IAS/PCS Academy - Best IAS Coaching in Aligarh"
+        />
+
+        {/* Google Site Verification */}
+        <meta
+          name="google-site-verification"
+          content="JeWkUtIJ6x6oW1eT4HTS4-ZlipkeO7ADKcLebQJcwUI"
         />
       </head>
 

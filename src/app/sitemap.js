@@ -153,5 +153,12 @@ export default function sitemap() {
       changeFrequency: "monthly",
       priority: 0.7,
     },
+    // PCS Coaching Page (High Priority)
+    {
+      url: `${baseUrl}/pcs-coaching-aligarh`,
+      lastModified: currentDate,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
   ];
 }
