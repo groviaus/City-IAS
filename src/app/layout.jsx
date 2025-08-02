@@ -589,7 +589,7 @@ export default function RootLayout({ children }) {
                   endTime: "T19:00",
                   timeZone: "Asia/Kolkata",
                   repeatCount: 156,
-                  repeatFrequency: "P1W",
+                  repeatFrequency: "WEEKLY",
                 },
                 instructor: {
                   "@type": "Person",
