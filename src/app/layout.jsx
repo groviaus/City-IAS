@@ -575,6 +575,20 @@ export default function RootLayout({ children }) {
                 courseMode: "Blended",
                 startDate: "2024-09-01",
                 endDate: "2025-08-31",
+                courseSchedule: {
+                  "@type": "Schedule",
+                  byDay: [
+                    "Monday",
+                    "Tuesday",
+                    "Wednesday",
+                    "Thursday",
+                    "Friday",
+                    "Saturday",
+                  ],
+                  startTime: "11:00",
+                  endTime: "19:00",
+                  timeZone: "Asia/Kolkata",
+                },
                 instructor: {
                   "@type": "Person",
                   name: "Mr. M.R. Khan",
