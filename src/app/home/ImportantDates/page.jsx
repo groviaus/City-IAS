@@ -30,7 +30,7 @@ export default function ImportantDates() {
     {
       icon: BookOpen,
       title: "Batch Starts",
-      date: "30th September",
+      date: "30th August",
       year: "2025",
       color: "green",
       bgColor: "bg-green-100",
