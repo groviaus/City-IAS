@@ -14,11 +14,10 @@ import { Trophy, Zap, CheckCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import { NumberTicker } from "@/components/magicui/number-ticker";
 import { fadeInUp, staggerContainer, scaleOnHover } from "@/lib/animations";
-import RegistrationDialog from "@/components/RegistrationDialog";
+import { useRegistrationDialog } from "@/components/GlobalRegistrationDialog";
 
 export default function Courses() {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [selectedCourse, setSelectedCourse] = useState("");
+  const { openDialog } = useRegistrationDialog();
   const courses = [
     {
       title: "FREE Coaching Program",
@@ -69,8 +68,7 @@ export default function Courses() {
 
   // Handle course selection and open dialog
   const handleCourseSelect = (courseTitle) => {
-    setSelectedCourse(courseTitle);
-    setIsDialogOpen(true);
+    openDialog(courseTitle);
   };
 
   return (
@@ -141,7 +139,7 @@ export default function Courses() {
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <span className="text-3xl font-bold text-gray-900">
-                       {course.price === 100? "Application Fee:": ""} ₹
+                        {course.price === 100 ? "Application Fee:" : ""} ₹
                         <NumberTicker
                           value={course.price}
                           className="text-3xl font-bold text-gray-900"
@@ -154,7 +152,7 @@ export default function Courses() {
                     {course.registration && (
                       <p className="text-gray-600">
                         One-time Registration After Selection Based on Entrance:
-                         ₹ 1000
+                        ₹ 1000
                       </p>
                     )}
                     {!course.registration && (
@@ -196,13 +194,6 @@ export default function Courses() {
           ))}
         </motion.div>
       </div>
-
-      {/* Registration Dialog */}
-      <RegistrationDialog
-        selectedCourse={selectedCourse}
-        isOpen={isDialogOpen}
-        onOpenChange={setIsDialogOpen}
-      />
     </section>
   );
 }

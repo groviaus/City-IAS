@@ -16,16 +16,20 @@ export default function UrgencyBanner() {
   useEffect(() => {
     const calculateTimeUntilBatch = () => {
       // Batch start date: 20th August 2025
-      const batchStartDate = new Date('2025-08-20T00:00:00');
+      const batchStartDate = new Date("2025-09-30T00:00:00");
       const now = new Date();
-      
+
       const timeDifference = batchStartDate.getTime() - now.getTime();
-      
+
       if (timeDifference > 0) {
         const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
-        
+        const hours = Math.floor(
+          (timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        );
+        const minutes = Math.floor(
+          (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
+        );
+
         setTimeData([
           { value: days, label: "Days Left" },
           { value: hours, label: "Hours" },
@@ -43,10 +47,10 @@ export default function UrgencyBanner() {
 
     // Calculate initial time
     calculateTimeUntilBatch();
-    
+
     // Update every minute
     const interval = setInterval(calculateTimeUntilBatch, 60000);
-    
+
     return () => clearInterval(interval);
   }, []);
 
@@ -55,8 +59,8 @@ export default function UrgencyBanner() {
     const targetElement = document.getElementById(targetId);
     if (targetElement) {
       targetElement.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
+        behavior: "smooth",
+        block: "start",
       });
     }
   };
@@ -81,7 +85,7 @@ export default function UrgencyBanner() {
               ⏰ Don't Wait! Seats Filling Fast
             </h3>
             <p className="text-orange-100">
-              Batch starts 20th August 2025 - Only{" "}
+              Batch starts 30th September 2025 - Only{" "}
               <NumberTicker value={50} className="text-orange-100" /> seats
               available
             </p>
@@ -109,7 +113,10 @@ export default function UrgencyBanner() {
               ))}
             </div>
             <motion.div {...scaleOnHover}>
-              <Button className="bg-white text-red-600 hover:bg-gray-100 shadow-lg w-full sm:w-auto sm:ml-5 md:text-xl sm:py-6" onClick={(e) => handleSmoothScroll(e, 'contact')}>
+              <Button
+                className="bg-white text-red-600 hover:bg-gray-100 shadow-lg w-full sm:w-auto sm:ml-5 md:text-xl sm:py-6"
+                onClick={(e) => handleSmoothScroll(e, "contact")}
+              >
                 Apply Now
               </Button>
             </motion.div>
@@ -118,4 +125,4 @@ export default function UrgencyBanner() {
       </div>
     </motion.section>
   );
-} 
+}

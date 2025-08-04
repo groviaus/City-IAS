@@ -5,7 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowRight, CheckCircle, XCircle, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { validateName, validatePhone, validateEmail, validateCourse, validateCityState } from "@/lib/validation";
+import {
+  validateName,
+  validatePhone,
+  validateEmail,
+  validateCourse,
+  validateCityState,
+} from "@/lib/validation";
 
 export default function ApplicationForm() {
   const [formData, setFormData] = useState({
@@ -60,18 +66,18 @@ export default function ApplicationForm() {
 
   // Handle input changes with real-time validation
   const handleInputChange = (fieldName, value) => {
-    setFormData(prev => ({ ...prev, [fieldName]: value }));
-    
+    setFormData((prev) => ({ ...prev, [fieldName]: value }));
+
     // Clear error when user starts typing
     if (errors[fieldName]) {
-      setErrors(prev => ({ ...prev, [fieldName]: "" }));
+      setErrors((prev) => ({ ...prev, [fieldName]: "" }));
     }
 
     // Real-time validation (only if field has content)
     if (value.trim()) {
       const validation = validateField(fieldName, value);
       if (!validation.isValid) {
-        setErrors(prev => ({ ...prev, [fieldName]: validation.error }));
+        setErrors((prev) => ({ ...prev, [fieldName]: validation.error }));
       }
     }
   };
@@ -80,9 +86,9 @@ export default function ApplicationForm() {
   const handleInputBlur = (fieldName, value) => {
     const validation = validateField(fieldName, value);
     if (!validation.isValid) {
-      setErrors(prev => ({ ...prev, [fieldName]: validation.error }));
+      setErrors((prev) => ({ ...prev, [fieldName]: validation.error }));
     } else {
-      setErrors(prev => ({ ...prev, [fieldName]: "" }));
+      setErrors((prev) => ({ ...prev, [fieldName]: "" }));
     }
   };
 
@@ -103,7 +109,7 @@ export default function ApplicationForm() {
   // Form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Validate all fields
     const validations = {
       name: validateName(formData.name),
@@ -116,7 +122,7 @@ export default function ApplicationForm() {
     const newErrors = {};
     let hasErrors = false;
 
-    Object.keys(validations).forEach(field => {
+    Object.keys(validations).forEach((field) => {
       if (!validations[field].isValid) {
         newErrors[field] = validations[field].error;
         hasErrors = true;
@@ -209,7 +215,7 @@ export default function ApplicationForm() {
       transition={{ duration: 0.5 }}
     >
       <h3 className="text-2xl font-bold mb-6 text-white">Ready to Begin?</h3>
-      
+
       {/* Success/Error Messages */}
       <AnimatePresence>
         {submitStatus === "success" && (
@@ -254,8 +260,8 @@ export default function ApplicationForm() {
               type={field.type}
               placeholder={field.placeholder}
               value={formData[field.name]}
-              onChange={(e) => 
-                field.customChange 
+              onChange={(e) =>
+                field.customChange
                   ? field.customChange(e.target.value)
                   : handleInputChange(field.name, e.target.value)
               }
@@ -265,7 +271,7 @@ export default function ApplicationForm() {
               }`}
               disabled={isSubmitting}
             />
-            
+
             {/* Error Message */}
             <AnimatePresence>
               {errors[field.name] && (
@@ -313,4 +319,4 @@ export default function ApplicationForm() {
       </p>
     </motion.div>
   );
-} 
+}

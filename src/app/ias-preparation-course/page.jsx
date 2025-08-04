@@ -197,7 +197,7 @@ export default function IASPreparationCourse() {
                 </h3>
                 <div className="text-center mb-6">
                   <span className="text-3xl font-bold text-blue-600">
-                    ₹35,000
+                    ₹30,000
                   </span>
                   <span className="text-gray-500 ml-2">/year</span>
                 </div>

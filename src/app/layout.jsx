@@ -3,6 +3,9 @@ import "./globals.css";
 import Header from "./home/Header/page";
 import Footer from "./home/Footer/page";
 import Script from "next/script";
+import { RegistrationDialogProvider } from "@/components/GlobalRegistrationDialog";
+import AutoRegistrationPopup from "@/components/AutoRegistrationPopup";
+import TestRegistrationButton from "@/components/TestRegistrationButton";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -812,9 +815,13 @@ export default function RootLayout({ children }) {
           }}
         />
 
-        <Header />
-        <main>{children}</main>
-        <Footer />
+        <RegistrationDialogProvider>
+          <Header />
+          <main>{children}</main>
+          <Footer />
+          <AutoRegistrationPopup />
+          {/* <TestRegistrationButton /> */}
+        </RegistrationDialogProvider>
       </body>
     </html>
   );

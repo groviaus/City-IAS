@@ -40,8 +40,8 @@ export default function Hero() {
     const targetElement = document.getElementById(targetId);
     if (targetElement) {
       targetElement.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
+        behavior: "smooth",
+        block: "start",
       });
     }
   };
@@ -103,8 +103,20 @@ export default function Hero() {
                   🎯 FREE Coaching Available!
                 </h3>
                 <p className="text-gray-700">
-                  Yes, you read that right. <span className="font-bold text-blue-500">Quality IAS/PCS</span>  coaching at <span className="text-green-500 font-bold   animate-pulse mt-2">ZERO COST !</span>
-                <br />Only <span className="text-green-500 font-bold sm:text-xl px-[2px]  animate-pulse mt-2">₹100</span> Entrance Test fee.
+                  Yes, you read that right.{" "}
+                  <span className="font-bold text-blue-500">
+                    Quality IAS/PCS
+                  </span>{" "}
+                  coaching at{" "}
+                  <span className="text-green-500 font-bold   animate-pulse mt-2">
+                    ZERO COST !
+                  </span>
+                  <br />
+                  Only{" "}
+                  <span className="text-green-500 font-bold sm:text-xl px-[2px]  animate-pulse mt-2">
+                    ₹100
+                  </span>{" "}
+                  Entrance Test fee.
                 </p>
               </motion.div>
             </div>
@@ -113,7 +125,11 @@ export default function Hero() {
               className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
               variants={fadeInUp}
             >
-              <motion.a onClick={(e) => handleSmoothScroll(e, 'contact')} href="#contact" {...scaleOnHover}>
+              <motion.a
+                onClick={(e) => handleSmoothScroll(e, "contact")}
+                href="#contact"
+                {...scaleOnHover}
+              >
                 <Button
                   size="lg"
                   className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-lg px-8 shadow-lg w-full sm:w-auto"
@@ -122,7 +138,11 @@ export default function Hero() {
                   Secure Your Seat Now
                 </Button>
               </motion.a>
-              <motion.a onClick={(e) => handleSmoothScroll(e, 'courses')} href="#courses" {...scaleOnHover}>
+              <motion.a
+                onClick={(e) => handleSmoothScroll(e, "courses")}
+                href="#courses"
+                {...scaleOnHover}
+              >
                 <Button
                   variant="outline"
                   size="lg"
