@@ -17,7 +17,8 @@ export default function Testimonials() {
       content:
         "City IAS Academy transformed my dream into reality. The FREE coaching program gave me the foundation I needed, and Mr. Khan's guidance was invaluable throughout my journey.",
       rating: 5,
-      image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
+      image:
+        "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
     },
     {
       name: "Rahul Verma",
@@ -26,16 +27,18 @@ export default function Testimonials() {
       content:
         "The comprehensive study material and regular mock tests prepared me thoroughly. The academy's approach to current affairs and answer writing made all the difference.",
       rating: 5,
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
+      image:
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
     },
     {
       name: "Anjali Singh",
       role: "IAS Officer",
-      batch: "2024",
+      batch: "2025",
       content:
         "From a small town girl to an IAS officer - this academy made it possible. The hostel facilities and 24x7 library support were crucial for my preparation.",
       rating: 5,
-      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
+      image:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
     },
   ];
 

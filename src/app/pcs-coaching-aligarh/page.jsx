@@ -23,7 +23,7 @@ export const metadata = {
     "pcs coaching with hostel aligarh",
     "pcs coaching with mentoring aligarh",
     "24/7 pcs coaching aligarh",
-    "pcs coaching 2024 aligarh",
+    "pcs coaching 2025 aligarh",
     "pcs prelims coaching aligarh",
     "pcs mains coaching aligarh",
     "pcs interview coaching aligarh",

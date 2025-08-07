@@ -91,18 +91,6 @@ export default function sitemap() {
       changeFrequency: "monthly",
       priority: 0.6,
     },
-    {
-      url: `${baseUrl}/jmd-academy-vs-city-ias`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/best-ias-coaching-aligarh-2024`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
     // Location-specific Pages (High Priority)
     {
       url: `${baseUrl}/ias-coaching-kela-nagar`,

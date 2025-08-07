@@ -2,21 +2,21 @@ import { Metadata } from "next";
 
 export const metadata = {
   title:
-    "IAS Coaching Comparison Aligarh 2024 - City IAS vs Others | Best IAS Academy",
+    "IAS Coaching Comparison Aligarh 2025 - City IAS vs Others | Best IAS Academy",
   description:
     "Compare top IAS coaching institutes in Aligarh: City IAS Academy, Pratistha IAS Academy, Katara Academy, JMD Academy. Find the best UPSC coaching with expert faculty and proven results.",
   keywords: [
     "IAS coaching comparison Aligarh",
     "Pratistha IAS Academy vs City IAS",
     "Katara Academy vs City IAS",
-    "best IAS coaching Aligarh 2024",
+    "best IAS coaching Aligarh 2025",
     "IAS coaching fees comparison Aligarh",
     "UPSC coaching comparison Aligarh",
     "JMD Academy vs City IAS",
     "IAS coaching institutes Aligarh",
   ],
   openGraph: {
-    title: "IAS Coaching Comparison Aligarh 2024 - Find the Best",
+    title: "IAS Coaching Comparison Aligarh 2025 - Find the Best",
     description:
       "Compare top IAS coaching institutes in Aligarh. See why City IAS Academy leads with expert faculty and proven results.",
     url: "https://www.cityiasacademy.com/ias-coaching-comparison-aligarh",
@@ -26,7 +26,7 @@ export const metadata = {
         url: "https://www.cityiasacademy.com/CityIASLOGO.png",
         width: 1200,
         height: 630,
-        alt: "IAS Coaching Comparison Aligarh 2024",
+        alt: "IAS Coaching Comparison Aligarh 2025",
       },
     ],
     locale: "en_IN",
@@ -106,7 +106,7 @@ export default function IASCoachingComparison() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              IAS Coaching Comparison Aligarh 2024
+              IAS Coaching Comparison Aligarh 2025
             </h1>
             <p className="text-xl md:text-2xl mb-8">
               Find the Best IAS Coaching Institute in Aligarh

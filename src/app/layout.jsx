@@ -51,7 +51,7 @@ export const metadata = {
     "Plutus IAS Aligarh",
     "best IAS coaching Aligarh vs VISION",
     "IAS coaching comparison Aligarh",
-    "IAS coaching fees Aligarh 2024",
+    "IAS coaching fees Aligarh 2025",
     "UPSC coaching near AMU Aligarh",
     "IAS preparation course Aligarh",
     "Civil Services coaching Kela Nagar",
@@ -61,10 +61,10 @@ export const metadata = {
     "best IAS faculty Aligarh",
     "IAS study material Aligarh",
     "UPSC current affairs Aligarh",
-    "UPSC 2024 coaching Aligarh",
-    "CSE 2024 preparation Aligarh",
-    "IAS 2024 batch Aligarh",
-    "UPSC prelims 2024 Aligarh",
+    "UPSC 2025 coaching Aligarh",
+    "CSE 2025 preparation Aligarh",
+    "IAS 2025 batch Aligarh",
+    "UPSC prelims 2025 Aligarh",
     "Pratistha IAS Academy Aligarh",
     "Katara Academy Aligarh",
     "JMD Academy Aligarh",
@@ -83,7 +83,7 @@ export const metadata = {
     "Aligarh Coaching Centre",
     "Pratistha vs City IAS Academy Aligarh",
     "Katara Academy vs City IAS",
-    "best IAS coaching Aligarh 2024 comparison",
+    "best IAS coaching Aligarh 2025 comparison",
     "IAS coaching fees Aligarh comparison",
     "UPSC coaching near Meenakshi Flyover",
     "IAS coaching near AMU campus",
@@ -296,6 +296,10 @@ export default function RootLayout({ children }) {
         <meta name="region" content="Uttar Pradesh" />
         <meta name="country-name" content="India" />
 
+        {/* Site Name Meta Tags for Google Search */}
+        <meta name="application-name" content="City IAS Academy" />
+        <meta name="apple-mobile-web-app-title" content="City IAS Academy" />
+
         {/* Educational Institution specific tags */}
         <meta name="education.type" content="Coaching Institute" />
         <meta name="education.level" content="Higher Education" />
@@ -501,7 +505,7 @@ export default function RootLayout({ children }) {
                     "@type": "Person",
                     name: "Saniya Siddiqui",
                   },
-                  datePublished: "2024-01-15",
+                  datePublished: "2025-01-15",
                   reviewBody:
                     "Excellent coaching institute with experienced faculty and comprehensive study materials. The personalized mentoring helped me clear my doubts effectively.",
                   reviewRating: {
@@ -574,9 +578,9 @@ export default function RootLayout({ children }) {
               ],
               hasCourseInstance: {
                 "@type": "CourseInstance",
-                name: "IAS/PCS Foundation Course 2024-25",
+                name: "IAS/PCS Foundation Course 2025-25",
                 courseMode: "Blended",
-                startDate: "2024-09-01",
+                startDate: "2025-09-01",
                 endDate: "2025-08-31",
                 courseSchedule: {
                   "@type": "Schedule",
@@ -759,7 +763,7 @@ export default function RootLayout({ children }) {
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "ComparisonPage",
-              name: "Best IAS Coaching in Aligarh - Complete Comparison 2024",
+              name: "Best IAS Coaching in Aligarh - Complete Comparison 2025",
               description:
                 "Compare top IAS coaching institutes in Aligarh: City IAS Academy, Pratistha IAS Academy, Katara Academy, JMD Academy, and more. Find the best UPSC coaching with expert faculty and proven results.",
               url: "https://www.cityiasacademy.com/ias-coaching-comparison-aligarh",

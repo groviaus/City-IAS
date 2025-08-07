@@ -1,7 +1,7 @@
 import React from "react";
 
 export const metadata = {
-  title: "Katara Academy vs City IAS Academy Aligarh 2024 | Best IAS Coaching",
+  title: "Katara Academy vs City IAS Academy Aligarh 2025 | Best IAS Coaching",
   description:
     "Compare Katara Academy vs City IAS Academy in Aligarh. Find the best IAS coaching with expert faculty, comprehensive study material, and proven results. Detailed comparison of fees, facilities, and success rates.",
   keywords: [
@@ -9,7 +9,7 @@ export const metadata = {
     "City IAS Academy vs Katara Academy",
     "Katara Academy comparison",
     "City IAS Academy comparison",
-    "best IAS coaching Aligarh 2024",
+    "best IAS coaching Aligarh 2025",
     "IAS coaching comparison Aligarh",
     "Katara Academy fees",
     "City IAS Academy fees",
@@ -23,7 +23,7 @@ export const metadata = {
   ],
   openGraph: {
     title:
-      "Katara Academy vs City IAS Academy Aligarh 2024 | Best IAS Coaching",
+      "Katara Academy vs City IAS Academy Aligarh 2025 | Best IAS Coaching",
     description:
       "Compare Katara Academy vs City IAS Academy in Aligarh. Find the best IAS coaching with expert faculty, comprehensive study material, and proven results.",
     url: "https://www.cityiasacademy.com/katara-academy-vs-city-ias",
@@ -42,7 +42,7 @@ export const metadata = {
   twitter: {
     card: "summary_large_image",
     title:
-      "Katara Academy vs City IAS Academy Aligarh 2024 | Best IAS Coaching",
+      "Katara Academy vs City IAS Academy Aligarh 2025 | Best IAS Coaching",
     description:
       "Compare Katara Academy vs City IAS Academy in Aligarh. Find the best IAS coaching with expert faculty and proven results.",
     images: ["https://www.cityiasacademy.com/og-image.jpg"],

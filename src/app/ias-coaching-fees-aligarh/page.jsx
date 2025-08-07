@@ -2,13 +2,13 @@ import { Metadata } from "next";
 
 export const metadata = {
   title:
-    "IAS Coaching Fees Aligarh 2024 - City IAS Academy | Affordable UPSC Coaching",
+    "IAS Coaching Fees Aligarh 2025 - City IAS Academy | Affordable UPSC Coaching",
   description:
     "City IAS Academy offers affordable IAS coaching fees in Aligarh. Compare fees with RCA, Pratistha IAS Academy, and other institutes. Best value for money with expert faculty and comprehensive study material.",
   keywords: [
     "IAS coaching fees Aligarh",
     "UPSC coaching fees Aligarh",
-    "IAS coaching fees 2024",
+    "IAS coaching fees 2025",
     "IAS coaching fees comparison Aligarh",
     "affordable IAS coaching Aligarh",
     "IAS coaching fees with hostel",
@@ -20,7 +20,7 @@ export const metadata = {
     "IAS coaching fees Kela Nagar",
   ],
   openGraph: {
-    title: "IAS Coaching Fees Aligarh 2024 - City IAS Academy",
+    title: "IAS Coaching Fees Aligarh 2025 - City IAS Academy",
     description:
       "Affordable IAS coaching fees in Aligarh with expert faculty and comprehensive study material. Compare with other institutes.",
     url: "https://www.cityiasacademy.com/ias-coaching-fees-aligarh",
@@ -30,7 +30,7 @@ export const metadata = {
         url: "https://www.cityiasacademy.com/CityIASLOGO.png",
         width: 1200,
         height: 630,
-        alt: "IAS Coaching Fees Aligarh 2024 - City IAS Academy",
+        alt: "IAS Coaching Fees Aligarh 2025 - City IAS Academy",
       },
     ],
     locale: "en_IN",
@@ -106,7 +106,7 @@ export default function IASCoachingFees() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              IAS Coaching Fees Aligarh 2024
+              IAS Coaching Fees Aligarh 2025
             </h1>
             <p className="text-xl md:text-2xl mb-8">
               Affordable • Transparent • Best Value for Money
@@ -128,7 +128,7 @@ export default function IASCoachingFees() {
         <div className="container mx-auto px-4">
           <div className="max-w-7xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-              IAS Coaching Fees Comparison 2024
+              IAS Coaching Fees Comparison 2025
             </h2>
 
             <div className="overflow-x-auto">
