@@ -12,8 +12,10 @@ import {
   scaleOnHover,
   pulseAnimation,
 } from "@/lib/animations";
+import { useRegistrationDialog } from "@/components/GlobalRegistrationDialog";
 
 export default function Hero() {
+  const { openDialog } = useRegistrationDialog();
   const stats = [
     {
       number: 500,
@@ -125,19 +127,16 @@ export default function Hero() {
               className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
               variants={fadeInUp}
             >
-              <motion.a
-                onClick={(e) => handleSmoothScroll(e, "contact")}
-                href="#contact"
-                {...scaleOnHover}
-              >
+              <motion.div {...scaleOnHover}>
                 <Button
                   size="lg"
+                  onClick={() => openDialog()}
                   className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-lg px-8 shadow-lg w-full sm:w-auto"
                 >
                   <Target className="mr-2 h-5 w-5" />
                   Secure Your Seat Now
                 </Button>
-              </motion.a>
+              </motion.div>
               <motion.a
                 onClick={(e) => handleSmoothScroll(e, "courses")}
                 href="#courses"

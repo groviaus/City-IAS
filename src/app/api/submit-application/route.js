@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server';
-import mysql from 'mysql2/promise';
-import { validateForm } from '@/lib/validation';
+import { NextResponse } from "next/server";
+import mysql from "mysql2/promise";
+import { validateForm } from "@/lib/validation";
 
 /**
  * POST /api/submit-application
@@ -14,13 +14,13 @@ export async function POST(request) {
 
     // Server-side validation
     const validation = validateForm({ name, phone, email, course, cityState });
-    
+
     if (!validation.isValid) {
       return NextResponse.json(
-        { 
-          success: false, 
-          message: 'Validation failed', 
-          errors: validation.errors 
+        {
+          success: false,
+          message: "Validation failed",
+          errors: validation.errors,
         },
         { status: 400 }
       );
@@ -30,10 +30,10 @@ export async function POST(request) {
 
     // Create new connection for serverless
     const connection = await mysql.createConnection({
-      host: process.env.DB_HOST || 'srv1875.hstgr.io',
-      user: process.env.DB_USER || 'u181984996_Tanweer',
-      password: process.env.DB_PASSWORD || 'TanweerSir12@WeM',
-      database: process.env.DB_NAME || 'u181984996_Tanweer',
+      host: process.env.DB_HOST || "srv1875.hstgr.io",
+      user: process.env.DB_USER || "u181984996_cityiasacademy",
+      password: process.env.DB_PASSWORD || "D=a9whhW7@",
+      database: process.env.DB_NAME || "u181984996_cityiasacademy",
       port: process.env.DB_PORT || 3306,
       connectTimeout: 60000,
       acquireTimeout: 60000,
@@ -56,16 +56,16 @@ export async function POST(request) {
 
       // Check for existing phone number
       const [existingPhone] = await connection.execute(
-        'SELECT id FROM applications WHERE phone = ?',
+        "SELECT id FROM applications WHERE phone = ?",
         [cleanData.phone]
       );
 
       if (existingPhone.length > 0) {
         return NextResponse.json(
-          { 
-            success: false, 
-            message: 'Phone number already exists',
-            errors: { phone: 'This phone number is already registered' }
+          {
+            success: false,
+            message: "Phone number already exists",
+            errors: { phone: "This phone number is already registered" },
           },
           { status: 409 }
         );
@@ -73,16 +73,16 @@ export async function POST(request) {
 
       // Check for existing email
       const [existingEmail] = await connection.execute(
-        'SELECT id FROM applications WHERE email = ?',
+        "SELECT id FROM applications WHERE email = ?",
         [cleanData.email]
       );
 
       if (existingEmail.length > 0) {
         return NextResponse.json(
-          { 
-            success: false, 
-            message: 'Email already exists',
-            errors: { email: 'This email address is already registered' }
+          {
+            success: false,
+            message: "Email already exists",
+            errors: { email: "This email address is already registered" },
           },
           { status: 409 }
         );
@@ -90,46 +90,51 @@ export async function POST(request) {
 
       // Insert new application
       const [result] = await connection.execute(
-        'INSERT INTO applications (name, phone, email, course, city_state) VALUES (?, ?, ?, ?, ?)',
-        [cleanData.name, cleanData.phone, cleanData.email, cleanData.course, cleanData.cityState]
+        "INSERT INTO applications (name, phone, email, course, city_state) VALUES (?, ?, ?, ?, ?)",
+        [
+          cleanData.name,
+          cleanData.phone,
+          cleanData.email,
+          cleanData.course,
+          cleanData.cityState,
+        ]
       );
 
       return NextResponse.json(
-        { 
-          success: true, 
-          message: 'Application submitted successfully!',
+        {
+          success: true,
+          message: "Application submitted successfully!",
           data: {
             id: result.insertId,
             name: cleanData.name,
             phone: cleanData.phone,
             email: cleanData.email,
             course: cleanData.course,
-            cityState: cleanData.cityState
-          }
+            cityState: cleanData.cityState,
+          },
         },
         { status: 201 }
       );
-
     } catch (dbError) {
-      console.error('Database error:', dbError);
-      
+      console.error("Database error:", dbError);
+
       // Handle specific database errors
-      if (dbError.code === 'ER_DUP_ENTRY') {
-        if (dbError.message.includes('phone')) {
+      if (dbError.code === "ER_DUP_ENTRY") {
+        if (dbError.message.includes("phone")) {
           return NextResponse.json(
-            { 
-              success: false, 
-              message: 'Phone number already exists',
-              errors: { phone: 'This phone number is already registered' }
+            {
+              success: false,
+              message: "Phone number already exists",
+              errors: { phone: "This phone number is already registered" },
             },
             { status: 409 }
           );
-        } else if (dbError.message.includes('email')) {
+        } else if (dbError.message.includes("email")) {
           return NextResponse.json(
-            { 
-              success: false, 
-              message: 'Email already exists',
-              errors: { email: 'This email address is already registered' }
+            {
+              success: false,
+              message: "Email already exists",
+              errors: { email: "This email address is already registered" },
             },
             { status: 409 }
           );
@@ -137,24 +142,22 @@ export async function POST(request) {
       }
 
       return NextResponse.json(
-        { 
-          success: false, 
-          message: 'Database error occurred. Please try again later.' 
+        {
+          success: false,
+          message: "Database error occurred. Please try again later.",
         },
         { status: 500 }
       );
-
     } finally {
       await connection.end();
     }
-
   } catch (error) {
-    console.error('API error:', error);
-    
+    console.error("API error:", error);
+
     return NextResponse.json(
-      { 
-        success: false, 
-        message: 'Internal server error. Please try again later.' 
+      {
+        success: false,
+        message: "Internal server error. Please try again later.",
       },
       { status: 500 }
     );
@@ -170,23 +173,23 @@ export async function GET() {
     const connection = await pool.getConnection();
     await connection.ping();
     connection.release();
-    
+
     return NextResponse.json(
-      { 
-        success: true, 
-        message: 'API is running and database is connected' 
+      {
+        success: true,
+        message: "API is running and database is connected",
       },
       { status: 200 }
     );
   } catch (error) {
-    console.error('❌ Health check failed:', error);
-    
+    console.error("❌ Health check failed:", error);
+
     return NextResponse.json(
-      { 
-        success: false, 
-        message: 'Database connection failed' 
+      {
+        success: false,
+        message: "Database connection failed",
       },
       { status: 503 }
     );
   }
-} 
+}

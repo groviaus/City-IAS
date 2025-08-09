@@ -6,8 +6,8 @@
   },
   "env": {
     "DB_HOST": "srv1875.hstgr.io",
-    "DB_USER": "u181984996_Tanweer",
-    "DB_NAME": "u181984996_Tanweer",
+    "DB_USER": "u181984996_cityiasacademy",
+    "DB_NAME": "u181984996_cityiasacademy",
     "DB_PORT": "3306"
   }
-} 
+}

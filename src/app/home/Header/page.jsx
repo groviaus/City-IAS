@@ -13,10 +13,12 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import Image from "next/image";
+import { useRegistrationDialog } from "@/components/GlobalRegistrationDialog";
 
 export default function Header() {
   const pathname = usePathname();
   const isHomePage = pathname === "/" || pathname === "/home";
+  const { openDialog } = useRegistrationDialog();
   const navItems = [
     "Courses",
     "Faculty",
@@ -112,7 +114,7 @@ export default function Header() {
 
             <Button
               size="sm"
-              onClick={(e) => handleSmoothScroll(e, "contact")}
+              onClick={() => openDialog()}
               className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-lg hover:scale-105 transition-all duration-300
                 hidden sm:block"
             >

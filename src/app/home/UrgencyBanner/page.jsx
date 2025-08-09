@@ -5,8 +5,10 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { NumberTicker } from "@/components/magicui/number-ticker";
 import { fadeInUp, staggerContainer, scaleOnHover } from "@/lib/animations";
+import { useRegistrationDialog } from "@/components/GlobalRegistrationDialog";
 
 export default function UrgencyBanner() {
+  const { openDialog } = useRegistrationDialog();
   const [timeData, setTimeData] = useState([
     { value: 0, label: "Days Left" },
     { value: 0, label: "Hours" },
@@ -53,17 +55,6 @@ export default function UrgencyBanner() {
 
     return () => clearInterval(interval);
   }, []);
-
-  const handleSmoothScroll = (e, targetId) => {
-    e.preventDefault();
-    const targetElement = document.getElementById(targetId);
-    if (targetElement) {
-      targetElement.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }
-  };
 
   return (
     <motion.section
@@ -115,7 +106,7 @@ export default function UrgencyBanner() {
             <motion.div {...scaleOnHover}>
               <Button
                 className="bg-white text-red-600 hover:bg-gray-100 shadow-lg w-full sm:w-auto sm:ml-5 md:text-xl sm:py-6"
-                onClick={(e) => handleSmoothScroll(e, "contact")}
+                onClick={() => openDialog()}
               >
                 Apply Now
               </Button>
