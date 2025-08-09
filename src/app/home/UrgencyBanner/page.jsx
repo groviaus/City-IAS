@@ -18,7 +18,7 @@ export default function UrgencyBanner() {
   useEffect(() => {
     const calculateTimeUntilBatch = () => {
       // Batch start date: 20th August 2025
-      const batchStartDate = new Date("2025-09-30T00:00:00");
+      const batchStartDate = new Date("2025-08-30T00:00:00");
       const now = new Date();
 
       const timeDifference = batchStartDate.getTime() - now.getTime();
@@ -76,7 +76,7 @@ export default function UrgencyBanner() {
               ⏰ Don't Wait! Seats Filling Fast
             </h3>
             <p className="text-orange-100">
-              Batch starts 30th September 2025 - Only{" "}
+              Batch starts <strong> 30th August 2025 </strong> - Only{" "}
               <NumberTicker value={50} className="text-orange-100" /> seats
               available
             </p>

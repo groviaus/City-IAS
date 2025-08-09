@@ -1,7 +1,6 @@
 import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Header from "./home/Header/page";
-import Footer from "./home/Footer/page";
+import LayoutWrapper from "@/components/LayoutWrapper";
 import Script from "next/script";
 import { RegistrationDialogProvider } from "@/components/GlobalRegistrationDialog";
 import AutoRegistrationPopup from "@/components/AutoRegistrationPopup";
@@ -820,9 +819,9 @@ export default function RootLayout({ children }) {
         />
 
         <RegistrationDialogProvider>
-          <Header />
-          <main>{children}</main>
-          <Footer />
+          <LayoutWrapper>
+            <main>{children}</main>
+          </LayoutWrapper>
           <AutoRegistrationPopup />
           {/* <TestRegistrationButton /> */}
         </RegistrationDialogProvider>

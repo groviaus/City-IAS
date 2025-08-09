@@ -1,54 +1,56 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calendar, BookOpen, Target, Play } from "lucide-react";
+import { Calendar as CalendarIcon, BookOpen, Target } from "lucide-react";
 import { motion } from "framer-motion";
 import { fadeInUp, staggerContainer } from "@/lib/animations";
+import { useEffect, useState } from "react";
+
+const iconMap = { Calendar: CalendarIcon, Target, BookOpen };
 
 export default function ImportantDates() {
-  const dates = [
-    {
-      icon: Calendar,
-      title: "Admissions Start",
-      date: "1st July",
-      year: "2025",
-      color: "blue",
-      bgColor: "bg-blue-100",
-      hoverBgColor: "group-hover:bg-blue-200",
-      textColor: "text-blue-600",
-    },
-    {
-      icon: Target,
-      title: "Entrance Test",
-      date: "23rd August",
-      year: "2025 (Saturday) 4:00-5:00 pm",
-      color: "red",
-      bgColor: "bg-red-100",
-      hoverBgColor: "group-hover:bg-red-200",
-      textColor: "text-red-600",
-    },
-    {
-      icon: BookOpen,
-      title: "Batch Starts",
-      date: "30th August",
-      year: "2025",
-      color: "green",
-      bgColor: "bg-green-100",
-      hoverBgColor: "group-hover:bg-green-200",
-      textColor: "text-green-600",
-    },
-   
-    // {
-    //   icon: Play,
-    //   title: "Classes Begin",
-    //   date: "20th August",
-    //   year: "2025",
-    //   color: "red",
-    //   bgColor: "bg-red-100",
-    //   hoverBgColor: "group-hover:bg-red-200",
-    //   textColor: "text-red-600",
-    // },
-  ];
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch("/api/important-dates");
+        if (!res.ok) return;
+        const data = await res.json();
+        if (Array.isArray(data.items) && data.items.length > 0) {
+          setItems(data.items);
+        }
+      } catch (e) {
+        console.error("Error loading important dates:", e);
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
+  }, []);
+
+  if (loading) {
+    return (
+      <section className="py-20 bg-gradient-to-br from-blue-50 to-indigo-50">
+        <div className="container sm:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="animate-pulse space-y-4">
+            <div className="h-8 bg-gray-200 rounded w-1/4 mx-auto mb-8"></div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="h-48 bg-gray-200 rounded"></div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (items.length === 0) {
+    return null;
+  }
 
   return (
     <section className="py-20 bg-gradient-to-br from-blue-50 to-indigo-50">
@@ -75,28 +77,33 @@ export default function ImportantDates() {
           whileInView="animate"
           viewport={{ once: true }}
         >
-          {dates.map((item, index) => (
-            <motion.div key={index} variants={fadeInUp}>
-              <Card className="text-center hover:shadow-xl transition-all duration-300 bg-white/80 backdrop-blur-sm border-0 shadow-lg group">
-                <CardHeader className="pb-4">
-                  <motion.div
-                    className={`h-16 w-16 ${item.bgColor} rounded-full flex items-center justify-center mx-auto mb-4 ${item.hoverBgColor} transition-colors`}
-                    whileHover={{ scale: 1.2, rotate: 360 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    <item.icon className={`h-8 w-8 ${item.textColor}`} />
-                  </motion.div>
-                  <CardTitle className="text-lg">{item.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className={`text-2xl font-bold ${item.textColor}`}>
-                    {item.date}
-                  </div>
-                  <div className="text-sm text-gray-600">{item.year}</div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
+          {items.map((item, index) => {
+            const IconComp = iconMap[item.icon] || CalendarIcon;
+            return (
+              <motion.div key={index} variants={fadeInUp}>
+                <Card className="text-center hover:shadow-xl transition-all duration-300 bg-white/80 backdrop-blur-sm border-0 shadow-lg group">
+                  <CardHeader className="pb-4">
+                    <motion.div
+                      className="h-16 w-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-200 transition-colors"
+                      whileHover={{ scale: 1.2, rotate: 360 }}
+                      transition={{ duration: 0.5 }}
+                    >
+                      <IconComp className="h-8 w-8 text-blue-600" />
+                    </motion.div>
+                    <CardTitle className="text-lg">{item.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold text-blue-600">
+                      {item.date_text}
+                    </div>
+                    <div className="text-sm text-gray-600">
+                      {item.year_text}
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            );
+          })}
         </motion.div>
       </div>
     </section>
