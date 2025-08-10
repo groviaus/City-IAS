@@ -60,12 +60,36 @@ export async function GET() {
     );
     const totalGalleryImages = galleryResult[0]?.count || 0;
 
+    // Last updated timestamps
+    const [lastAppRow] = await query(
+      "SELECT MAX(created_at) as ts FROM applications"
+    );
+    const [lastCourseRow] = await query(
+      "SELECT MAX(updated_at) as ts FROM courses"
+    );
+    const [lastImpRow] = await query(
+      "SELECT MAX(created_at) as ts FROM important_dates"
+    );
+    const [lastUrgRow] = await query(
+      "SELECT MAX(updated_at) as ts FROM urgency_banner"
+    );
+    const [lastGalRow] = await query(
+      "SELECT MAX(created_at) as ts FROM gallery_images"
+    );
+
     return NextResponse.json({
       totalApplications,
       totalCourses,
       totalImportantDates,
       totalUrgencyBanners,
       totalGalleryImages,
+      lastUpdated: {
+        applications: lastAppRow?.ts || null,
+        courses: lastCourseRow?.ts || null,
+        importantDates: lastImpRow?.ts || null,
+        urgencyBanner: lastUrgRow?.ts || null,
+        gallery: lastGalRow?.ts || null,
+      },
     });
   } catch (error) {
     console.error("Error fetching admin stats:", error);
