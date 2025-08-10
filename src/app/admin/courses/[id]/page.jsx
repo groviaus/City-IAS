@@ -113,7 +113,7 @@ const ViewCourse = () => {
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 space-y-6 h-max">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
@@ -312,7 +312,7 @@ const ViewCourse = () => {
         </div>
 
         {/* Course Preview */}
-        <div className="space-y-4">
+        <div className="space-y-4 h-fit">
           <h3 className="text-lg font-semibold text-gray-900">
             Course Preview
           </h3>

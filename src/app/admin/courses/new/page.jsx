@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { BookOpen, ArrowLeft, Plus, X, Save, Eye } from "lucide-react";
+import CourseCard from "@/components/CourseCard";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -134,9 +135,6 @@ const AddCourse = () => {
         ...courseData,
         features: cleanFeatures,
         price: parseInt(courseData.price) || 0,
-        registration: courseData.registration
-          ? parseInt(courseData.registration)
-          : null,
       };
 
       const response = await fetch("/api/admin/courses", {
@@ -161,71 +159,29 @@ const AddCourse = () => {
     }
   };
 
-  const CoursePreview = () => (
-    <Card className="border-2 border-gray-200 overflow-hidden">
-      {courseData.isPopular && (
-        <div
-          className={`absolute top-0 right-0 ${courseData.badgeColor} text-white px-4 py-2 text-sm font-bold rounded-bl-lg`}
-        >
-          {courseData.badge || "POPULAR"}
-        </div>
-      )}
-      <CardHeader className="space-y-4 pb-6">
-        <div className="flex items-center space-x-3">
-          <div
-            className={`h-12 w-12 ${courseData.iconBg} rounded-lg flex items-center justify-center`}
-          >
-            <BookOpen className={`h-6 w-6 ${courseData.iconColor}`} />
-          </div>
-          <div>
-            <CardTitle className={`text-2xl ${courseData.titleColor}`}>
-              {courseData.title || "Course Title"}
-            </CardTitle>
-            <p className="text-lg text-gray-600">
-              {courseData.subtitle || "Course Subtitle"}
-            </p>
-          </div>
-        </div>
-        <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-3xl font-bold text-gray-900">
-              ₹{courseData.price || "0"}
-            </span>
-            <Badge className="bg-gray-100 text-gray-800">
-              {courseData.duration || "Duration"}
-            </Badge>
-          </div>
-          {courseData.registration && (
-            <p className="text-gray-600">
-              Registration: ₹{courseData.registration}
-            </p>
-          )}
-        </div>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="space-y-3">
-          {courseData.features
-            .filter((f) => f.trim() !== "")
-            .map((feature, index) => (
-              <div key={index} className="flex items-center space-x-3">
-                <div
-                  className={`h-5 w-5 ${courseData.iconColor} rounded-full`}
-                ></div>
-                <span>{feature}</span>
-              </div>
-            ))}
-        </div>
-        <Button
-          className={`w-full ${courseData.buttonColor} text-lg py-6 shadow-lg`}
-        >
-          {courseData.buttonText || "Enroll Now"}
-        </Button>
-      </CardContent>
-    </Card>
-  );
+  const CoursePreview = () => {
+    const mapped = {
+      title: courseData.title || "Course Title",
+      subtitle: courseData.subtitle || "Course Subtitle",
+      price: parseInt(courseData.price) || 0,
+      duration: courseData.duration || "Duration",
+      description: courseData.description || "",
+      badge: courseData.badge || (courseData.isPopular ? "POPULAR" : ""),
+      badgeColor: courseData.badgeColor,
+      borderColor: courseData.borderColor,
+      iconBg: courseData.iconBg,
+      iconColor: courseData.iconColor,
+      titleColor: courseData.titleColor,
+      buttonText: courseData.buttonText || "Enroll Now",
+      buttonColor: courseData.buttonColor,
+      isPopular: !!courseData.isPopular,
+      features: courseData.features.filter((f) => f.trim() !== ""),
+    };
+    return <CourseCard course={mapped} />;
+  };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 space-y-6 ">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
@@ -337,19 +293,7 @@ const AddCourse = () => {
                     />
                   </div>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Registration Fee (₹)
-                  </label>
-                  <Input
-                    type="number"
-                    value={courseData.registration}
-                    onChange={(e) =>
-                      handleInputChange("registration", e.target.value)
-                    }
-                    placeholder="e.g., 1000"
-                  />
-                </div>
+                {/* Registration fee removed; use description in UI instead */}
               </CardContent>
             </Card>
 
@@ -499,7 +443,7 @@ const AddCourse = () => {
 
         {/* Preview */}
         {previewMode && (
-          <div className="space-y-4">
+          <div className="space-y-4 h-fit">
             <h3 className="text-lg font-semibold text-gray-900">
               Course Preview
             </h3>

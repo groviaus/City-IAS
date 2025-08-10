@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -15,10 +15,11 @@ import { motion } from "framer-motion";
 import { NumberTicker } from "@/components/magicui/number-ticker";
 import { fadeInUp, staggerContainer, scaleOnHover } from "@/lib/animations";
 import { useRegistrationDialog } from "@/components/GlobalRegistrationDialog";
+import CourseCard from "@/components/CourseCard";
 
 export default function Courses() {
   const { openDialog } = useRegistrationDialog();
-  const courses = [
+  const fallbackCourses = [
     {
       title: "FREE Coaching Program",
       subtitle: "Prelims + Mains",
@@ -66,6 +67,26 @@ export default function Courses() {
     },
   ];
 
+  const [courses, setCourses] = useState(fallbackCourses);
+
+  useEffect(() => {
+    let isMounted = true;
+    fetch("/api/courses")
+      .then((res) => (res.ok ? res.json() : { courses: [] }))
+      .then((data) => {
+        if (!isMounted) return;
+        if (Array.isArray(data.courses) && data.courses.length > 0) {
+          setCourses(data.courses);
+        } else {
+          setCourses(fallbackCourses);
+        }
+      })
+      .catch(() => setCourses(fallbackCourses));
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   // Handle course selection and open dialog
   const handleCourseSelect = (courseTitle) => {
     openDialog(courseTitle);
@@ -104,92 +125,12 @@ export default function Courses() {
         >
           {courses.map((course, index) => (
             <motion.div key={index} variants={fadeInUp}>
-              <Card
-                className={`relative hover:shadow-2xl transition-all duration-300 border-2 ${
-                  course.borderColor
-                } overflow-hidden backdrop-blur-sm bg-white/80 h-full ${
-                  course.isPopular ? "pt-10 sm:pt-6" : ""
-                }`}
-              >
-                {course.isPopular && (
-                  <div
-                    className={`absolute top-0 right-0 ${course.badgeColor} text-white px-4 py-2 text-sm font-bold rounded-bl-lg`}
-                  >
-                    {course.badge}
-                  </div>
-                )}
-                <CardHeader className="space-y-4 pb-6">
-                  <div className="flex items-center space-x-3">
-                    <motion.div
-                      className={`h-12 w-12 ${course.iconBg} rounded-lg flex items-center justify-center`}
-                      whileHover={{ rotate: 360 }}
-                      transition={{ duration: 0.5 }}
-                    >
-                      <course.icon className={`h-6 w-6 ${course.iconColor}`} />
-                    </motion.div>
-                    <div>
-                      <CardTitle className={`text-2xl ${course.titleColor}`}>
-                        {course.title}
-                      </CardTitle>
-                      <CardDescription className="text-lg">
-                        {course.subtitle}
-                      </CardDescription>
-                    </div>
-                  </div>
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-3xl font-bold text-gray-900">
-                        {course.price === 100 ? "Application Fee:" : ""} ₹
-                        <NumberTicker
-                          value={course.price}
-                          className="text-3xl font-bold text-gray-900"
-                        />
-                      </span>
-                      <Badge className={course.badgeColor}>
-                        {course.duration || "Limited Seats"}
-                      </Badge>
-                    </div>
-                    {course.registration && (
-                      <p className="text-gray-600">
-                        One-time Registration After Selection Based on Entrance:
-                        ₹ 1000
-                      </p>
-                    )}
-                    {!course.registration && (
-                      <p className="text-gray-600">
-                        Complete comprehensive program
-                      </p>
-                    )}
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-3">
-                    {course.features.map((feature, featureIndex) => (
-                      <motion.div
-                        key={featureIndex}
-                        className="flex items-center space-x-3"
-                        initial={{ opacity: 0, x: -20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: featureIndex * 0.1 }}
-                      >
-                        <CheckCircle
-                          className={`h-5 w-5 ${course.iconColor}`}
-                        />
-                        <span>{feature}</span>
-                      </motion.div>
-                    ))}
-                  </div>
-                  <motion.div {...scaleOnHover}>
-                    <Button
-                      className={`w-full ${course.buttonColor} text-lg py-6 shadow-lg`}
-                      onClick={() => handleCourseSelect(course.title)}
-                    >
-                      {course.buttonText}
-                    </Button>
-                  </motion.div>
-                </CardContent>
-              </Card>
+              <div className="h-full">
+                <CourseCard
+                  course={course}
+                  onPrimaryAction={handleCourseSelect}
+                />
+              </div>
             </motion.div>
           ))}
         </motion.div>
