@@ -20,7 +20,15 @@ const AdminDashboard = () => {
     totalApplications: 0,
     totalCourses: 0,
     totalImportantDates: 0,
-    totalUrgencyBanners: 0, // Added for Urgency Banner
+    totalUrgencyBanners: 0,
+    totalGalleryImages: 0,
+    lastUpdated: {
+      applications: null,
+      courses: null,
+      importantDates: null,
+      urgencyBanner: null,
+      gallery: null,
+    },
   });
 
   const [recentApplications, setRecentApplications] = useState([]);
@@ -60,7 +68,7 @@ const AdminDashboard = () => {
       const response = await fetch("/api/admin/stats");
       if (response.ok) {
         const data = await response.json();
-        setStats(data);
+        setStats((prev) => ({ ...prev, ...data }));
       }
     } catch (error) {
       console.error("Error fetching stats:", error);
@@ -124,80 +132,131 @@ const AdminDashboard = () => {
 
   const statCards = [
     {
-      title: "Total Applications",
+      key: "applications",
+      title: "Applications",
       value: stats.totalApplications,
       icon: GraduationCap,
       color: "text-blue-600",
       bgColor: "bg-blue-50",
       href: "/admin/applications",
+      updatedAt: stats.lastUpdated?.applications,
     },
     {
-      title: "Active Courses",
+      key: "courses",
+      title: "Courses",
       value: stats.totalCourses,
       icon: BookOpen,
       color: "text-green-600",
       bgColor: "bg-green-50",
       href: "/admin/courses",
+      updatedAt: stats.lastUpdated?.courses,
     },
     {
+      key: "importantDates",
       title: "Important Dates",
       value: stats.totalImportantDates,
       icon: Calendar,
       color: "text-amber-600",
       bgColor: "bg-amber-50",
       href: "/admin/important-dates",
+      updatedAt: stats.lastUpdated?.importantDates,
     },
     {
+      key: "gallery",
+      title: "Gallery Images",
+      value: stats.totalGalleryImages,
+      icon: ImagePlaceholder,
+      color: "text-purple-600",
+      bgColor: "bg-purple-50",
+      href: "/admin/gallery",
+      updatedAt: stats.lastUpdated?.gallery,
+    },
+    {
+      key: "urgencyBanner",
       title: "Urgency Banner",
       value: urgencyBannerData ? 1 : 0,
       icon: Clock,
       color: "text-red-600",
       bgColor: "bg-red-50",
       href: "/admin/urgency-banner",
+      updatedAt: stats.lastUpdated?.urgencyBanner,
     },
   ];
+
+  function ImagePlaceholder(props) {
+    // minimalist square placeholder icon
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        width="16"
+        height="16"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        {...props}
+      >
+        <rect x="3" y="3" width="18" height="18" rx="2" />
+        <path d="M8 13l3-3 5 5" />
+        <circle cx="8.5" cy="8.5" r="1.5" />
+      </svg>
+    );
+  }
+
+  const formatUpdated = (ts) => {
+    if (!ts) return "No data";
+    try {
+      return new Date(ts).toLocaleString();
+    } catch {
+      return String(ts);
+    }
+  };
 
   return (
     <div className="w-full p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-600 mt-2">
-            Welcome back! Here's what's happening today.
+          <h1 className="text-2xl font-semibold text-gray-900">Overview</h1>
+          <p className="text-gray-600 mt-1">
+            A quick summary across all sections.
           </p>
         </div>
-        <div className="flex space-x-3">
+        <div className="flex gap-2">
           <Button asChild>
             <Link href="/admin/courses/new">
               <Plus className="h-4 w-4 mr-2" />
-              Add Course
+              New Course
             </Link>
           </Button>
           <Button variant="outline" asChild>
             <Link href="/admin/applications">
               <GraduationCap className="h-4 w-4 mr-2" />
-              View Applications
+              Applications
             </Link>
           </Button>
         </div>
       </div>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* Compact Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
         {statCards.map((stat) => (
-          <Card key={stat.title} className="hover:shadow-md transition-shadow">
+          <Card key={stat.key} className="hover:shadow-sm transition-shadow">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">
+              <CardTitle className="text-xs font-medium text-gray-600">
                 {stat.title}
               </CardTitle>
-              <div className={`p-2 rounded-lg ${stat.bgColor}`}>
+              <div className={`p-2 rounded-md ${stat.bgColor}`}>
                 <stat.icon className={`h-4 w-4 ${stat.color}`} />
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-gray-900">
+              <div className="text-2xl font-semibold text-gray-900">
                 {stat.value}
+              </div>
+              <div className="text-[11px] text-gray-500 mt-1">
+                Updated {formatUpdated(stat.updatedAt)}
               </div>
               <Button
                 variant="ghost"
@@ -209,7 +268,7 @@ const AdminDashboard = () => {
                   href={stat.href}
                   className="text-blue-600 hover:text-blue-800"
                 >
-                  View Details →
+                  Open →
                 </Link>
               </Button>
             </CardContent>
@@ -217,157 +276,123 @@ const AdminDashboard = () => {
         ))}
       </div>
 
-      {/* Recent Applications */}
-      <Card className="w-full">
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <GraduationCap className="h-5 w-5" />
-            <span>Recent Applications</span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          {recentApplications.length > 0 ? (
-            <div className="space-y-3">
-              {recentApplications.slice(0, 5).map((app) => (
-                <div
-                  key={app.id}
-                  className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
-                >
-                  <div>
-                    <p className="font-medium text-gray-900">{app.name}</p>
-                    <p className="text-sm text-gray-600">
-                      {app.course} • {app.city_state}
-                    </p>
+      {/* Two-column: Activity & Urgency */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Recent Applications */}
+        <Card className="w-full">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-sm">
+              <GraduationCap className="h-4 w-4" /> Recent Applications
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {recentApplications.length > 0 ? (
+              <div className="divide-y divide-gray-100">
+                {recentApplications.slice(0, 5).map((app) => (
+                  <div
+                    key={app.id}
+                    className="flex items-center justify-between py-3"
+                  >
+                    <div className="min-w-0">
+                      <p className="font-medium text-gray-900 truncate">
+                        {app.name}
+                      </p>
+                      <p className="text-xs text-gray-600 truncate">
+                        {app.course} • {app.city_state}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-gray-500 hidden sm:block">
+                        {new Date(app.created_at).toLocaleDateString()}
+                      </span>
+                      <Button variant="outline" size="sm" asChild>
+                        <Link href={`/admin/applications/${app.id}`}>View</Link>
+                      </Button>
+                    </div>
                   </div>
-                  <div className="text-right">
-                    <p className="text-sm text-gray-500">{app.created_at}</p>
-                    <Button variant="outline" size="sm" asChild>
-                      <Link href={`/admin/applications/${app.id}`}>
-                        View Details
-                      </Link>
-                    </Button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-8 text-gray-500">
-              <GraduationCap className="h-12 w-12 mx-auto mb-3 text-gray-300" />
-              <p>No applications yet</p>
-              <p className="text-sm">
-                Applications will appear here once students start applying
-              </p>
-            </div>
-          )}
-          <div className="mt-4 text-center">
-            <Button variant="outline" asChild>
-              <Link href="/admin/applications">View All Applications</Link>
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-8 text-gray-500">
+                <GraduationCap className="h-10 w-10 mx-auto mb-2 text-gray-300" />
+                <p className="text-sm">No applications yet</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
 
-      {/* Urgency Banner Status */}
-      <Card className="w-full">
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <AlertTriangle className="h-5 w-5 text-red-600" />
-            <span>Urgency Banner Status</span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {/* Banner Data Card - Minimal Display */}
-          {loadingUrgencyBanner ? (
-            <Card className="bg-gray-50 border-gray-200">
-              <CardContent className="p-4">
-                <div className="text-center py-4">
-                  <Clock className="h-6 w-6 mx-auto mb-2 text-gray-400 animate-spin" />
-                  <div className="text-sm text-gray-500">
-                    Loading banner data...
+        {/* Urgency Banner Snapshot */}
+        <Card className="w-full">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-sm">
+              <AlertTriangle className="h-4 w-4 text-red-600" /> Urgency Banner
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {loadingUrgencyBanner ? (
+              <div className="text-center py-6 text-gray-500">
+                <Clock className="h-5 w-5 mx-auto mb-2 animate-spin text-gray-400" />
+                Loading banner data...
+              </div>
+            ) : urgencyBannerData ? (
+              <div className="space-y-4">
+                {/* Top: Batch Date */}
+                <div className="text-center">
+                  <div className="text-[11px] uppercase tracking-wide text-gray-500">
+                    Batch Date
+                  </div>
+                  <div className="text-lg font-semibold text-gray-900">
+                    {urgencyBannerData.batch_start_date
+                      ? new Date(
+                          urgencyBannerData.batch_start_date.split("T")[0]
+                        ).toLocaleDateString("en-IN", {
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric",
+                        })
+                      : "Not set"}
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-          ) : urgencyBannerData ? (
-            <Card className="bg-gradient-to-r from-red-50 to-orange-50 border-red-200">
-              <CardContent className="p-4">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {/* Available Seats */}
-                  <div className="text-center">
+
+                {/* Middle: Equal summary tiles */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="text-center rounded-md bg-red-50 py-3">
                     <div className="text-2xl font-bold text-red-600">
                       {urgencyBannerData.available_seats || "0"}
                     </div>
-                    <div className="text-sm text-red-600 font-medium">
-                      Available Seats
+                    <div className="text-xs font-medium text-red-700">
+                      Seats
                     </div>
                   </div>
-
-                  {/* Batch Start Date */}
-                  <div className="text-center">
-                    <div className="text-lg font-semibold text-gray-800">
-                      {urgencyBannerData.batch_start_date
-                        ? new Date(
-                            urgencyBannerData.batch_start_date.split("T")[0]
-                          ).toLocaleDateString("en-IN", {
-                            day: "numeric",
-                            month: "short",
-                            year: "numeric",
-                          })
-                        : "Not set"}
-                    </div>
-                    <div className="text-sm text-gray-600">
-                      Batch Start Date
-                    </div>
-                  </div>
-
-                  {/* Days Left */}
-                  <div className="text-center">
+                  <div className="text-center rounded-md bg-orange-50 py-3">
                     <div className="text-2xl font-bold text-orange-600">
-                      {countdownData.days > 0 ? countdownData.days : "0"}
+                      {Math.max(0, countdownData.days)}
                     </div>
-                    <div className="text-sm text-orange-600 font-medium">
+                    <div className="text-xs font-medium text-orange-700">
                       Days Left
                     </div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-          ) : (
-            <Card className="bg-gray-50 border-gray-200">
-              <CardContent className="p-4">
-                <div className="text-center py-4">
-                  <AlertTriangle className="h-6 w-6 mx-auto mb-2 text-gray-400" />
-                  <div className="text-sm text-gray-500">
-                    No active urgency banner
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          )}
+              </div>
+            ) : (
+              <div className="text-center py-6 text-gray-500">
+                <AlertTriangle className="h-5 w-5 mx-auto mb-2 text-gray-400" />
+                No active urgency banner
+              </div>
+            )}
 
-          {/* Quick Actions */}
-          <div className="flex flex-wrap gap-3">
-            <Button variant="outline" asChild>
-              <Link href="/admin/urgency-banner">
-                <Clock className="h-4 w-4 mr-2" />
-                Manage Urgency Banner
-              </Link>
-            </Button>
-            <Button variant="outline" asChild>
-              <Link href="/admin/applications">
-                <GraduationCap className="h-4 w-4 mr-2" />
-                View Applications
-              </Link>
-            </Button>
-            <Button variant="outline" asChild>
-              <Link href="/admin/courses">
-                <BookOpen className="h-4 w-4 mr-2" />
-                Manage Courses
-              </Link>
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+            <div className="pt-2">
+              <div className="flex flex-wrap gap-2">
+                <Button variant="outline" asChild>
+                  <Link href="/admin/urgency-banner">
+                    <Clock className="h-4 w-4 mr-2" /> Manage Banner
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };
