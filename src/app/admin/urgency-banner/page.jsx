@@ -20,6 +20,11 @@ export default function AdminUrgencyBannerPage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+  const [previewTime, setPreviewTime] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+  });
 
   const fetchItem = async () => {
     try {
@@ -29,11 +34,16 @@ export default function AdminUrgencyBannerPage() {
         const data = await response.json();
         if (data.items && data.items.length > 0) {
           const banner = data.items[0];
+          // Ensure batch_start_date is in YYYY-MM-DD format
+          const batchDate = banner.batch_start_date
+            ? banner.batch_start_date.split("T")[0]
+            : defaultItem.batch_start_date;
+
           setItem({
             id: banner.id,
             title: banner.title,
             subtitle: banner.subtitle,
-            batch_start_date: banner.batch_start_date,
+            batch_start_date: batchDate,
             available_seats: banner.available_seats,
             active: banner.active,
           });
@@ -51,11 +61,61 @@ export default function AdminUrgencyBannerPage() {
     fetchItem();
   }, []);
 
+  // Calculate preview time whenever batch_start_date changes
+  useEffect(() => {
+    if (!item.batch_start_date) return;
+
+    const calculatePreviewTime = () => {
+      // Ensure we have a clean date string (YYYY-MM-DD format)
+      const cleanDateString = item.batch_start_date
+        ? item.batch_start_date.split("T")[0]
+        : null;
+
+      if (!cleanDateString) {
+        setPreviewTime({ days: 0, hours: 0, minutes: 0 });
+        return;
+      }
+
+      const batchStartDate = new Date(cleanDateString + "T00:00:00");
+      const now = new Date();
+
+      const timeDifference = batchStartDate.getTime() - now.getTime();
+
+      if (timeDifference > 0) {
+        const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor(
+          (timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        );
+        const minutes = Math.floor(
+          (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
+        );
+
+        setPreviewTime({ days, hours, minutes });
+      } else {
+        // If batch has already started
+        setPreviewTime({ days: 0, hours: 0, minutes: 0 });
+      }
+    };
+
+    // Calculate initial time
+    calculatePreviewTime();
+
+    // Update every minute
+    const interval = setInterval(calculatePreviewTime, 60000);
+
+    return () => clearInterval(interval);
+  }, [item.batch_start_date]);
+
   const onSave = async () => {
     try {
       setSaving(true);
       setError(null);
       setSuccess(false);
+
+      // Ensure batch_start_date is in YYYY-MM-DD format
+      const cleanBatchDate = item.batch_start_date
+        ? item.batch_start_date.split("T")[0]
+        : item.batch_start_date;
 
       const action = item.id ? "update" : "create";
       const response = await fetch("/api/admin/urgency-banner", {
@@ -64,6 +124,7 @@ export default function AdminUrgencyBannerPage() {
         body: JSON.stringify({
           action,
           ...item,
+          batch_start_date: cleanBatchDate,
         }),
       });
 
@@ -265,29 +326,32 @@ export default function AdminUrgencyBannerPage() {
                   {item.subtitle
                     .replace(
                       "{date}",
-                      new Date(item.batch_start_date).toLocaleDateString(
-                        "en-IN",
-                        {
-                          day: "numeric",
-                          month: "long",
-                          year: "numeric",
-                        }
-                      )
+                      new Date(
+                        (item.batch_start_date
+                          ? item.batch_start_date.split("T")[0]
+                          : "") + "T00:00:00"
+                      ).toLocaleDateString("en-IN", {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric",
+                      })
                     )
                     .replace("{seats}", item.available_seats)}
                 </p>
               </div>
               <div className="flex items-center space-x-4 mt-4 md:mt-0">
                 <div className="text-center">
-                  <div className="text-2xl font-bold">50</div>
+                  <div className="text-2xl font-bold">{previewTime.days}</div>
                   <div className="text-xs">Days Left</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold">10</div>
+                  <div className="text-2xl font-bold">{previewTime.hours}</div>
                   <div className="text-xs">Hours</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold">52</div>
+                  <div className="text-2xl font-bold">
+                    {previewTime.minutes}
+                  </div>
                   <div className="text-xs">Minutes</div>
                 </div>
               </div>

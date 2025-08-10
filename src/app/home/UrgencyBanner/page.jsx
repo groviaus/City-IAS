@@ -25,6 +25,7 @@ export default function UrgencyBanner() {
           const data = await response.json();
           if (data.item) {
             setBannerData(data.item);
+          } else {
           }
         }
       } catch (error) {
@@ -41,9 +42,18 @@ export default function UrgencyBanner() {
     if (!bannerData) return;
 
     const calculateTimeUntilBatch = () => {
-      const batchStartDate = new Date(
-        bannerData.batch_start_date + "T00:00:00"
-      );
+      if (!bannerData.batch_start_date) {
+        setTimeData([
+          { value: 0, label: "Days Left" },
+          { value: 0, label: "Hours" },
+          { value: 0, label: "Minutes" },
+        ]);
+        return;
+      }
+
+      // Ensure we have a clean date string (YYYY-MM-DD format)
+      const cleanDateString = bannerData.batch_start_date.split("T")[0];
+      const batchStartDate = new Date(cleanDateString + "T00:00:00");
       const now = new Date();
 
       const timeDifference = batchStartDate.getTime() - now.getTime();
@@ -63,7 +73,6 @@ export default function UrgencyBanner() {
           { value: minutes, label: "Minutes" },
         ]);
       } else {
-        // If batch has already started
         setTimeData([
           { value: 0, label: "Days Left" },
           { value: 0, label: "Hours" },
@@ -80,6 +89,22 @@ export default function UrgencyBanner() {
 
     return () => clearInterval(interval);
   }, [bannerData]);
+
+  // Function to format numbers with leading zero
+  const formatTimeValue = (value, index) => {
+    if (index === 0) {
+      // For days, use NumberTicker with custom formatting
+      return (
+        <NumberTicker 
+          value={value} 
+          className="text-2xl font-bold text-white"
+          formatValue={(val) => val < 10 ? `0${val}` : val.toString()}
+        />
+      );
+    }
+    // For hours and minutes, use regular formatting
+    return value < 10 ? `0${value}` : value;
+  };
 
   // Don't render if no banner data or loading
   if (loading || !bannerData) {
@@ -107,14 +132,15 @@ export default function UrgencyBanner() {
               {bannerData.subtitle
                 .replace(
                   "{date}",
-                  new Date(bannerData.batch_start_date).toLocaleDateString(
-                    "en-IN",
-                    {
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric",
-                    }
-                  )
+                  new Date(
+                    (bannerData.batch_start_date
+                      ? bannerData.batch_start_date.split("T")[0]
+                      : "") + "T00:00:00"
+                  ).toLocaleDateString("en-IN", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })
                 )
                 .replace("{seats}", bannerData.available_seats)}
             </p>
@@ -127,15 +153,13 @@ export default function UrgencyBanner() {
               {timeData.map((time, index) => (
                 <motion.div
                   key={index}
-                  className="text-center"
+                  className="text-center text-white"
                   whileHover={{ scale: 1.1 }}
                 >
-                  <div className="text-2xl font-bold">
-                    <NumberTicker
-                      value={time.value}
-                      className="text-2xl font-bold text-white"
-                      delay={index * 0.1}
-                    />
+                  <div className="text-2xl font-bold  bg-white/40 backdrop-blur-sm  rounded-md p-2 mb-2">
+                    <span className="text-2xl font-bold text-white">
+                      {formatTimeValue(time.value, index)}
+                    </span>
                   </div>
                   <div className="text-xs">{time.label}</div>
                 </motion.div>
