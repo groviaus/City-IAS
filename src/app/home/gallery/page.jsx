@@ -8,97 +8,24 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { fadeInUp, staggerContainer, scaleOnHover } from "@/lib/animations";
 
-const galleryItems = [
-  {
-    id: 1,
-    src: "/facility1.jpg",
-    alt: "Modern Architecture",
-    category: "facilities",
-    title: "State-of-the-Art Classrooms",
-    height: 450,
-  },
-  {
-    id: 2,
-    src: "/facility2.jpg",
-    alt: "Library",
-    category: "facilities",
-    title: "Extensive Library Collection",
-    height: 280,
-  },
-  {
-    id: 3,
-    src: "/hostel1.jpg",
-    alt: "Hostel",
-    category: "hostel",
-    title: "Comfortable Hostel Accommodation",
-    height: 520,
-  },
-  {
-    id: 4,
-    src: "/event3.jpg",
-    alt: "Events",
-    category: "events",
-    title: "Interactive Learning Sessions",
-    height: 380,
-  },
-  {
-    id: 5,
-    src: "/facility3.jpg",
-    alt: "Study Areas",
-    category: "facilities",
-    title: "Dedicated Study Spaces",
-    height: 300,
-  },
-  {
-    id: 6,
-    src: "/event1.jpg",
-    alt: "Events",
-    category: "events",
-    title: "Mock Interview Sessions",
-    height: 420,
-  },
-  {
-    id: 7,
-    src: "/hostel2.jpg",
-    alt: "Hostel",
-    category: "hostel",
-    title: "Modern Hostel Facilities",
-    height: 350,
-  },
-  {
-    id: 8,
-    src: "/event4.jpg",
-    alt: "Events",
-    category: "events",
-    title: "Group Study Sessions",
-    height: 480,
-  },
-];
+// Items will be loaded from /api/gallery at runtime
+const initialItems = [];
 
-const categories = [
-  { id: "all", label: "All Stories", count: galleryItems.length },
-  {
-    id: "facilities",
-    label: "Facilities",
-    count: galleryItems.filter((item) => item.category === "facilities").length,
-  },
-  {
-    id: "hostel",
-    label: "Hostel",
-    count: galleryItems.filter((item) => item.category === "hostel").length,
-  },
-  {
-    id: "events",
-    label: "Events",
-    count: galleryItems.filter((item) => item.category === "events").length,
-  },
+const defaultCategories = [
+  { id: "all", label: "All Stories", count: 0 },
+  { id: "facilities", label: "Facilities", count: 0 },
+  { id: "hostel", label: "Hostel", count: 0 },
+  { id: "events", label: "Events", count: 0 },
 ];
 
 export default function Gallery() {
   const [activeFilter, setActiveFilter] = useState("all");
-  const [filteredItems, setFilteredItems] = useState(galleryItems);
+  const [items, setItems] = useState(initialItems);
+  const [filteredItems, setFilteredItems] = useState(initialItems);
+  const [categories, setCategories] = useState(defaultCategories);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const [loading, setLoading] = useState(true);
   const sliderRef = useRef(null);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
@@ -113,16 +40,49 @@ export default function Gallery() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  // Load items from API
   useEffect(() => {
-    if (activeFilter === "all") {
-      setFilteredItems(galleryItems);
-    } else {
-      setFilteredItems(
-        galleryItems.filter((item) => item.category === activeFilter)
-      );
-    }
+    const load = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch("/api/gallery");
+        const data = await res.json();
+        const list = Array.isArray(data.items) ? data.items : [];
+        setItems(list);
+      } catch (_e) {
+        setItems([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
+  }, []);
+
+  // Recompute categories when items change
+  useEffect(() => {
+    const counts = {
+      all: items.length,
+      facilities: items.filter((i) => i.category === "facilities").length,
+      hostel: items.filter((i) => i.category === "hostel").length,
+      events: items.filter((i) => i.category === "events").length,
+    };
+    setCategories([
+      { id: "all", label: "All Stories", count: counts.all },
+      { id: "facilities", label: "Facilities", count: counts.facilities },
+      { id: "hostel", label: "Hostel", count: counts.hostel },
+      { id: "events", label: "Events", count: counts.events },
+    ]);
+  }, [items]);
+
+  useEffect(() => {
+    const source = items;
+    const next =
+      activeFilter === "all"
+        ? source
+        : source.filter((item) => item.category === activeFilter);
+    setFilteredItems(next);
     setCurrentSlide(0);
-  }, [activeFilter]);
+  }, [activeFilter, items]);
 
   const handleFilterChange = (filter) => {
     setActiveFilter(filter);
@@ -161,6 +121,48 @@ export default function Gallery() {
       prevSlide();
     }
   };
+
+  if (loading) {
+    return (
+      <section
+        className="pt-10 sm:pt-20 bg-white"
+        aria-labelledby="gallery-heading"
+        id="gallery"
+      >
+        <div className="container sm:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Header Section Skeleton */}
+          <div className="text-center space-y-4 mb-16">
+            <div className="h-12 bg-gray-200 rounded-lg w-3/4 mx-auto animate-pulse"></div>
+            <div className="h-6 bg-gray-200 rounded w-1/2 mx-auto animate-pulse"></div>
+          </div>
+
+          {/* Filter Badges Skeleton */}
+          <div className="flex flex-wrap justify-center gap-3 mb-12">
+            {[1, 2, 3, 4].map((i) => (
+              <div
+                key={i}
+                className="h-10 bg-gray-200 rounded-full w-24 animate-pulse"
+              ></div>
+            ))}
+          </div>
+
+          {/* Gallery Content Skeleton */}
+          <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <div key={i} className="break-inside-avoid">
+                <div className="bg-gray-200 rounded-2xl h-64 animate-pulse"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Don't render gallery if no items
+  if (!items || items.length === 0) {
+    return null;
+  }
 
   return (
     <section

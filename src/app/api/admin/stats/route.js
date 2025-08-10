@@ -45,11 +45,27 @@ export async function GET() {
     );
     const totalUrgencyBanners = urgencyResult[0]?.count || 0;
 
+    // Get gallery image count
+    await query(`CREATE TABLE IF NOT EXISTS gallery_images (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      src VARCHAR(255) NOT NULL,
+      alt VARCHAR(255) NOT NULL,
+      category ENUM('facilities','hostel','events') DEFAULT 'facilities',
+      title VARCHAR(255),
+      order_index INT DEFAULT 0,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`);
+    const galleryResult = await query(
+      "SELECT COUNT(*) as count FROM gallery_images"
+    );
+    const totalGalleryImages = galleryResult[0]?.count || 0;
+
     return NextResponse.json({
       totalApplications,
       totalCourses,
       totalImportantDates,
       totalUrgencyBanners,
+      totalGalleryImages,
     });
   } catch (error) {
     console.error("Error fetching admin stats:", error);

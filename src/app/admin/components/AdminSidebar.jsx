@@ -17,12 +17,19 @@ import {
   Building2,
   Calendar,
   Clock,
+  LogOut,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 export default function AdminSidebar() {
   const pathname = usePathname();
+  const onLogout = async () => {
+    try {
+      await fetch("/api/admin/auth/logout", { method: "POST" });
+      window.location.href = "/admin/login";
+    } catch (_) {}
+  };
 
   const menuItems = [
     {
@@ -91,6 +98,17 @@ export default function AdminSidebar() {
                 </SidebarMenuButton>
               </SidebarMenuItem>
             ))}
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild className="w-full">
+                <button
+                  onClick={onLogout}
+                  className="flex items-center space-x-3 w-full text-left"
+                >
+                  <LogOut className="h-5 w-5" />
+                  <span>Logout</span>
+                </button>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
