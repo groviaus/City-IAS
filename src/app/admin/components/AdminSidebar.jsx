@@ -18,6 +18,7 @@ import {
   Calendar,
   Clock,
   LogOut,
+  Image as ImageIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -49,6 +50,12 @@ export default function AdminSidebar() {
       icon: GraduationCap,
       href: "/admin/applications",
       isActive: pathname.startsWith("/admin/applications"),
+    },
+    {
+      title: "Gallery",
+      icon: ImageIcon,
+      href: "/admin/gallery",
+      isActive: pathname.startsWith("/admin/gallery"),
     },
     {
       title: "Important Dates",

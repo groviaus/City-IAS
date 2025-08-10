@@ -49,6 +49,11 @@ export default function AdminGalleryPage() {
 
   const fileInputRef = useRef(null);
 
+  // Local previews and UI state for uploads
+  const [previews, setPreviews] = useState([]);
+  const [uploading, setUploading] = useState(false);
+  const [uploadMessage, setUploadMessage] = useState("");
+
   const fetchItems = async () => {
     try {
       setLoading(true);
@@ -86,6 +91,8 @@ export default function AdminGalleryPage() {
       order_index: 0,
       files: [],
     });
+    setPreviews([]);
+    setUploadMessage("");
     setModalOpen(true);
   };
 
@@ -98,6 +105,8 @@ export default function AdminGalleryPage() {
       order_index: item.order_index || 0,
       files: [],
     });
+    setPreviews([]);
+    setUploadMessage("");
     setModalOpen(true);
   };
 
@@ -105,6 +114,12 @@ export default function AdminGalleryPage() {
     if (!editing) {
       // create (multipart, multiple files allowed)
       if (!form.files || form.files.length === 0) return;
+      setUploading(true);
+      setUploadMessage(
+        `Uploading ${form.files.length} image${
+          form.files.length > 1 ? "s" : ""
+        }...`
+      );
       const fd = new FormData();
       fd.append("title", form.title || "");
       fd.append("alt", form.alt || "Gallery Image");
@@ -116,12 +131,16 @@ export default function AdminGalleryPage() {
         body: fd,
       });
       if (res.ok) {
-        setModalOpen(false);
+        setUploadMessage("Uploaded successfully");
         await fetchItems();
+        setModalOpen(false);
       }
+      setUploading(false);
     } else {
       // update meta, and optionally replace image if a file was chosen
       if (form.files && form.files.length > 0) {
+        setUploading(true);
+        setUploadMessage("Uploading replacement image...");
         const fd = new FormData();
         fd.append("title", form.title || "");
         fd.append("alt", form.alt || "Gallery Image");
@@ -133,9 +152,11 @@ export default function AdminGalleryPage() {
           body: fd,
         });
         if (res.ok) {
-          setModalOpen(false);
+          setUploadMessage("Saved successfully");
           await fetchItems();
+          setModalOpen(false);
         }
+        setUploading(false);
       } else {
         const res = await fetch(`/api/admin/gallery/${editing.id}`, {
           method: "PATCH",
@@ -148,8 +169,8 @@ export default function AdminGalleryPage() {
           }),
         });
         if (res.ok) {
-          setModalOpen(false);
           await fetchItems();
+          setModalOpen(false);
         }
       }
     }
@@ -196,6 +217,19 @@ export default function AdminGalleryPage() {
 
   const selectAll = () => setSelectedIds(filtered.map((i) => i.id));
   const clearSel = () => setSelectedIds([]);
+
+  // Create and clean preview URLs when file selection changes
+  useEffect(() => {
+    if (!form.files || form.files.length === 0) {
+      setPreviews([]);
+      return;
+    }
+    const urls = form.files.map((f) => URL.createObjectURL(f));
+    setPreviews(urls);
+    return () => {
+      urls.forEach((u) => URL.revokeObjectURL(u));
+    };
+  }, [form.files]);
 
   return (
     <div className="p-6 space-y-6">
@@ -287,7 +321,7 @@ export default function AdminGalleryPage() {
       ) : filtered.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filtered.map((it) => (
-            <Card key={it.id} className="overflow-hidden">
+            <Card key={it.id} className="overflow-hidden py-0">
               <div className="relative h-56 bg-gray-50">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
@@ -432,15 +466,44 @@ export default function AdminGalleryPage() {
                 }
                 className="block w-full text-sm text-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
               />
+              {previews.length > 0 && (
+                <div className="grid grid-cols-3 gap-2 mt-3">
+                  {previews.map((src, idx) => (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      key={idx}
+                      src={src}
+                      alt={`preview-${idx}`}
+                      className="h-24 w-full object-cover rounded border"
+                      onError={(e) => {
+                        e.currentTarget.src = "/placeholder.svg";
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
 
             <div className="flex justify-end gap-2 pt-2">
-              <Button variant="outline" onClick={() => setModalOpen(false)}>
+              <Button
+                variant="outline"
+                onClick={() => setModalOpen(false)}
+                disabled={uploading}
+              >
                 Cancel
               </Button>
-              <Button onClick={onSave}>
-                <Upload className="h-4 w-4 mr-2" />{" "}
-                {editing ? "Save" : "Upload"}
+              <Button onClick={onSave} disabled={uploading}>
+                {uploading ? (
+                  <>
+                    <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                    {uploadMessage || "Uploading..."}
+                  </>
+                ) : (
+                  <>
+                    <Upload className="h-4 w-4 mr-2" />{" "}
+                    {editing ? "Save" : "Upload"}
+                  </>
+                )}
               </Button>
             </div>
           </div>
@@ -449,5 +512,3 @@ export default function AdminGalleryPage() {
     </div>
   );
 }
-
-

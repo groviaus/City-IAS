@@ -3,7 +3,9 @@ import { query } from "@/lib/db";
 import fs from "fs/promises";
 import path from "path";
 
+// Ensure Node.js runtime for filesystem access and disable caching
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 async function ensureTable() {
   await query(`
@@ -154,5 +156,3 @@ export async function POST(request) {
     return NextResponse.json({ error: "Failed" }, { status: 500 });
   }
 }
-
-

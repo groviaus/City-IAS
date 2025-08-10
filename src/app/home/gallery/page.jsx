@@ -255,9 +255,15 @@ export default function Gallery() {
                     <div className="relative aspect-[4/5] overflow-hidden">
                       <Image
                         src={item.src || "/placeholder.svg"}
-                        alt={item.alt}
+                        alt={item.alt || "Gallery Image"}
                         fill
                         className="object-cover transition-transform duration-700 group-hover:scale-110"
+                        onError={(e) => {
+                          const img = e.target;
+                          if (img && img.tagName) {
+                            // fallback for Next Image handled by browser
+                          }
+                        }}
                       />
                       <motion.div
                         className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"
@@ -341,7 +347,7 @@ export default function Gallery() {
                     >
                       <Image
                         src={item.src || "/placeholder.svg"}
-                        alt={item.alt}
+                        alt={item.alt || "Gallery Image"}
                         width={0}
                         height={0}
                         sizes="100vw"
