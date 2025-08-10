@@ -14,11 +14,36 @@ export default function UrgencyBanner() {
     { value: 0, label: "Hours" },
     { value: 0, label: "Minutes" },
   ]);
+  const [bannerData, setBannerData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const fetchBannerData = async () => {
+      try {
+        const response = await fetch("/api/urgency-banner");
+        if (response.ok) {
+          const data = await response.json();
+          if (data.item) {
+            setBannerData(data.item);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching urgency banner data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBannerData();
+  }, []);
+
+  useEffect(() => {
+    if (!bannerData) return;
+
     const calculateTimeUntilBatch = () => {
-      // Batch start date: 20th August 2025
-      const batchStartDate = new Date("2025-08-30T00:00:00");
+      const batchStartDate = new Date(
+        bannerData.batch_start_date + "T00:00:00"
+      );
       const now = new Date();
 
       const timeDifference = batchStartDate.getTime() - now.getTime();
@@ -54,7 +79,12 @@ export default function UrgencyBanner() {
     const interval = setInterval(calculateTimeUntilBatch, 60000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [bannerData]);
+
+  // Don't render if no banner data or loading
+  if (loading || !bannerData) {
+    return null;
+  }
 
   return (
     <motion.section
@@ -72,13 +102,21 @@ export default function UrgencyBanner() {
           viewport={{ once: true }}
         >
           <motion.div className="space-y-1" variants={fadeInUp}>
-            <h3 className="text-xl font-bold">
-              ⏰ Don't Wait! Seats Filling Fast
-            </h3>
+            <h3 className="text-xl font-bold">{bannerData.title}</h3>
             <p className="text-orange-100">
-              Batch starts <strong> 30th August 2025 </strong> - Only{" "}
-              <NumberTicker value={50} className="text-orange-100" /> seats
-              available
+              {bannerData.subtitle
+                .replace(
+                  "{date}",
+                  new Date(bannerData.batch_start_date).toLocaleDateString(
+                    "en-IN",
+                    {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    }
+                  )
+                )
+                .replace("{seats}", bannerData.available_seats)}
             </p>
           </motion.div>
           <motion.div
@@ -95,7 +133,7 @@ export default function UrgencyBanner() {
                   <div className="text-2xl font-bold">
                     <NumberTicker
                       value={time.value}
-                      className="text-2xl font-bold text-white p-2 bg-white/20 backdrop-blur-sm rounded-lg"
+                      className="text-2xl font-bold text-white"
                       delay={index * 0.1}
                     />
                   </div>

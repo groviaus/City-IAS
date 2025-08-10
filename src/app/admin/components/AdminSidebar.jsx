@@ -16,6 +16,7 @@ import {
   GraduationCap,
   Building2,
   Calendar,
+  Clock,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -47,6 +48,12 @@ export default function AdminSidebar() {
       icon: Calendar,
       href: "/admin/important-dates",
       isActive: pathname.startsWith("/admin/important-dates"),
+    },
+    {
+      title: "Urgency Banner",
+      icon: Clock,
+      href: "/admin/urgency-banner",
+      isActive: pathname.startsWith("/admin/urgency-banner"),
     },
   ];
 

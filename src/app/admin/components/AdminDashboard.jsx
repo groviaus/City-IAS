@@ -9,6 +9,7 @@ import {
   TrendingUp,
   Plus,
   Calendar,
+  Clock,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -17,6 +18,7 @@ const AdminDashboard = () => {
     totalApplications: 0,
     totalCourses: 0,
     totalImportantDates: 0,
+    totalUrgencyBanners: 0, // Added for Urgency Banner
   });
 
   const [recentApplications, setRecentApplications] = useState([]);
@@ -76,6 +78,14 @@ const AdminDashboard = () => {
       bgColor: "bg-amber-50",
       href: "/admin/important-dates",
     },
+    {
+      title: "Urgency Banner",
+      value: stats.totalUrgencyBanners,
+      icon: Clock,
+      color: "text-red-600",
+      bgColor: "bg-red-50",
+      href: "/admin/urgency-banner",
+    },
   ];
 
   return (
@@ -105,7 +115,7 @@ const AdminDashboard = () => {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {statCards.map((stat) => (
           <Card key={stat.title} className="hover:shadow-md transition-shadow">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

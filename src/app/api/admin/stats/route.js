@@ -20,9 +20,6 @@ export async function GET() {
       title VARCHAR(100) NOT NULL,
       date_text VARCHAR(100) NOT NULL,
       year_text VARCHAR(100) NOT NULL,
-      bg_color VARCHAR(50) NOT NULL,
-      hover_bg_color VARCHAR(50) NOT NULL,
-      text_color VARCHAR(50) NOT NULL,
       order_index INT DEFAULT 0,
       active TINYINT(1) DEFAULT 1,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -32,10 +29,27 @@ export async function GET() {
     );
     const totalImportantDates = importantResult[0]?.count || 0;
 
+    // Get urgency banner count
+    await query(`CREATE TABLE IF NOT EXISTS urgency_banner (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      title VARCHAR(200) NOT NULL,
+      subtitle VARCHAR(300) NOT NULL,
+      batch_start_date DATE NOT NULL,
+      available_seats INT DEFAULT 50,
+      active TINYINT(1) DEFAULT 1,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`);
+    const urgencyResult = await query(
+      "SELECT COUNT(*) as count FROM urgency_banner"
+    );
+    const totalUrgencyBanners = urgencyResult[0]?.count || 0;
+
     return NextResponse.json({
       totalApplications,
       totalCourses,
       totalImportantDates,
+      totalUrgencyBanners,
     });
   } catch (error) {
     console.error("Error fetching admin stats:", error);
