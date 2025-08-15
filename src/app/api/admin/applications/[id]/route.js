@@ -1,25 +1,14 @@
 import { NextResponse } from "next/server";
 import { query } from "@/lib/db";
 
-async function ensureStatusColumn() {
-  try {
-    const columns = await query("SHOW COLUMNS FROM applications LIKE 'status'");
-    if (!columns || columns.length === 0) {
-      await query(
-        "ALTER TABLE applications ADD COLUMN status ENUM('pending','approved','rejected') DEFAULT 'pending'"
-      );
-    }
-  } catch (e) {
-    console.error("ensureStatusColumn error:", e);
-  }
-}
+// Status column is now created by default in submit-application API
+// No need for dynamic column creation
 
 export async function GET(_req, { params }) {
   const { id } = params;
   try {
-    await ensureStatusColumn();
     const rows = await query(
-      `SELECT id, name, email, phone, city_state, course, created_at, COALESCE(status,'pending') as status
+      `SELECT id, name, email, phone, city_state, course, created_at, status
        FROM applications WHERE id = ? LIMIT 1`,
       [id]
     );
@@ -36,7 +25,6 @@ export async function GET(_req, { params }) {
 export async function PATCH(request, { params }) {
   const { id } = params;
   try {
-    await ensureStatusColumn();
     const body = await request.json();
     const { status } = body;
     if (!["pending", "approved", "rejected"].includes(status)) {

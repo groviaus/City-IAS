@@ -50,6 +50,7 @@ export async function POST(request) {
           email VARCHAR(100) UNIQUE NOT NULL,
           course VARCHAR(100) NOT NULL,
           city_state VARCHAR(100) NOT NULL,
+          status ENUM('pending','approved','rejected') DEFAULT 'pending',
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
       `);
@@ -88,9 +89,9 @@ export async function POST(request) {
         );
       }
 
-      // Insert new application
+      // Insert new application with explicit pending status
       const [result] = await connection.execute(
-        "INSERT INTO applications (name, phone, email, course, city_state) VALUES (?, ?, ?, ?, ?)",
+        "INSERT INTO applications (name, phone, email, course, city_state, status) VALUES (?, ?, ?, ?, ?, 'pending')",
         [
           cleanData.name,
           cleanData.phone,
@@ -111,6 +112,7 @@ export async function POST(request) {
             email: cleanData.email,
             course: cleanData.course,
             cityState: cleanData.cityState,
+            status: "pending",
           },
         },
         { status: 201 }
