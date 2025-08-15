@@ -101,9 +101,17 @@ export const openRazorpayCheckout = async (order, userData, onSuccess, onFailure
       },
       handler: async function (response) {
         try {
-          await verifyPayment(response, userData.applicationId);
-          onSuccess(response);
+          const verificationResult = await verifyPayment(response, userData.applicationId);
+          console.log("Payment verification result:", verificationResult);
+          
+          // Call onSuccess with the verification result
+          onSuccess({
+            ...response,
+            verificationResult,
+            status: "paid"
+          });
         } catch (error) {
+          console.error("Payment verification failed:", error);
           onFailure(error);
         }
       },

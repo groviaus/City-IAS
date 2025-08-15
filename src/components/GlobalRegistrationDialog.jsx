@@ -104,6 +104,7 @@ function GlobalRegistrationDialog({
   const [submitStatus, setSubmitStatus] = useState(null);
   const [currentApplicationId, setCurrentApplicationId] = useState(null);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+  const [applicationUpdateTrigger, setApplicationUpdateTrigger] = useState(0);
 
   const courseOptions = [
     "FREE Coaching Program",
@@ -173,11 +174,26 @@ function GlobalRegistrationDialog({
         }
       }
     }
-  }, [isOpen, selectedCourse]);
+  }, [isOpen, selectedCourse, applicationUpdateTrigger]);
+
+  // Debug: Monitor application status changes
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const pendingApplications = localStorage.getItem("pendingApplications");
+      if (pendingApplications) {
+        try {
+          const parsed = JSON.parse(pendingApplications);
+          console.log("Current applications in localStorage:", parsed);
+        } catch (error) {
+          console.error("Error parsing applications:", error);
+        }
+      }
+    }
+  }, [applicationUpdateTrigger]);
 
   // Auto-hide success messages after 5 seconds and close dialog
   useEffect(() => {
-    if (submitStatus === "success") {
+    if (submitStatus === "success" || submitStatus === "paid") {
       const timer = setTimeout(() => {
         onOpenChange(false);
         setFormData({
@@ -190,7 +206,7 @@ function GlobalRegistrationDialog({
         setErrors({});
         setSubmitStatus(null);
         setCurrentApplicationId(null);
-      }, 5000);
+      }, submitStatus === "paid" ? 8000 : 5000); // Show paid message longer
 
       return () => clearTimeout(timer);
     }
@@ -293,10 +309,42 @@ function GlobalRegistrationDialog({
         result.order,
         applicationData,
         async (paymentResponse) => {
-          // Payment successful
-          setSubmitStatus("success");
-          localStorage.removeItem("pendingApplication");
+          console.log("Payment success callback triggered:", paymentResponse);
+          
+          // Payment successful - update status to "paid" and show success message
+          setSubmitStatus("paid");
+          console.log("Submit status set to 'paid'");
+          
+          // Update application status in localStorage to "paid"
+          if (typeof window !== 'undefined') {
+            const existingApplications = localStorage.getItem("pendingApplications");
+            if (existingApplications) {
+              try {
+                const applications = JSON.parse(existingApplications);
+                const updatedApplications = applications.map((app) =>
+                  app.applicationId === applicationData.applicationId
+                    ? { ...app, status: "paid" }
+                    : app
+                );
+                localStorage.setItem(
+                  "pendingApplications",
+                  JSON.stringify(updatedApplications)
+                );
+                console.log("Updated localStorage with paid status");
+              } catch (error) {
+                console.error("Error updating applications:", error);
+              }
+            }
+          }
+          
+          // Force a re-render to update the UI immediately
+          setFormData(prev => ({ ...prev }));
           setCurrentApplicationId(null);
+          
+          // Trigger a re-render to update course selection display
+          setApplicationUpdateTrigger(prev => prev + 1);
+          
+          console.log("Payment success callback completed");
         },
         (error) => {
           // Payment failed
@@ -516,8 +564,11 @@ function GlobalRegistrationDialog({
     if (pendingApplications) {
       try {
         const parsed = JSON.parse(pendingApplications);
-        return parsed.some(app => app.course === course);
+        const existingApp = parsed.find(app => app.course === course);
+        console.log(`Checking course ${course}:`, existingApp);
+        return existingApp ? existingApp.status : false;
       } catch (error) {
+        console.error("Error parsing applications:", error);
         return false;
       }
     }
@@ -571,8 +622,18 @@ function GlobalRegistrationDialog({
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Status:</span>
-                    <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs">
-                      Pending
+                    <span className={`px-2 py-1 rounded-full text-xs ${
+                      submitStatus === "paid"
+                        ? "bg-green-100 text-green-800"
+                        : submitStatus === "approved"
+                        ? "bg-blue-100 text-blue-800"
+                        : "bg-yellow-100 text-yellow-800"
+                    }`}>
+                      {submitStatus === "paid"
+                        ? "Paid"
+                        : submitStatus === "approved"
+                        ? "Approved"
+                        : "Pending"}
                     </span>
                   </div>
                   {coursePrices[formData.course] > 0 && (
@@ -593,8 +654,18 @@ function GlobalRegistrationDialog({
                   <div className="space-y-1 text-xs">
                     <div className="flex justify-between items-center">
                       <span className="text-blue-700">{formData.course}</span>
-                      <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs">
-                        Pending
+                      <span className={`px-2 py-1 rounded-full text-xs ${
+                        submitStatus === "paid"
+                          ? "bg-green-100 text-green-800"
+                          : submitStatus === "approved"
+                          ? "bg-blue-100 text-blue-800"
+                          : "bg-yellow-100 text-yellow-800"
+                      }`}>
+                        {submitStatus === "paid"
+                          ? "Paid"
+                          : submitStatus === "approved"
+                          ? "Approved"
+                          : "Pending"}
                       </span>
                     </div>
                   </div>
@@ -635,8 +706,8 @@ function GlobalRegistrationDialog({
                     Register for Another Course
                   </Button>
 
-                  {/* Option 2: Proceed to Payment (only for paid courses) */}
-                  {coursePrices[formData.course] > 0 ? (
+                  {/* Option 2: Proceed to Payment (only for paid courses and pending status) */}
+                  {coursePrices[formData.course] > 0 && submitStatus !== "paid" ? (
                     <Button
                       onClick={handleDirectPayment}
                       disabled={isProcessingPayment}
@@ -654,6 +725,13 @@ function GlobalRegistrationDialog({
                         </>
                       )}
                     </Button>
+                  ) : coursePrices[formData.course] > 0 && submitStatus === "paid" ? (
+                    <div className="text-center p-3 bg-green-100 rounded-lg">
+                      <CheckCircle className="h-6 w-6 text-green-600 mx-auto mb-2" />
+                      <p className="text-green-700 text-sm font-medium">
+                        Payment completed! Your course is booked.
+                      </p>
+                    </div>
                   ) : (
                     <div className="text-center p-3 bg-green-100 rounded-lg">
                       <CheckCircle className="h-6 w-6 text-green-600 mx-auto mb-2" />
@@ -666,7 +744,9 @@ function GlobalRegistrationDialog({
 
                 {coursePrices[formData.course] > 0 && (
                   <p className="text-xs text-green-600 text-center mt-3">
-                    Click "Proceed to Payment" to open Razorpay payment gateway
+                    {submitStatus === "paid" 
+                      ? "Your course is successfully booked! Our team will contact you soon."
+                      : "Click \"Proceed to Payment\" to open Razorpay payment gateway"}
                   </p>
                 )}
               </div>
@@ -689,6 +769,23 @@ function GlobalRegistrationDialog({
                   </p>
                 </motion.div>
               )}
+
+              {/* Paid Status Message */}
+              {submitStatus === "paid" && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="p-4 bg-green-50 border border-green-200 rounded-lg text-center"
+                >
+                  <CheckCircle className="h-8 w-8 text-green-600 mx-auto mb-2" />
+                  <p className="text-green-800 font-medium">
+                    Your course has been booked and our team will contact you soon.
+                  </p>
+                  <p className="text-green-700 text-sm mt-1">
+                    Payment completed successfully! Welcome to City IAS Academy.
+                  </p>
+                </motion.div>
+              )}
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -706,6 +803,20 @@ function GlobalRegistrationDialog({
                       {coursePrices[formData.course] > 0
                         ? "Payment successful! Your application has been approved."
                         : "Application submitted successfully! We'll contact you soon."}
+                    </span>
+                  </motion.div>
+                )}
+
+                {submitStatus === "paid" && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="p-4 bg-green-50 border border-green-200 rounded-lg flex items-center space-x-3"
+                  >
+                    <CheckCircle className="h-5 w-5 text-green-600" />
+                    <span className="text-green-800 font-medium">
+                      Your course has been booked and our team will contact you soon.
                     </span>
                   </motion.div>
                 )}
@@ -848,7 +959,8 @@ function GlobalRegistrationDialog({
                 {showCourseSelection ? (
                   <div className="space-y-2">
                     {courseOptions.map((course, index) => {
-                      const hasApplied = hasAppliedForCourse(course);
+                      const applicationStatus = hasAppliedForCourse(course);
+                      const hasApplied = applicationStatus !== false;
                       
                       return (
                         <motion.button
@@ -857,7 +969,11 @@ function GlobalRegistrationDialog({
                           onClick={() => handleCourseSelect(course)}
                           className={`w-full p-3 text-left border rounded-lg transition-all duration-200 ${
                             hasApplied
-                              ? "border-green-300 bg-green-50 cursor-pointer"
+                              ? applicationStatus === "paid"
+                                ? "border-green-300 bg-green-50 cursor-pointer"
+                                : applicationStatus === "approved"
+                                ? "border-blue-300 bg-blue-50 cursor-pointer"
+                                : "border-yellow-300 bg-yellow-50 cursor-pointer"
                               : "border-gray-200 hover:border-blue-300 hover:bg-blue-50"
                           }`}
                           whileHover={{ scale: 1.02 }}
@@ -869,8 +985,18 @@ function GlobalRegistrationDialog({
                                 {course}
                               </span>
                               {hasApplied && (
-                                <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">
-                                  Applied
+                                <span className={`px-2 py-1 rounded-full text-xs ${
+                                  applicationStatus === "paid"
+                                    ? "bg-green-100 text-green-800"
+                                    : applicationStatus === "approved"
+                                    ? "bg-blue-100 text-blue-800"
+                                    : "bg-yellow-100 text-yellow-800"
+                                }`}>
+                                  {applicationStatus === "paid"
+                                    ? "Paid"
+                                    : applicationStatus === "approved"
+                                    ? "Approved"
+                                    : "Pending"}
                                 </span>
                               )}
                             </div>

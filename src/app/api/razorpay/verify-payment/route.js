@@ -76,11 +76,13 @@ export async function POST(request) {
 
       return NextResponse.json({
         success: true,
-        message: "Payment verified successfully",
+        message: "Your course has been booked and our team will contact you soon.",
         data: {
           applicationId,
           paymentId: razorpay_payment_id,
           orderId: razorpay_order_id,
+          status: "approved",
+          message: "Your course has been booked and our team will contact you soon."
         },
       });
     } finally {
