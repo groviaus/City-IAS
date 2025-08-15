@@ -57,11 +57,163 @@ export async function POST(request) {
           course VARCHAR(100) NOT NULL,
           city_state VARCHAR(100) NOT NULL,
           status ENUM('pending','approved','rejected') DEFAULT 'pending',
-          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-          UNIQUE KEY unique_course_phone (course, phone),
-          UNIQUE KEY unique_course_email (course, email)
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
       `);
+
+      // Check if the table exists and has the right structure
+      const [columns] = await connection.execute(`
+        SELECT COLUMN_NAME, CONSTRAINT_NAME, REFERENCED_TABLE_NAME 
+        FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE 
+        WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'applications'
+      `);
+
+      // Check if we need to add the per-course unique constraints
+      const hasCoursePhoneConstraint = columns.some(col => 
+        col.CONSTRAINT_NAME === 'unique_course_phone'
+      );
+      const hasCourseEmailConstraint = columns.some(col => 
+        col.CONSTRAINT_NAME === 'unique_course_email'
+      );
+
+      // Check for old single-field unique constraints that need to be removed
+      const hasOldPhoneConstraint = columns.some(col => 
+        col.CONSTRAINT_NAME === 'unique_phone' || 
+        col.CONSTRAINT_NAME === 'phone' ||
+        col.CONSTRAINT_NAME === 'unique_key_phone'
+      );
+      const hasOldEmailConstraint = columns.some(col => 
+        col.CONSTRAINT_NAME === 'unique_email' || 
+        col.CONSTRAINT_NAME === 'email' ||
+        col.CONSTRAINT_NAME === 'unique_key_email'
+      );
+
+      // Remove old single-field unique constraints if they exist
+      if (hasOldPhoneConstraint) {
+        try {
+          await connection.execute(`
+            ALTER TABLE applications 
+            DROP INDEX unique_phone
+          `);
+          console.log("Removed old unique_phone constraint");
+        } catch (error) {
+          try {
+            await connection.execute(`
+              ALTER TABLE applications 
+              DROP INDEX phone
+            `);
+            console.log("Removed old phone constraint");
+          } catch (error2) {
+            try {
+              await connection.execute(`
+                ALTER TABLE applications 
+                DROP INDEX unique_key_phone
+              `);
+              console.log("Removed old unique_key_phone constraint");
+            } catch (error3) {
+              console.log("Could not remove old phone constraint, may not exist");
+            }
+          }
+        }
+      }
+
+      if (hasOldEmailConstraint) {
+        try {
+          await connection.execute(`
+            ALTER TABLE applications 
+            DROP INDEX unique_email
+          `);
+          console.log("Removed old unique_email constraint");
+        } catch (error) {
+          try {
+            await connection.execute(`
+              ALTER TABLE applications 
+              DROP INDEX email
+            `);
+            console.log("Removed old email constraint");
+          } catch (error2) {
+            try {
+              await connection.execute(`
+                ALTER TABLE applications 
+                DROP INDEX unique_key_email
+              `);
+              console.log("Removed old unique_key_email constraint");
+            } catch (error3) {
+              console.log("Could not remove old email constraint, may not exist");
+            }
+          }
+        }
+      }
+
+      // Add per-course unique constraints if they don't exist
+      if (!hasCoursePhoneConstraint) {
+        try {
+          await connection.execute(`
+            ALTER TABLE applications 
+            ADD CONSTRAINT unique_course_phone UNIQUE (course, phone)
+          `);
+          console.log("Added unique_course_phone constraint");
+        } catch (error) {
+          console.log("unique_course_phone constraint already exists or failed to add");
+        }
+      }
+
+      if (!hasCourseEmailConstraint) {
+        try {
+          await connection.execute(`
+            ALTER TABLE applications 
+            ADD CONSTRAINT unique_course_email UNIQUE (course, email)
+          `);
+          console.log("Added unique_course_email constraint");
+        } catch (error) {
+          console.log("unique_course_email constraint already exists or failed to add");
+        }
+      }
+
+      // If constraints still can't be added, try to recreate the table
+      if (!hasCoursePhoneConstraint || !hasCourseEmailConstraint) {
+        try {
+          console.log("Attempting to recreate table with correct constraints...");
+          
+          // Backup existing data
+          const [existingData] = await connection.execute(`
+            SELECT * FROM applications
+          `);
+          
+          // Drop and recreate table
+          await connection.execute(`DROP TABLE IF EXISTS applications`);
+          
+          await connection.execute(`
+            CREATE TABLE applications (
+              id INT AUTO_INCREMENT PRIMARY KEY,
+              name VARCHAR(100) NOT NULL,
+              phone VARCHAR(15) NOT NULL,
+              email VARCHAR(100) NOT NULL,
+              course VARCHAR(100) NOT NULL,
+              city_state VARCHAR(100) NOT NULL,
+              status ENUM('pending','approved','rejected') DEFAULT 'pending',
+              created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+              UNIQUE KEY unique_course_phone (course, phone),
+              UNIQUE KEY unique_course_email (course, email)
+            )
+          `);
+          
+          // Restore data if any existed
+          if (existingData.length > 0) {
+            for (const row of existingData) {
+              await connection.execute(`
+                INSERT INTO applications (name, phone, email, course, city_state, status, created_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+              `, [row.name, row.phone, row.email, row.course, row.city_state, row.status, row.created_at]);
+            }
+            console.log(`Restored ${existingData.length} existing applications`);
+          }
+          
+          console.log("Table recreated successfully with per-course constraints");
+        } catch (error) {
+          console.error("Failed to recreate table:", error);
+        }
+      }
 
       // Check for existing application within the same course
       const [existingApp] = await connection.execute(

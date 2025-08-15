@@ -123,60 +123,57 @@ function GlobalRegistrationDialog({
     }
   }, [selectedCourse]);
 
-  // Check localStorage for pending applications when dialog opens
+  // Check for existing user data and prefill form when dialog opens
   useEffect(() => {
-    if (isOpen) {
-      const pendingApplications = localStorage.getItem("pendingApplications");
-      if (pendingApplications) {
+    if (isOpen && typeof window !== 'undefined') {
+      // Check if user has existing data in localStorage
+      const existingUserData = localStorage.getItem("userData");
+      if (existingUserData) {
         try {
-          const parsed = JSON.parse(pendingApplications);
-          // Find the most recent pending application
-          const mostRecentPending = parsed.find(
-            (app) => app.status === "pending"
-          );
-          if (mostRecentPending) {
-            setFormData({
-              name: mostRecentPending.name,
-              phone: mostRecentPending.phone,
-              email: mostRecentPending.email,
-              course: mostRecentPending.course,
-              cityState: mostRecentPending.cityState,
-            });
-            setCurrentApplicationId(mostRecentPending.applicationId);
-            setSubmitStatus("pending");
-            // Don't automatically trigger payment - let user choose
+          const userData = JSON.parse(existingUserData);
+          if (userData.isRegistered) {
+            // Prefill form with existing user data
+            setFormData(prev => ({
+              ...prev,
+              name: userData.name || "",
+              phone: userData.phone || "",
+              email: userData.email || "",
+              cityState: userData.cityState || "",
+            }));
           }
         } catch (error) {
-          console.error("Error parsing pending applications:", error);
-          localStorage.removeItem("pendingApplications");
+          console.error("Error parsing user data:", error);
+          localStorage.removeItem("userData");
         }
-      } else {
-        // Check for old single application format (backward compatibility)
-        const oldPendingApplication =
-          localStorage.getItem("pendingApplication");
-        if (oldPendingApplication) {
+      }
+
+      // Check for pending applications for the selected course
+      if (selectedCourse) {
+        const pendingApplications = localStorage.getItem("pendingApplications");
+        if (pendingApplications) {
           try {
-            const parsed = JSON.parse(oldPendingApplication);
-            if (parsed.status === "pending") {
+            const parsed = JSON.parse(pendingApplications);
+            const coursePendingApp = parsed.find(
+              (app) => app.course === selectedCourse && app.status === "pending"
+            );
+            if (coursePendingApp) {
               setFormData({
-                name: parsed.name,
-                phone: parsed.phone,
-                email: parsed.email,
-                course: parsed.course,
-                cityState: parsed.cityState,
+                name: coursePendingApp.name,
+                phone: coursePendingApp.phone,
+                email: coursePendingApp.email,
+                course: coursePendingApp.course,
+                cityState: coursePendingApp.cityState,
               });
-              setCurrentApplicationId(parsed.applicationId);
+              setCurrentApplicationId(coursePendingApp.applicationId);
               setSubmitStatus("pending");
-              // Don't automatically trigger payment - let user choose
             }
           } catch (error) {
-            console.error("Error parsing old pending application:", error);
-            localStorage.removeItem("pendingApplication");
+            console.error("Error parsing pending applications:", error);
           }
         }
       }
     }
-  }, [isOpen]);
+  }, [isOpen, selectedCourse]);
 
   // Auto-hide success messages after 5 seconds and close dialog
   useEffect(() => {
@@ -255,31 +252,13 @@ function GlobalRegistrationDialog({
 
   // Handle course selection
   const handleCourseSelect = (course) => {
-    // Check if user already has a pending application for this course
-    const pendingApplication = localStorage.getItem("pendingApplication");
-    if (pendingApplication) {
-      try {
-        const parsed = JSON.parse(pendingApplication);
-        if (parsed.course === course && parsed.status === "pending") {
-          // User already has a pending application for this course
-          setSelectedCourse(course);
-          setFormData({
-            name: parsed.name,
-            phone: parsed.phone,
-            email: parsed.email,
-            course: parsed.course,
-            cityState: parsed.cityState,
-          });
-          setCurrentApplicationId(parsed.applicationId);
-          setSubmitStatus("pending");
-          setShowCourseSelection(false);
-          return;
-        }
-      } catch (error) {
-        console.error("Error parsing pending application:", error);
-      }
+    // Check if user already has an application for this course
+    if (hasAppliedForCourse(course)) {
+      alert(`You have already applied for ${course}. Please select a different course.`);
+      return;
     }
 
+    // Course is available for application
     setSelectedCourse(course);
     setFormData((prev) => ({ ...prev, course }));
     setShowCourseSelection(false);
@@ -350,25 +329,27 @@ function GlobalRegistrationDialog({
       setSubmitStatus("success");
 
       // Update application status in localStorage
-      const existingApplications = localStorage.getItem("pendingApplications");
-      if (existingApplications) {
-        try {
-          const applications = JSON.parse(existingApplications);
-          const updatedApplications = applications.map((app) =>
-            app.applicationId === currentApplicationId
-              ? { ...app, status: "approved" }
-              : app
-          );
-          localStorage.setItem(
-            "pendingApplications",
-            JSON.stringify(updatedApplications)
-          );
-        } catch (error) {
-          console.error("Error updating applications:", error);
+      if (typeof window !== 'undefined') {
+        const existingApplications = localStorage.getItem("pendingApplications");
+        if (existingApplications) {
+          try {
+            const applications = JSON.parse(existingApplications);
+            const updatedApplications = applications.map((app) =>
+              app.applicationId === currentApplicationId
+                ? { ...app, status: "approved" }
+                : app
+            );
+            localStorage.setItem(
+              "pendingApplications",
+              JSON.stringify(updatedApplications)
+            );
+          } catch (error) {
+            console.error("Error updating applications:", error);
+          }
         }
-      }
 
-      localStorage.removeItem("pendingApplication");
+        localStorage.removeItem("pendingApplication");
+      }
       setCurrentApplicationId(null);
     }
   };
@@ -428,33 +409,38 @@ function GlobalRegistrationDialog({
           status: "pending",
         };
 
-        // Save to localStorage (support multiple applications)
-        const existingApplications = localStorage.getItem(
-          "pendingApplications"
-        );
-        let applications = [];
+        // Save user data for future prefilling with isRegistered flag
+        if (typeof window !== 'undefined') {
+          localStorage.setItem("userData", JSON.stringify({
+            name: formData.name,
+            phone: formData.phone,
+            email: formData.email,
+            cityState: formData.cityState,
+            isRegistered: true,
+          }));
 
-        if (existingApplications) {
-          try {
-            applications = JSON.parse(existingApplications);
-          } catch (error) {
-            console.error("Error parsing existing applications:", error);
-            applications = [];
+          // Save to localStorage (support multiple applications)
+          const existingApplications = localStorage.getItem(
+            "pendingApplications"
+          );
+          let applications = [];
+
+          if (existingApplications) {
+            try {
+              applications = JSON.parse(existingApplications);
+            } catch (error) {
+              console.error("Error parsing existing applications:", error);
+              applications = [];
+            }
           }
+
+          // Add new application
+          applications.push(applicationData);
+          localStorage.setItem(
+            "pendingApplications",
+            JSON.stringify(applications)
+          );
         }
-
-        // Add new application
-        applications.push(applicationData);
-        localStorage.setItem(
-          "pendingApplications",
-          JSON.stringify(applications)
-        );
-
-        // Also save to old format for backward compatibility
-        localStorage.setItem(
-          "pendingApplication",
-          JSON.stringify(applicationData)
-        );
 
         setCurrentApplicationId(result.data.applicationId);
 
@@ -466,22 +452,27 @@ function GlobalRegistrationDialog({
         } else {
           // Free course - mark as approved
           setSubmitStatus("success");
-          // Remove from pending applications
-          const updatedApplications = applications.map((app) =>
-            app.applicationId === applicationData.applicationId
-              ? { ...app, status: "approved" }
-              : app
-          );
-          localStorage.setItem(
-            "pendingApplications",
-            JSON.stringify(updatedApplications)
-          );
-          localStorage.removeItem("pendingApplication");
+          // Update application status
+          if (typeof window !== 'undefined') {
+            const updatedApplications = applications.map((app) =>
+              app.applicationId === applicationData.applicationId
+                ? { ...app, status: "approved" }
+                : app
+            );
+            localStorage.setItem(
+              "pendingApplications",
+              JSON.stringify(updatedApplications)
+            );
+          }
         }
       } else {
         setSubmitStatus("error");
         if (result.errors) {
           setErrors(result.errors);
+        }
+        // Handle duplicate application error specifically
+        if (result.message && result.message.includes("already applied")) {
+          alert("You have already applied for this course. Please select a different course.");
         }
       }
     } catch (error) {
@@ -492,33 +483,6 @@ function GlobalRegistrationDialog({
     }
   };
 
-  const pendingApplications = localStorage.getItem("pendingApplications");
-  if (pendingApplications) {
-    const applications = [];
-    try {
-      const parsed = JSON.parse(pendingApplications);
-      applications.push(...parsed);
-    } catch (error) {
-      console.error("Error parsing pending applications:", error);
-    }
-  }
-
-  // Check for old single application format
-  const oldPendingApplication = localStorage.getItem("pendingApplication");
-  if (oldPendingApplication) {
-    try {
-      const parsed = JSON.parse(oldPendingApplication);
-      // Only add if not already in applications array
-      if (
-        !applications.find((app) => app.applicationId === parsed.applicationId)
-      ) {
-        applications.push(parsed);
-      }
-    } catch (error) {
-      console.error("Error parsing old pending application:", error);
-    }
-  }
-
   // Format phone number as user types
   const formatPhoneNumber = (value) => {
     const cleaned = value.replace(/\D/g, "");
@@ -526,6 +490,38 @@ function GlobalRegistrationDialog({
       return cleaned;
     }
     return cleaned.slice(0, 10);
+  };
+
+  // Check if user has existing data
+  const hasExistingUserData = () => {
+    if (typeof window === 'undefined') return false; // Server-side check
+    
+    const userData = localStorage.getItem("userData");
+    if (userData) {
+      try {
+        const parsed = JSON.parse(userData);
+        return parsed.isRegistered === true;
+      } catch (error) {
+        return false;
+      }
+    }
+    return false;
+  };
+
+  // Check if user has applied for a specific course
+  const hasAppliedForCourse = (course) => {
+    if (typeof window === 'undefined') return false; // Server-side check
+    
+    const pendingApplications = localStorage.getItem("pendingApplications");
+    if (pendingApplications) {
+      try {
+        const parsed = JSON.parse(pendingApplications);
+        return parsed.some(app => app.course === course);
+      } catch (error) {
+        return false;
+      }
+    }
+    return false;
   };
 
   return (
@@ -551,6 +547,8 @@ function GlobalRegistrationDialog({
             <DialogDescription className="text-center text-gray-600">
               {submitStatus === "pending" && currentApplicationId
                 ? "Your application has been submitted. Choose what you'd like to do next."
+                : hasExistingUserData()
+                ? "Welcome back! Your details are prefilled. You can edit them if needed or proceed with the application."
                 : "Take the first step towards your IAS dream. Fill out the form below to get started."}
             </DialogDescription>
           </DialogHeader>
@@ -732,6 +730,11 @@ function GlobalRegistrationDialog({
                 <label className="text-sm font-medium text-gray-700 flex items-center space-x-2">
                   <User className="h-4 w-4" />
                   <span>Full Name</span>
+                  {hasExistingUserData() && (
+                    <span className="text-xs text-blue-600 bg-blue-100 px-2 py-1 rounded-full">
+                      Prefilled
+                    </span>
+                  )}
                 </label>
                 <Input
                   type="text"
@@ -831,46 +834,12 @@ function GlobalRegistrationDialog({
                 </label>
 
                 {(() => {
-                  // Check if user has any pending applications
-                  const pendingApplications = localStorage.getItem(
-                    "pendingApplications"
-                  );
-                  const oldPendingApplication =
-                    localStorage.getItem("pendingApplication");
-                  let hasPendingApplications = false;
-
-                  if (pendingApplications) {
-                    try {
-                      const parsed = JSON.parse(pendingApplications);
-                      hasPendingApplications = parsed.some(
-                        (app) => app.status === "pending"
-                      );
-                    } catch (error) {
-                      console.error(
-                        "Error parsing pending applications:",
-                        error
-                      );
-                    }
-                  }
-
-                  if (!hasPendingApplications && oldPendingApplication) {
-                    try {
-                      const parsed = JSON.parse(oldPendingApplication);
-                      hasPendingApplications = parsed.status === "pending";
-                    } catch (error) {
-                      console.error(
-                        "Error parsing old pending application:",
-                        error
-                      );
-                    }
-                  }
-
-                  return hasPendingApplications ? (
+                  // Show tip if user has existing data
+                  return hasExistingUserData() ? (
                     <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
                       <p className="text-sm text-blue-700">
-                        💡 <strong>Tip:</strong> You can apply for multiple
-                        courses. Courses with pending applications will be
-                        highlighted.
+                        💡 <strong>Tip:</strong> Your details are saved! When you apply for another course, 
+                        the form will be automatically prefilled with your information.
                       </p>
                     </div>
                   ) : null;
@@ -879,35 +848,16 @@ function GlobalRegistrationDialog({
                 {showCourseSelection ? (
                   <div className="space-y-2">
                     {courseOptions.map((course, index) => {
-                      // Check if user already has a pending application for this course
-                      const pendingApplication =
-                        localStorage.getItem("pendingApplication");
-                      let hasPendingApplication = false;
-                      let applicationStatus = "";
-
-                      if (pendingApplication) {
-                        try {
-                          const parsed = JSON.parse(pendingApplication);
-                          if (parsed.course === course) {
-                            hasPendingApplication = true;
-                            applicationStatus = parsed.status;
-                          }
-                        } catch (error) {
-                          console.error(
-                            "Error parsing pending application:",
-                            error
-                          );
-                        }
-                      }
-
+                      const hasApplied = hasAppliedForCourse(course);
+                      
                       return (
                         <motion.button
                           key={index}
                           type="button"
                           onClick={() => handleCourseSelect(course)}
                           className={`w-full p-3 text-left border rounded-lg transition-all duration-200 ${
-                            hasPendingApplication
-                              ? "border-yellow-300 bg-yellow-50 cursor-pointer"
+                            hasApplied
+                              ? "border-green-300 bg-green-50 cursor-pointer"
                               : "border-gray-200 hover:border-blue-300 hover:bg-blue-50"
                           }`}
                           whileHover={{ scale: 1.02 }}
@@ -918,17 +868,9 @@ function GlobalRegistrationDialog({
                               <span className="font-medium text-gray-900">
                                 {course}
                               </span>
-                              {hasPendingApplication && (
-                                <span
-                                  className={`px-2 py-1 rounded-full text-xs ${
-                                    applicationStatus === "pending"
-                                      ? "bg-yellow-100 text-yellow-800"
-                                      : "bg-green-100 text-green-800"
-                                  }`}
-                                >
-                                  {applicationStatus === "pending"
-                                    ? "Pending"
-                                    : "Applied"}
+                              {hasApplied && (
+                                <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">
+                                  Applied
                                 </span>
                               )}
                             </div>
@@ -1066,6 +1008,36 @@ function GlobalRegistrationDialog({
                 By submitting this form, you agree to our privacy policy and
                 consent to being contacted regarding your application.
               </p>
+
+              {/* User Data Management */}
+              {hasExistingUserData() && (
+                <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
+                  <p className="text-xs text-green-700 mb-2">
+                    ✅ <strong>Your details are prefilled!</strong> You can edit any field if needed, 
+                    or clear all data to start fresh.
+                  </p>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      if (typeof window !== 'undefined') {
+                        localStorage.removeItem("userData");
+                      }
+                      setFormData({
+                        name: "",
+                        phone: "",
+                        email: "",
+                        course: selectedCourse || "",
+                        cityState: "",
+                      });
+                    }}
+                    className="text-xs text-green-600 hover:text-green-700"
+                  >
+                    Clear All Data
+                  </Button>
+                </div>
+              )}
             </form>
           )}
         </motion.div>
