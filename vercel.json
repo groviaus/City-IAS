@@ -2,6 +2,12 @@
   "functions": {
     "src/app/api/submit-application/route.js": {
       "maxDuration": 30
+    },
+    "src/app/api/razorpay/create-order/route.js": {
+      "maxDuration": 30
+    },
+    "src/app/api/razorpay/verify-payment/route.js": {
+      "maxDuration": 30
     }
   },
   "env": {
