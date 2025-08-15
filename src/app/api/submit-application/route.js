@@ -6,7 +6,7 @@ import { validateForm } from "@/lib/validation";
  * POST /api/submit-application
  * Handles form submission with validation and database storage
  * 
- * Duplicate Prevention Logic:
+ * Per-Course Validation Logic:
  * - Users can register for multiple courses with the same email/phone
  * - Duplicate registrations are only prevented within the same course
  * - This allows users to apply for both "FREE Coaching Program" and "Foundation Batch for 12th Pass"
@@ -63,7 +63,31 @@ export async function POST(request) {
         )
       `);
 
-      // Check for existing phone number within the same course
+      // Check for existing application within the same course
+      const [existingApp] = await connection.execute(
+        "SELECT id, status FROM applications WHERE phone = ? AND email = ? AND course = ?",
+        [cleanData.phone, cleanData.email, cleanData.course]
+      );
+
+      if (existingApp.length > 0) {
+        const existing = existingApp[0];
+        return NextResponse.json(
+          {
+            success: false,
+            message: "You have already applied for this course",
+            errors: { 
+              course: "You have already applied for this course with the same contact details" 
+            },
+            existingApplication: {
+              id: existing.id,
+              status: existing.status
+            }
+          },
+          { status: 409 }
+        );
+      }
+
+      // Check for existing phone number within the same course (additional safety check)
       const [existingPhone] = await connection.execute(
         "SELECT id FROM applications WHERE phone = ? AND course = ?",
         [cleanData.phone, cleanData.course]
@@ -80,7 +104,7 @@ export async function POST(request) {
         );
       }
 
-      // Check for existing email within the same course
+      // Check for existing email within the same course (additional safety check)
       const [existingEmail] = await connection.execute(
         "SELECT id FROM applications WHERE email = ? AND course = ?",
         [cleanData.email, cleanData.course]
@@ -185,6 +209,8 @@ export async function POST(request) {
  * - GET /api/submit-application (health check)
  * - GET /api/submit-application?email=user@example.com&phone=1234567890&course=Course Name
  *   (check if user already has application for specific course)
+ * - GET /api/submit-application?email=user@example.com&phone=1234567890
+ *   (get all applications for a user across all courses)
  */
 export async function GET(request) {
   try {
@@ -193,8 +219,8 @@ export async function GET(request) {
     const phone = searchParams.get('phone');
     const course = searchParams.get('course');
 
-    // If query parameters are provided, check for existing application
-    if (email && phone && course) {
+    // If query parameters are provided, check for existing applications
+    if (email && phone) {
       const connection = await mysql.createConnection({
         host: process.env.DB_HOST || "srv1875.hstgr.io",
         user: process.env.DB_USER || "u181984996_cityiasacademy",
@@ -207,25 +233,42 @@ export async function GET(request) {
       });
 
       try {
-        // Check for existing application for this specific course
-        const [existingApp] = await connection.execute(
-          "SELECT id, status FROM applications WHERE email = ? AND phone = ? AND course = ?",
-          [email, phone, course]
-        );
+        if (course) {
+          // Check for existing application for this specific course
+          const [existingApp] = await connection.execute(
+            "SELECT id, status, name, phone, email, course, city_state, created_at FROM applications WHERE email = ? AND phone = ? AND course = ?",
+            [email, phone, course]
+          );
 
-        if (existingApp.length > 0) {
-          return NextResponse.json({
-            success: true,
-            exists: true,
-            applicationId: existingApp[0].id,
-            status: existingApp[0].status,
-            message: `Application already exists for ${course}`
-          });
+          if (existingApp.length > 0) {
+            return NextResponse.json({
+              success: true,
+              exists: true,
+              applicationId: existingApp[0].id,
+              status: existingApp[0].status,
+              data: existingApp[0],
+              message: `Application already exists for ${course}`
+            });
+          } else {
+            return NextResponse.json({
+              success: true,
+              exists: false,
+              message: `No existing application found for ${course}`
+            });
+          }
         } else {
+          // Get all applications for this user across all courses
+          const [allApplications] = await connection.execute(
+            "SELECT id, status, name, phone, email, course, city_state, created_at FROM applications WHERE email = ? AND phone = ? ORDER BY created_at DESC",
+            [email, phone]
+          );
+
           return NextResponse.json({
             success: true,
-            exists: false,
-            message: `No existing application found for ${course}`
+            exists: allApplications.length > 0,
+            applications: allApplications,
+            count: allApplications.length,
+            message: `Found ${allApplications.length} application(s) for this user`
           });
         }
       } finally {
