@@ -113,7 +113,7 @@ function GlobalRegistrationDialog({
 
   // Course prices configuration
   const coursePrices = {
-    "FREE Coaching Program": 1,
+    "FREE Coaching Program": 100,
     "Foundation Batch for 12th Pass": 5000, // ₹5000
   };
 
