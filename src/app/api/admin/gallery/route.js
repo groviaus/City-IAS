@@ -72,17 +72,55 @@ export async function POST(request) {
 
       for (const file of files) {
         if (!file || typeof file === "string") continue;
-        const blob = file;
-        const arrayBuffer = await blob.arrayBuffer();
-        const buffer = Buffer.from(arrayBuffer);
-        const originalName = blob.name || "image";
-        const ext = path.extname(originalName) || ".jpg";
-        const uniqueName = `${Date.now()}-${Math.random()
-          .toString(36)
-          .slice(2)}${ext}`;
-        const destPath = path.join(dir, uniqueName);
-        await fs.writeFile(destPath, buffer);
-        const src = `/uploads/gallery/${uniqueName}`;
+        
+        // Prepare file metadata
+        const originalName = file.name || "image";
+        
+        let src = "";
+
+        // Check if we should upload to Hostinger (Remote)
+        if (process.env.HOSTINGER_UPLOAD_URL && process.env.HOSTINGER_UPLOAD_SECRET) {
+             try {
+                const uploadFormData = new FormData();
+                uploadFormData.append("file", file); // file is already a Blob/File
+                uploadFormData.append("secret", process.env.HOSTINGER_UPLOAD_SECRET);
+
+                const res = await fetch(process.env.HOSTINGER_UPLOAD_URL, {
+                    method: "POST",
+                    body: uploadFormData,
+                });
+
+                if (!res.ok) {
+                    const errText = await res.text();
+                    throw new Error(`Hostinger upload failed: ${res.status} ${errText}`);
+                }
+
+                const data = await res.json();
+                if (data.success && data.url) {
+                    src = data.url;
+                } else {
+                    throw new Error(data.error || "Unknown upload error");
+                }
+             } catch (err) {
+                 console.error("Remote upload error:", err);
+                 // Fallback or skip? For now, we should probably fail for this file.
+                 continue; 
+             }
+        } else {
+            // Fallback: Local Filesystem (works in Dev, fails in Vercel)
+            const blob = file;
+            const arrayBuffer = await blob.arrayBuffer();
+            const buffer = Buffer.from(arrayBuffer);
+            const ext = path.extname(originalName) || ".jpg";
+            const uniqueName = `${Date.now()}-${Math.random()
+            .toString(36)
+            .slice(2)}${ext}`;
+            const destPath = path.join(dir, uniqueName);
+            await fs.writeFile(destPath, buffer);
+            src = `/uploads/gallery/${uniqueName}`;
+        }
+
+        if (!src) continue;
 
         await query(
           `INSERT INTO gallery_images (src, alt, category, title, order_index)
