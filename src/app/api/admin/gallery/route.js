@@ -67,57 +67,48 @@ export async function POST(request) {
         );
       }
 
-      const dir = await ensureUploadsDir();
+      // const dir = await ensureUploadsDir(); // No longer saving locally
       const created = [];
+
+      // Validate Hostinger config presence
+      if (!process.env.HOSTINGER_UPLOAD_URL || !process.env.HOSTINGER_UPLOAD_SECRET) {
+        return NextResponse.json(
+          { error: "Hostinger upload configuration missing (HOSTINGER_UPLOAD_URL or HOSTINGER_UPLOAD_SECRET)" },
+          { status: 500 }
+        );
+      }
 
       for (const file of files) {
         if (!file || typeof file === "string") continue;
-        
-        // Prepare file metadata
-        const originalName = file.name || "image";
-        
+
         let src = "";
 
-        // Check if we should upload to Hostinger (Remote)
-        if (process.env.HOSTINGER_UPLOAD_URL && process.env.HOSTINGER_UPLOAD_SECRET) {
-             try {
-                const uploadFormData = new FormData();
-                uploadFormData.append("file", file); // file is already a Blob/File
-                uploadFormData.append("secret", process.env.HOSTINGER_UPLOAD_SECRET);
+        // Upload to Hostinger (Remote) - MANDATORY
+        try {
+          const uploadFormData = new FormData();
+          uploadFormData.append("file", file);
+          uploadFormData.append("secret", process.env.HOSTINGER_UPLOAD_SECRET);
 
-                const res = await fetch(process.env.HOSTINGER_UPLOAD_URL, {
-                    method: "POST",
-                    body: uploadFormData,
-                });
+          const res = await fetch(process.env.HOSTINGER_UPLOAD_URL, {
+            method: "POST",
+            body: uploadFormData,
+          });
 
-                if (!res.ok) {
-                    const errText = await res.text();
-                    throw new Error(`Hostinger upload failed: ${res.status} ${errText}`);
-                }
+          if (!res.ok) {
+            const errText = await res.text();
+            throw new Error(`Hostinger upload failed: ${res.status} ${errText}`);
+          }
 
-                const data = await res.json();
-                if (data.success && data.url) {
-                    src = data.url;
-                } else {
-                    throw new Error(data.error || "Unknown upload error");
-                }
-             } catch (err) {
-                 console.error("Remote upload error:", err);
-                 // Fallback or skip? For now, we should probably fail for this file.
-                 continue; 
-             }
-        } else {
-            // Fallback: Local Filesystem (works in Dev, fails in Vercel)
-            const blob = file;
-            const arrayBuffer = await blob.arrayBuffer();
-            const buffer = Buffer.from(arrayBuffer);
-            const ext = path.extname(originalName) || ".jpg";
-            const uniqueName = `${Date.now()}-${Math.random()
-            .toString(36)
-            .slice(2)}${ext}`;
-            const destPath = path.join(dir, uniqueName);
-            await fs.writeFile(destPath, buffer);
-            src = `/uploads/gallery/${uniqueName}`;
+          const data = await res.json();
+          if (data.success && data.url) {
+            src = data.url;
+          } else {
+            throw new Error(data.error || "Unknown upload error");
+          }
+        } catch (err) {
+          console.error("Remote upload error:", err);
+          // Skip this file if upload fails
+          continue;
         }
 
         if (!src) continue;
@@ -160,17 +151,45 @@ export async function POST(request) {
       );
       // Delete files from disk (best-effort)
       const dir = getUploadsDir();
-      await Promise.all(
-        (rows || []).map(async (r) => {
-          if (!r?.src) return;
-          const filename = r.src.split("/uploads/gallery/")[1];
-          if (!filename) return;
-          const filePath = path.join(dir, filename);
-          try {
-            await fs.unlink(filePath);
-          } catch (_e) {}
-        })
-      );
+
+      // Delete from Hostinger
+      if (process.env.HOSTINGER_UPLOAD_URL && process.env.HOSTINGER_UPLOAD_SECRET) {
+        await Promise.all(
+          (rows || []).map(async (r) => {
+            if (!r?.src) return;
+            // Extract filename from URL (e.g. https://domain.com/.../gallery/filename.jpg)
+            const filename = r.src.split("/").pop();
+            if (!filename) return;
+
+            try {
+              const formData = new FormData();
+              formData.append("action", "delete");
+              formData.append("secret", process.env.HOSTINGER_UPLOAD_SECRET);
+              formData.append("filename", filename);
+
+              await fetch(process.env.HOSTINGER_UPLOAD_URL, {
+                method: "POST",
+                body: formData,
+              });
+            } catch (e) {
+              console.error(`Failed to delete remote file ${filename}:`, e);
+            }
+          })
+        );
+      } else {
+        // Fallback: Delete files from local disk (if legacy files exist)
+        await Promise.all(
+          (rows || []).map(async (r) => {
+            if (!r?.src) return;
+            const filename = r.src.split("/uploads/gallery/")[1];
+            if (!filename) return;
+            const filePath = path.join(dir, filename);
+            try {
+              await fs.unlink(filePath);
+            } catch (_e) { }
+          })
+        );
+      }
       return NextResponse.json({ success: true, deleted: ids.length });
     }
 

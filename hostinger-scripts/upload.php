@@ -27,6 +27,36 @@ if ($provided_secret !== $SECRET_KEY) {
     exit;
 }
 
+$action = $_POST['action'] ?? 'upload';
+
+if ($action === 'delete') {
+    // DELETE FILE LOGIC
+    $filename = $_POST['filename'] ?? '';
+    if (!$filename) {
+        http_response_code(400);
+        echo json_encode(['error' => 'No filename provided']);
+        exit;
+    }
+
+    // Sanitize filename to prevent directory traversal
+    $safeFilename = basename($filename);
+    $targetFilePath = __DIR__ . '/' . $UPLOAD_DIR . $safeFilename;
+
+    if (file_exists($targetFilePath)) {
+        if (unlink($targetFilePath)) {
+            echo json_encode(['success' => true, 'message' => 'File deleted']);
+        } else {
+            http_response_code(500);
+            echo json_encode(['error' => 'Failed to delete file']);
+        }
+    } else {
+        // File not found is considered success (idempotent)
+        echo json_encode(['success' => true, 'message' => 'File not found, already deleted']);
+    }
+    exit;
+}
+
+// UPLOAD LOGIC (Default)
 // 2. File Validation
 if (!isset($_FILES['file'])) {
     http_response_code(400);
