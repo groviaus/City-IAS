@@ -30,3 +30,5 @@ Redeploy your application on Vercel.
 
 - **Local Development**: If you don't set these variables locally in `.env.local`, the app will continue to save files to your local `public/uploads/gallery` folder, so `pnpm dev` keeps working as normal.
 - **Production**: When Vercel sees these variables, it receives the file from the browser, then instantly forwards it to your Hostinger PHP script, which saves it to the Hostinger disk and returns the public URL.
+
+
