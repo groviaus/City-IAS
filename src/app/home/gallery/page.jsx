@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -100,7 +101,23 @@ export default function Gallery() {
     );
   };
 
+  const [isPaused, setIsPaused] = useState(false);
+
+  // Auto-slide effect
+  useEffect(() => {
+    if (!isMobile || isPaused) return;
+
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) =>
+        prev === filteredItems.length - 1 ? 0 : prev + 1
+      );
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [isMobile, isPaused, filteredItems.length]);
+
   const handleTouchStart = (e) => {
+    setIsPaused(true);
     setTouchStart(e.targetTouches[0].clientX);
   };
 
@@ -109,6 +126,7 @@ export default function Gallery() {
   };
 
   const handleTouchEnd = () => {
+    setIsPaused(false);
     if (!touchStart || !touchEnd) return;
 
     const distance = touchStart - touchEnd;
@@ -210,10 +228,9 @@ export default function Gallery() {
                 variant={activeFilter === category.id ? "default" : "secondary"}
                 className={`
                   cursor-pointer px-6 py-3 text-sm font-medium transition-all duration-300 hover:scale-105
-                  ${
-                    activeFilter === category.id
-                      ? "bg-blue-600 text-white shadow-lg shadow-blue-500/25 border-0"
-                      : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200 hover:border-blue-300"
+                  ${activeFilter === category.id
+                    ? "bg-blue-600 text-white shadow-lg shadow-blue-500/25 border-0"
+                    : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200 hover:border-blue-300"
                   }
                 `}
                 onClick={() => handleFilterChange(category.id)}
@@ -230,150 +247,160 @@ export default function Gallery() {
         {/* Gallery Content */}
         {isMobile ? (
           /* Mobile Slider */
-          <div className="relative overflow-hidden rounded-2xl">
-            <motion.div
-              ref={sliderRef}
-              className="flex transition-transform duration-500 ease-out"
-              style={{ transform: `translateX(-${currentSlide * 100}%)` }}
-              onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
-            >
-              {filteredItems.map((item, index) => (
-                <motion.div
-                  key={`${activeFilter}-${item.id}`}
-                  className="w-full flex-shrink-0 px-2"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                >
+          <div className="space-y-8">
+            <div className="relative overflow-hidden rounded-2xl">
+              <motion.div
+                ref={sliderRef}
+                className="flex transition-transform duration-500 ease-out"
+                style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+                onMouseEnter={() => setIsPaused(true)}
+                onMouseLeave={() => setIsPaused(false)}
+              >
+                {filteredItems.map((item, index) => (
                   <motion.div
-                    className="relative group bg-white rounded-2xl overflow-hidden shadow-xl border border-gray-200"
-                    whileHover={{ y: -8, scale: 1.02 }}
-                    transition={{ duration: 0.3 }}
+                    key={`${activeFilter}-${item.id}`}
+                    className="w-full flex-shrink-0 px-2"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.3, delay: index * 0.1 }}
                   >
-                    <div className="relative aspect-[4/5] overflow-hidden">
-                      <Image
-                        src={item.src || "/placeholder.svg"}
-                        alt={item.alt || "Gallery Image"}
-                        fill
-                        className="object-cover transition-transform duration-700 group-hover:scale-110"
-                        onError={(e) => {
-                          const img = e.target;
-                          if (img && img.tagName) {
-                            // fallback for Next Image handled by browser
-                          }
-                        }}
-                      />
-                      <motion.div
-                        className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"
-                        initial={{ opacity: 0 }}
-                        whileHover={{ opacity: 1 }}
-                        transition={{ duration: 0.3 }}
-                      />
-                    </div>
-                    {/* <motion.div
-                      className="absolute bottom-0 left-0 right-0 p-6 text-white"
-                      initial={{ y: 16, opacity: 0 }}
-                      whileHover={{ y: 0, opacity: 1 }}
+                    <motion.div
+                      className="relative group bg-white rounded-2xl overflow-hidden shadow-xl border border-gray-200"
+                      whileHover={{ y: -8, scale: 1.02 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <h3 className="text-xl font-bold">{item.title}</h3>
-                    </motion.div> */}
+                      <div className="relative aspect-[4/5] overflow-hidden">
+                        <Image
+                          src={item.src || "/placeholder.svg"}
+                          alt={item.alt || "Gallery Image"}
+                          fill
+                          className="object-cover transition-transform duration-700 group-hover:scale-110"
+                          onError={(e) => {
+                            const img = e.target;
+                            if (img && img.tagName) {
+                              // fallback for Next Image handled by browser
+                            }
+                          }}
+                        />
+                        <motion.div
+                          className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"
+                          initial={{ opacity: 0 }}
+                          whileHover={{ opacity: 1 }}
+                          transition={{ duration: 0.3 }}
+                        />
+                      </div>
+                    </motion.div>
                   </motion.div>
-                </motion.div>
-              ))}
-            </motion.div>
+                ))}
+              </motion.div>
 
-            {/* Mobile Navigation */}
-            <Button
-              onClick={prevSlide}
-              size="icon"
-              className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-sm hover:bg-white shadow-lg rounded-full border border-gray-200"
-            >
-              <ChevronLeft className="w-5 h-5 text-gray-700" />
-            </Button>
-            <Button
-              onClick={nextSlide}
-              size="icon"
-              className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-sm hover:bg-white shadow-lg rounded-full border border-gray-200"
-            >
-              <ChevronRight className="w-5 h-5 text-gray-700" />
-            </Button>
+              {/* Mobile Navigation */}
+              <Button
+                onClick={prevSlide}
+                size="icon"
+                className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-sm hover:bg-white shadow-lg rounded-full border border-gray-200"
+              >
+                <ChevronLeft className="w-5 h-5 text-gray-700" />
+              </Button>
+              <Button
+                onClick={nextSlide}
+                size="icon"
+                className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-sm hover:bg-white shadow-lg rounded-full border border-gray-200"
+              >
+                <ChevronRight className="w-5 h-5 text-gray-700" />
+              </Button>
 
-            {/* Mobile Dots Indicator */}
-            <div className="flex justify-center mt-6 gap-2">
-              {filteredItems.map((_, index) => (
-                <motion.button
-                  key={index}
-                  onClick={() => setCurrentSlide(index)}
-                  className={`h-2 rounded-full transition-all duration-300 ${
-                    index === currentSlide
+              {/* Mobile Dots Indicator */}
+              <div className="flex justify-center mt-6 gap-2">
+                {filteredItems.map((_, index) => (
+                  <motion.button
+                    key={index}
+                    onClick={() => setCurrentSlide(index)}
+                    className={`h-2 rounded-full transition-all duration-300 ${index === currentSlide
                       ? "bg-blue-600 w-8"
                       : "bg-gray-300 hover:bg-gray-400 w-2"
-                  }`}
-                  whileHover={{ scale: 1.2 }}
-                  whileTap={{ scale: 0.9 }}
-                />
-              ))}
+                      }`}
+                    whileHover={{ scale: 1.2 }}
+                    whileTap={{ scale: 0.9 }}
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div className="flex justify-center">
+              <Link href="/gallery">
+                <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 rounded-full shadow-lg shadow-blue-600/25">
+                  View Full Gallery
+                </Button>
+              </Link>
             </div>
           </div>
         ) : (
           /* Desktop Masonry Grid */
-          <motion.div
-            className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6"
-            key={activeFilter}
-            variants={staggerContainer}
-            initial="initial"
-            animate="animate"
-          >
-            {filteredItems.map((item, index) => (
+          <div className="space-y-10">
+            <div className="relative max-h-[1000px] overflow-hidden">
               <motion.div
-                key={`${activeFilter}-${item.id}`}
-                className="break-inside-avoid group cursor-pointer"
-                variants={fadeInUp}
-                whileHover={{ y: -8, scale: 1.02 }}
+                className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6 pb-20"
+                key={activeFilter}
+                variants={staggerContainer}
+                initial="initial"
+                animate="animate"
               >
-                <motion.div
-                  className="relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-500 border border-gray-200"
-                  whileHover={{
-                    boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
-                  }}
-                >
-                  <div className="relative overflow-hidden">
-                    <motion.div
-                      whileHover={{ scale: 1.1 }}
-                      transition={{ duration: 0.7 }}
-                    >
-                      <Image
-                        src={item.src || "/placeholder.svg"}
-                        alt={item.alt || "Gallery Image"}
-                        width={0}
-                        height={0}
-                        sizes="100vw"
-                        className="w-full h-auto object-cover"
-                        style={{ width: "100%", height: "auto" }}
-                      />
-                    </motion.div>
-                    <motion.div
-                      className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"
-                      initial={{ opacity: 0 }}
-                      whileHover={{ opacity: 1 }}
-                      transition={{ duration: 0.3 }}
-                    />
-                  </div>
-                  {/* <motion.div
-                    className="absolute bottom-0 left-0 right-0 p-6 text-white"
-                    initial={{ y: 16, opacity: 0 }}
-                    whileHover={{ y: 0, opacity: 1 }}
-                    transition={{ duration: 0.3 }}
+                {filteredItems.map((item, index) => (
+                  <motion.div
+                    key={`${activeFilter}-${item.id}`}
+                    className="break-inside-avoid group cursor-pointer"
+                    variants={fadeInUp}
+                    whileHover={{ y: -8, scale: 1.02 }}
                   >
-                    <h3 className="text-lg font-bold">{item.title}</h3>
-                  </motion.div> */}
-                </motion.div>
+                    <motion.div
+                      className="relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-500 border border-gray-200"
+                      whileHover={{
+                        boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
+                      }}
+                    >
+                      <div className="relative overflow-hidden">
+                        <motion.div
+                          whileHover={{ scale: 1.1 }}
+                          transition={{ duration: 0.7 }}
+                        >
+                          <Image
+                            src={item.src || "/placeholder.svg"}
+                            alt={item.alt || "Gallery Image"}
+                            width={0}
+                            height={0}
+                            sizes="100vw"
+                            className="w-full h-auto object-cover"
+                            style={{ width: "100%", height: "auto" }}
+                          />
+                        </motion.div>
+                        <motion.div
+                          className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"
+                          initial={{ opacity: 0 }}
+                          whileHover={{ opacity: 1 }}
+                          transition={{ duration: 0.3 }}
+                        />
+                      </div>
+                    </motion.div>
+                  </motion.div>
+                ))}
               </motion.div>
-            ))}
-          </motion.div>
+
+              {/* Gradient Overlay */}
+              <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-white via-white/80 to-transparent z-10 pointer-events-none" />
+            </div>
+
+            <div className="flex justify-center">
+              <Link href="/gallery">
+                <Button size="lg" className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-10 py-6 text-lg rounded-full shadow-xl shadow-blue-600/30 transition-all duration-300 hover:scale-105 hover:shadow-2xl">
+                  View All Campus Photos
+                </Button>
+              </Link>
+            </div>
+          </div>
         )}
       </div>
     </section>
