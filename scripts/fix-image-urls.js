@@ -48,6 +48,8 @@ async function migrate() {
     //   [OLD_DOMAIN, NEW_BASE, `%${OLD_DOMAIN}%`]
     // );
 
+    ///
+
   } catch (error) {
     console.error("Migration failed:", error);
   } finally {
