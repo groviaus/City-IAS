@@ -15,6 +15,18 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
+        hostname: "srv1875-files.hstgr.io",
+        port: "",
+        pathname: "/73e1f4ef2617d397/api/raw/public_html/cityias-storage/uploads/**",
+      },
+      {
+        protocol: "https",
+        hostname: "srv1875-files.hstgr.io",
+        port: "",
+        pathname: "/73e1f4ef2617d397/api/raw/public_html/cityias-storage/gallery/**",
+      },
+      {
+        protocol: "https",
         hostname: "cityias-storage.wetoomedia.com",
         port: "",
         pathname: "/uploads/**",
