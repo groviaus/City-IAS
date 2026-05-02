@@ -2,9 +2,38 @@
 
 import { motion } from "framer-motion";
 import { NumberTicker } from "@/components/magicui/number-ticker";
+import { useEffect, useState } from "react";
 import { fadeInUp, staggerContainer } from "@/lib/animations";
 
 export default function ApplicationProcess() {
+  const [applicationFee, setApplicationFee] = useState(200);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    fetch("/api/courses")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (!isMounted || !data?.courses?.length) return;
+        const freeCourse = data.courses.find((course) =>
+          typeof course.title === "string"
+            ? course.title.toLowerCase().includes("free")
+            : false
+        );
+        const apiFee = Number(freeCourse?.price ?? data.courses[0]?.price) || 0;
+        if (apiFee > 0) {
+          setApplicationFee(apiFee);
+        }
+      })
+      .catch(() => {
+        /* keep fallback fee */
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   const steps = [
     {
       step: "1",
@@ -17,7 +46,7 @@ export default function ApplicationProcess() {
       step: "2",
       title: "Pay Application Fee",
       description:
-        "₹100 application fee to secure your application",
+        `₹${applicationFee} application fee to secure your application`,
       color: "amber",
     },
     {

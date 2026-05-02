@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Target, Play } from "lucide-react";
@@ -16,6 +17,34 @@ import { useRegistrationDialog } from "@/components/GlobalRegistrationDialog";
 
 export default function Hero() {
   const { openDialog } = useRegistrationDialog();
+  const [entranceFee, setEntranceFee] = useState(100);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    fetch("/api/courses")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (!isMounted || !data?.courses?.length) return;
+        const freeCourse = data.courses.find((course) =>
+          typeof course.title === "string"
+            ? course.title.toLowerCase().includes("free")
+            : false
+        );
+        const apiPrice = Number(freeCourse?.price ?? data.courses[0]?.price) || 0;
+        if (apiPrice > 0) {
+          setEntranceFee(apiPrice);
+        }
+      })
+      .catch(() => {
+        /* keep fallback price */
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   const stats = [
     {
       number: 500,
@@ -116,7 +145,7 @@ export default function Hero() {
                   <br />
                   Only{" "}
                   <span className="text-green-500 font-bold sm:text-xl px-[2px]  animate-pulse mt-2">
-                    ₹100
+                    ₹{entranceFee}
                   </span>{" "}
                   Entrance Test fee.
                 </p>

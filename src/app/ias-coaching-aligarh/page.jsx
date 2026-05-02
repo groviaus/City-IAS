@@ -164,7 +164,7 @@ export default function IASCoachingAligarh() {
                   <li>• Previous year papers</li>
                   <li>• Performance tracking</li>
                 </ul>
-                <p className="text-2xl font-bold text-blue-600">₹100 + ₹1000</p>
+                <p className="text-2xl font-bold text-blue-600">₹200 + ₹1000</p>
               </div>
             </div>
           </div>

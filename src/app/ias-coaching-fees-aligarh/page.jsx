@@ -46,7 +46,7 @@ export default function IASCoachingFees() {
     {
       name: "City IAS Academy",
       basicFee: "₹30,000",
-      completeFee: "₹100 + ₹1000",
+      completeFee: "₹200 + ₹1000",
       features: [
         "Expert Faculty",
         "Study Material Included",
@@ -223,7 +223,7 @@ export default function IASCoachingFees() {
                 </h3>
                 <div className="text-center mb-6">
                   <span className="text-3xl font-bold text-blue-600">
-                    ₹100 + ₹1000
+                    ₹200 + ₹1000
                   </span>
                   <span className="text-gray-500 ml-2">FREE Program</span>
                 </div>

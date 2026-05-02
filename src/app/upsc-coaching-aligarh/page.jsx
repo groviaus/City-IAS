@@ -181,7 +181,7 @@ export default function UPSCCoachingAligarh() {
                   <li>• Performance tracking</li>
                   <li>• Current affairs updates</li>
                 </ul>
-                <p className="text-2xl font-bold text-blue-600">₹100 + ₹1000</p>
+                <p className="text-2xl font-bold text-blue-600">₹200 + ₹1000</p>
               </div>
             </div>
           </div>

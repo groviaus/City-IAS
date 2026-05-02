@@ -15,12 +15,14 @@ export default function Facilities() {
       details: [
         { label: "Lodging", price: 3000, suffix: "/month" },
         { label: "Mess", price: 4000, suffix: "/month" },
+        { label: "Academic", price: 2500, suffix: "/month" },
         {
           label: "Total",
-          price: 7000,
+          price: 9500,
           suffix: "/month",
           highlight: true,
         },
+
       ],
       color: "blue",
     },

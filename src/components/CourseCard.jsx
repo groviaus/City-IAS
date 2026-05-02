@@ -71,7 +71,7 @@ export default function CourseCard({ course, onPrimaryAction }) {
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-3xl font-bold text-gray-900">
-              {course.price === 100 ? "Application Fee:" : ""} ₹
+              {course.price === 200 ? "Application Fee:" : ""} ₹
               <NumberTicker
                 value={Number(course.price) || 0}
                 className="text-3xl font-bold text-gray-900"
