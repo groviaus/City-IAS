@@ -190,7 +190,7 @@ export default function IASCoachingMarrisRoad() {
                   Modern Infrastructure
                 </h3>
                 <p className="text-gray-600">
-                  State-of-the-art classrooms with air conditioning, comfortable
+                  State-of-the-art classrooms with comfortable
                   seating, digital teaching aids, and modern learning facilities
                   for optimal study experience.
                 </p>

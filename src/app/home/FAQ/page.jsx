@@ -33,7 +33,7 @@ export default function FAQ() {
     {
       question: "What study materials are provided?",
       answer:
-        "Both programs include comprehensive study materials, current affairs updates, test series, and access to our 24x7 air-conditioned library with high-speed internet.",
+        "Both programs include comprehensive study materials, current affairs updates, test series, and access to our 24x7 library with high-speed internet.",
     },
   ];
 

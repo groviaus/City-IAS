@@ -438,7 +438,7 @@ export default function PratisthaVsCityIAS() {
                   Modern Infrastructure
                 </h3>
                 <p className="text-gray-600">
-                  State-of-the-art classrooms with air conditioning, comfortable
+                  State-of-the-art classrooms with comfortable
                   seating, and modern teaching facilities for optimal learning
                   experience.
                 </p>

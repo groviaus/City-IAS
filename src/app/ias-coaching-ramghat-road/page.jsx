@@ -191,7 +191,7 @@ export default function IASCoachingRamghatRoad() {
                   Study Environment
                 </h3>
                 <p className="text-gray-600">
-                  Modern classrooms with air conditioning, comfortable seating,
+                  Modern classrooms with comfortable seating,
                   and state-of-the-art teaching facilities for optimal learning
                   experience.
                 </p>

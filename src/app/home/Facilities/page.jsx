@@ -27,7 +27,7 @@ export default function Facilities() {
     {
       icon: BookOpen,
       title: "24x7 Library",
-      description: "Air-conditioned library with unlimited access",
+      description: "Library with unlimited access",
       features: [
         { icon: Wifi, text: "High-Speed Internet" },
         { icon: Coffee, text: "Refreshment Area" },
@@ -37,7 +37,7 @@ export default function Facilities() {
     {
       icon: Users,
       title: "Smart Classrooms",
-      description: "Modern, air-conditioned classrooms with latest technology",
+      description: "Modern classrooms with latest technology",
       subtitle:
         "Interactive learning environment designed for maximum retention",
       color: "purple",
