@@ -23,9 +23,9 @@ export default function Courses() {
     {
       title: "FREE Coaching Program",
       subtitle: "Prelims + Mains",
-      price: 100,
+      price: 200,
       registration: 1000,
-      application: 100,
+      application: 200,
       badge: "MOST POPULAR",
       badgeColor: "bg-green-500",
       borderColor: "border-green-200",
