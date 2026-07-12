@@ -223,20 +223,46 @@ export async function POST(request) {
 
       if (existingApp.length > 0) {
         const existing = existingApp[0];
-        return NextResponse.json(
-          {
-            success: false,
-            message: "You have already applied for this course",
-            errors: { 
-              course: "You have already applied for this course with the same contact details" 
+        if (existing.status === 'pending') {
+          // If pending, just update the existing application and return success
+          await connection.execute(
+            "UPDATE applications SET name = ?, city_state = ? WHERE id = ?",
+            [cleanData.name, cleanData.cityState, existing.id]
+          );
+          
+          return NextResponse.json(
+            {
+              success: true,
+              message: "Application updated successfully!",
+              data: {
+                id: existing.id,
+                name: cleanData.name,
+                phone: cleanData.phone,
+                email: cleanData.email,
+                course: cleanData.course,
+                cityState: cleanData.cityState,
+                status: "pending",
+                applicationId: existing.id,
+              },
             },
-            existingApplication: {
-              id: existing.id,
-              status: existing.status
-            }
-          },
-          { status: 409 }
-        );
+            { status: 200 }
+          );
+        } else {
+          return NextResponse.json(
+            {
+              success: false,
+              message: "You have already applied for this course",
+              errors: { 
+                course: "You have already applied for this course with the same contact details" 
+              },
+              existingApplication: {
+                id: existing.id,
+                status: existing.status
+              }
+            },
+            { status: 409 }
+          );
+        }
       }
 
       // Check for existing phone number within the same course (additional safety check)

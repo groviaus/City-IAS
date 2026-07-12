@@ -113,8 +113,8 @@ function GlobalRegistrationDialog({
 
   // Course prices configuration
   const coursePrices = {
-    "FREE Coaching Program": 100,
-    "Foundation Batch for 12th Pass": 30000, // ₹30000
+    "FREE Coaching Program": 300,
+    "Foundation Batch for 12th Pass": 3000, // ₹3000
   };
 
   // Update course when selectedCourse prop changes
@@ -127,6 +127,14 @@ function GlobalRegistrationDialog({
   // Check for existing user data and prefill form when dialog opens
   useEffect(() => {
     if (isOpen && typeof window !== 'undefined') {
+      // Version control for localStorage to clear legacy states
+      const CURRENT_APP_VERSION = "v2.1"; // Increment this to force a reset for all users
+      if (localStorage.getItem("app_version") !== CURRENT_APP_VERSION) {
+        localStorage.removeItem("pendingApplications");
+        localStorage.setItem("app_version", CURRENT_APP_VERSION);
+        console.log("Legacy localStorage cleared for version", CURRENT_APP_VERSION);
+      }
+
       // Check if user has existing data in localStorage
       const existingUserData = localStorage.getItem("userData");
       if (existingUserData) {
@@ -149,6 +157,8 @@ function GlobalRegistrationDialog({
       }
 
       // Check for pending applications for the selected course
+      // We read from localStorage to prefill details, but we NO LONGER
+      // lock the user out by setting submitStatus to 'pending'.
       if (selectedCourse) {
         const pendingApplications = localStorage.getItem("pendingApplications");
         if (pendingApplications) {
@@ -166,7 +176,7 @@ function GlobalRegistrationDialog({
                 cityState: coursePendingApp.cityState,
               });
               setCurrentApplicationId(coursePendingApp.applicationId);
-              setSubmitStatus("pending");
+              // Deliberately NOT setting submitStatus("pending") so the form stays open
             }
           } catch (error) {
             console.error("Error parsing pending applications:", error);
@@ -310,11 +320,11 @@ function GlobalRegistrationDialog({
         applicationData,
         async (paymentResponse) => {
           console.log("Payment success callback triggered:", paymentResponse);
-          
+
           // Payment successful - update status to "paid" and show success message
           setSubmitStatus("paid");
           console.log("Submit status set to 'paid'");
-          
+
           // Update application status in localStorage to "paid"
           if (typeof window !== 'undefined') {
             const existingApplications = localStorage.getItem("pendingApplications");
@@ -336,20 +346,21 @@ function GlobalRegistrationDialog({
               }
             }
           }
-          
+
           // Force a re-render to update the UI immediately
           setFormData(prev => ({ ...prev }));
           setCurrentApplicationId(null);
-          
+
           // Trigger a re-render to update course selection display
           setApplicationUpdateTrigger(prev => prev + 1);
-          
+
           console.log("Payment success callback completed");
         },
         (error) => {
-          // Payment failed
+          // Payment failed or user closed dialog
           console.error("Payment failed:", error);
-          setSubmitStatus("error");
+          // Just reset status to null so they can see the form and try again
+          setSubmitStatus(null);
         }
       );
     } catch (error) {
@@ -543,7 +554,7 @@ function GlobalRegistrationDialog({
   // Check if user has existing data
   const hasExistingUserData = () => {
     if (typeof window === 'undefined') return false; // Server-side check
-    
+
     const userData = localStorage.getItem("userData");
     if (userData) {
       try {
@@ -559,7 +570,7 @@ function GlobalRegistrationDialog({
   // Check if user has applied for a specific course
   const hasAppliedForCourse = (course) => {
     if (typeof window === 'undefined') return false; // Server-side check
-    
+
     const pendingApplications = localStorage.getItem("pendingApplications");
     if (pendingApplications) {
       try {
@@ -599,8 +610,8 @@ function GlobalRegistrationDialog({
               {submitStatus === "pending" && currentApplicationId
                 ? "Your application has been submitted. Choose what you'd like to do next."
                 : hasExistingUserData()
-                ? "Welcome back! Your details are prefilled. You can edit them if needed or proceed with the application."
-                : "Take the first step towards your IAS dream. Fill out the form below to get started."}
+                  ? "Welcome back! Your details are prefilled. You can edit them if needed or proceed with the application."
+                  : "Take the first step towards your IAS dream. Fill out the form below to get started."}
             </DialogDescription>
           </DialogHeader>
 
@@ -622,18 +633,17 @@ function GlobalRegistrationDialog({
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Status:</span>
-                    <span className={`px-2 py-1 rounded-full text-xs ${
-                      submitStatus === "paid"
+                    <span className={`px-2 py-1 rounded-full text-xs ${submitStatus === "paid"
                         ? "bg-green-100 text-green-800"
                         : submitStatus === "approved"
-                        ? "bg-blue-100 text-blue-800"
-                        : "bg-yellow-100 text-yellow-800"
-                    }`}>
+                          ? "bg-blue-100 text-blue-800"
+                          : "bg-yellow-100 text-yellow-800"
+                      }`}>
                       {submitStatus === "paid"
                         ? "Paid"
                         : submitStatus === "approved"
-                        ? "Approved"
-                        : "Pending"}
+                          ? "Approved"
+                          : "Pending"}
                     </span>
                   </div>
                   {coursePrices[formData.course] > 0 && (
@@ -654,18 +664,17 @@ function GlobalRegistrationDialog({
                   <div className="space-y-1 text-xs">
                     <div className="flex justify-between items-center">
                       <span className="text-blue-700">{formData.course}</span>
-                      <span className={`px-2 py-1 rounded-full text-xs ${
-                        submitStatus === "paid"
+                      <span className={`px-2 py-1 rounded-full text-xs ${submitStatus === "paid"
                           ? "bg-green-100 text-green-800"
                           : submitStatus === "approved"
-                          ? "bg-blue-100 text-blue-800"
-                          : "bg-yellow-100 text-yellow-800"
-                      }`}>
+                            ? "bg-blue-100 text-blue-800"
+                            : "bg-yellow-100 text-yellow-800"
+                        }`}>
                         {submitStatus === "paid"
                           ? "Paid"
                           : submitStatus === "approved"
-                          ? "Approved"
-                          : "Pending"}
+                            ? "Approved"
+                            : "Pending"}
                       </span>
                     </div>
                   </div>
@@ -744,7 +753,7 @@ function GlobalRegistrationDialog({
 
                 {coursePrices[formData.course] > 0 && (
                   <p className="text-xs text-green-600 text-center mt-3">
-                    {submitStatus === "paid" 
+                    {submitStatus === "paid"
                       ? "Your course is successfully booked! Our team will contact you soon."
                       : "Click \"Proceed to Payment\" to open Razorpay payment gateway"}
                   </p>
@@ -853,11 +862,10 @@ function GlobalRegistrationDialog({
                   value={formData.name}
                   onChange={(e) => handleInputChange("name", e.target.value)}
                   onBlur={(e) => handleInputBlur("name", e.target.value)}
-                  className={`${
-                    errors.name
+                  className={`${errors.name
                       ? "border-red-500 focus:border-red-500 focus:ring-red-500"
                       : ""
-                  }`}
+                    }`}
                 />
                 {errors.name && (
                   <motion.p
@@ -889,11 +897,10 @@ function GlobalRegistrationDialog({
                   }
                   onBlur={(e) => handleInputBlur("phone", e.target.value)}
                   maxLength={10}
-                  className={`${
-                    errors.phone
+                  className={`${errors.phone
                       ? "border-red-500 focus:border-red-500 focus:ring-red-500"
                       : ""
-                  }`}
+                    }`}
                 />
                 {errors.phone && (
                   <motion.p
@@ -919,11 +926,10 @@ function GlobalRegistrationDialog({
                   value={formData.email}
                   onChange={(e) => handleInputChange("email", e.target.value)}
                   onBlur={(e) => handleInputBlur("email", e.target.value)}
-                  className={`${
-                    errors.email
+                  className={`${errors.email
                       ? "border-red-500 focus:border-red-500 focus:ring-red-500"
                       : ""
-                  }`}
+                    }`}
                 />
                 {errors.email && (
                   <motion.p
@@ -949,7 +955,7 @@ function GlobalRegistrationDialog({
                   return hasExistingUserData() ? (
                     <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
                       <p className="text-sm text-blue-700">
-                        💡 <strong>Tip:</strong> Your details are saved! When you apply for another course, 
+                        💡 <strong>Tip:</strong> Your details are saved! When you apply for another course,
                         the form will be automatically prefilled with your information.
                       </p>
                     </div>
@@ -961,21 +967,20 @@ function GlobalRegistrationDialog({
                     {courseOptions.map((course, index) => {
                       const applicationStatus = hasAppliedForCourse(course);
                       const hasApplied = applicationStatus !== false;
-                      
+
                       return (
                         <motion.button
                           key={index}
                           type="button"
                           onClick={() => handleCourseSelect(course)}
-                          className={`w-full p-3 text-left border rounded-lg transition-all duration-200 ${
-                            hasApplied
+                          className={`w-full p-3 text-left border rounded-lg transition-all duration-200 ${hasApplied
                               ? applicationStatus === "paid"
                                 ? "border-green-300 bg-green-50 cursor-pointer"
                                 : applicationStatus === "approved"
-                                ? "border-blue-300 bg-blue-50 cursor-pointer"
-                                : "border-yellow-300 bg-yellow-50 cursor-pointer"
+                                  ? "border-blue-300 bg-blue-50 cursor-pointer"
+                                  : "border-yellow-300 bg-yellow-50 cursor-pointer"
                               : "border-gray-200 hover:border-blue-300 hover:bg-blue-50"
-                          }`}
+                            }`}
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
                         >
@@ -985,18 +990,17 @@ function GlobalRegistrationDialog({
                                 {course}
                               </span>
                               {hasApplied && (
-                                <span className={`px-2 py-1 rounded-full text-xs ${
-                                  applicationStatus === "paid"
+                                <span className={`px-2 py-1 rounded-full text-xs ${applicationStatus === "paid"
                                     ? "bg-green-100 text-green-800"
                                     : applicationStatus === "approved"
-                                    ? "bg-blue-100 text-blue-800"
-                                    : "bg-yellow-100 text-yellow-800"
-                                }`}>
+                                      ? "bg-blue-100 text-blue-800"
+                                      : "bg-yellow-100 text-yellow-800"
+                                  }`}>
                                   {applicationStatus === "paid"
                                     ? "Paid"
                                     : applicationStatus === "approved"
-                                    ? "Approved"
-                                    : "Pending"}
+                                      ? "Approved"
+                                      : "Pending"}
                                 </span>
                               )}
                             </div>
@@ -1059,11 +1063,10 @@ function GlobalRegistrationDialog({
                     handleInputChange("cityState", e.target.value)
                   }
                   onBlur={(e) => handleInputBlur("cityState", e.target.value)}
-                  className={`${
-                    errors.cityState
+                  className={`${errors.cityState
                       ? "border-red-500 focus:border-red-500 focus:ring-red-500"
                       : ""
-                  }`}
+                    }`}
                 />
                 {errors.cityState && (
                   <motion.p
@@ -1139,7 +1142,7 @@ function GlobalRegistrationDialog({
               {hasExistingUserData() && (
                 <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
                   <p className="text-xs text-green-700 mb-2">
-                    ✅ <strong>Your details are prefilled!</strong> You can edit any field if needed, 
+                    ✅ <strong>Your details are prefilled!</strong> You can edit any field if needed,
                     or clear all data to start fresh.
                   </p>
                   <Button

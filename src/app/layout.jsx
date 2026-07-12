@@ -563,7 +563,7 @@ export default function RootLayout({ children }) {
                 "@type": "Offer",
                 category: "Education",
                 priceCurrency: "INR",
-                price: "30000",
+                price: "3000",
                 availability: "https://schema.org/InStock",
               },
               courseMode: "Blended",
