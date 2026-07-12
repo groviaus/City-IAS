@@ -105,6 +105,7 @@ function GlobalRegistrationDialog({
   const [paymentError, setPaymentError] = useState(null);
   const [currentApplicationId, setCurrentApplicationId] = useState(null);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+  const [isRazorpayOpen, setIsRazorpayOpen] = useState(false);
   const [applicationUpdateTrigger, setApplicationUpdateTrigger] = useState(0);
 
   const courseOptions = [
@@ -129,7 +130,7 @@ function GlobalRegistrationDialog({
   useEffect(() => {
     if (isOpen && typeof window !== 'undefined') {
       // Version control for localStorage to clear legacy states
-      const CURRENT_APP_VERSION = "v2.2"; // Increment this to force a reset for all users
+      const CURRENT_APP_VERSION = "v2.3"; // Increment this to force a reset for all users
       if (localStorage.getItem("app_version") !== CURRENT_APP_VERSION) {
         localStorage.removeItem("pendingApplications");
         localStorage.setItem("app_version", CURRENT_APP_VERSION);
@@ -316,6 +317,9 @@ function GlobalRegistrationDialog({
         throw new Error(result.message || "Failed to create payment order");
       }
 
+      // Track that Razorpay is actively open so we can disable the background lock
+      setIsRazorpayOpen(true);
+
       // Open Razorpay checkout
       await openRazorpayCheckout(
         result.order,
@@ -357,6 +361,7 @@ function GlobalRegistrationDialog({
           setApplicationUpdateTrigger(prev => prev + 1);
 
           console.log("Payment success callback completed");
+          setIsRazorpayOpen(false);
         },
         (error) => {
           // Payment failed or user closed dialog
@@ -368,11 +373,13 @@ function GlobalRegistrationDialog({
             setPaymentError("Payment failed. Please try again.");
           }
           // Do not change submitStatus so we don't break the current UI view
+          setIsRazorpayOpen(false);
         }
       );
     } catch (error) {
       console.error("Payment error:", error);
       setPaymentError("An error occurred during payment.");
+      setIsRazorpayOpen(false);
     } finally {
       setIsProcessingPayment(false);
     }
@@ -595,12 +602,12 @@ function GlobalRegistrationDialog({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange} modal={!isProcessingPayment}>
+    <Dialog open={isOpen} onOpenChange={onOpenChange} modal={!isRazorpayOpen}>
       <DialogContent 
         className="sm:max-w-md max-h-[90vh] overflow-y-auto scrollbar-hide"
         onInteractOutside={(e) => {
           // Do not close the dialog if the user is interacting with Razorpay
-          if (isProcessingPayment || e.target.closest('.razorpay-container')) {
+          if (isRazorpayOpen || e.target.closest('.razorpay-container')) {
             e.preventDefault();
           }
         }}
