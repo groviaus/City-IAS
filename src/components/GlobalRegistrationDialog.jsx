@@ -114,7 +114,7 @@ function GlobalRegistrationDialog({
   // Course prices configuration
   const coursePrices = {
     "FREE Coaching Program": 100,
-    "Foundation Batch for 12th Pass": 5000, // ₹5000
+    "Foundation Batch for 12th Pass": 30000, // ₹30000
   };
 
   // Update course when selectedCourse prop changes

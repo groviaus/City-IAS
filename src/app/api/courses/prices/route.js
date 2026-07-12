@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 // Course prices configuration
 const coursePrices = {
   "FREE Coaching Program": 0,
-  "Foundation Batch for 12th Pass": 5000, // ₹5000
+  "Foundation Batch for 12th Pass": 30000, // ₹30000
 };
 
 export async function GET() {
