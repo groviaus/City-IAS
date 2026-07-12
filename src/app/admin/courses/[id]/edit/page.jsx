@@ -288,7 +288,7 @@ const EditCourse = () => {
                     required
                     value={courseData.title}
                     onChange={(e) => handleInputChange("title", e.target.value)}
-                    placeholder="e.g., FREE Coaching Program"
+                    placeholder="e.g., Coaching Program"
                   />
                 </div>
                 <div>

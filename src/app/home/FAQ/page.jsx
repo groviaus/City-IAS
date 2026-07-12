@@ -13,12 +13,12 @@ export default function FAQ() {
     {
       question: "What is the eligibility criteria for admission?",
       answer:
-        "<strong>Foundation Batch:</strong> Students who have passed 12th grade or undergraduates are eligible. This program is open for all backgrounds and there are no specific stream requirements. Direct admission based on a first-come, first-serve basis with limited seats. <br><br><strong>Free Coaching Program:</strong> Candidates who have completed an undergraduate degree or are currently studying in the final year of an undergraduate program are eligible to apply for the free coaching program for UPSC. Selection will be done via an entrance test (online/offline).",
+        "<strong>Foundation Batch:</strong> Students who have passed 12th grade or undergraduates are eligible. This program is open for all backgrounds and there are no specific stream requirements. Direct admission based on a first-come, first-serve basis with limited seats. <br><br><strong>Coaching Program:</strong> Candidates who have completed an undergraduate degree or are currently studying in the final year of an undergraduate program are eligible to apply for the coaching program for UPSC. Selection will be done via an entrance test (online/offline).",
     },
     {
       question:
-        "How is the FREE coaching program different from the Foundation batch?",
-      answer: `<strong>Free Coaching Program:</strong> Selection for the Free Coaching Program is based on an entrance test for a 10-month duration. The Free Coaching Program consists of classes by expert faculty, mock test series, with a one-time registration fee of Rs. 1,000 after selection. <br><br><strong>Foundation Batch:</strong> Admission to the Foundation Batch is on a first-come, first-serve basis with limited seats. The Foundation Batch is a comprehensive 10-month program with intensive classroom training, personal mentorship, and test series for Rs. 30,000.`,
+        "How is the Coaching Program different from the Foundation batch?",
+      answer: `<strong>Coaching Program:</strong> Selection for the Coaching Program is based on an entrance test for a 10-month duration. The Coaching Program consists of classes by expert faculty, mock test series, with a one-time registration fee of Rs. 1,000 after selection. <br><br><strong>Foundation Batch:</strong> Admission to the Foundation Batch is on a first-come, first-serve basis with limited seats. The Foundation Batch is a comprehensive 10-month program with intensive classroom training, personal mentorship, and test series for Rs. 30,000.`,
     },
     {
       question: "Are hostel facilities mandatory?",
@@ -28,7 +28,7 @@ export default function FAQ() {
     {
       question: "What is the selection process?",
       answer:
-        "Admissions are on a first-come, first-serve basis with limited seats for the Foundation Batch.There’s an entrance test for the Free Coaching Program for final selection.",
+        "Admissions are on a first-come, first-serve basis with limited seats for the Foundation Batch.There’s an entrance test for the Coaching Program for final selection.",
     },
     {
       question: "What study materials are provided?",

@@ -714,7 +714,7 @@ export default function RootLayout({ children }) {
                   name: "What are the IAS coaching fees in Aligarh?",
                   acceptedAnswer: {
                     "@type": "Answer",
-                    text: "City IAS Academy offers competitive fees with FREE coaching program (₹200 application fee + ₹1000 registration) and Foundation Batch for ₹30,000 (10 months). We provide better value compared to other institutes with comprehensive study materials and expert faculty included.",
+                    text: "City IAS Academy offers competitive fees with our Coaching Program (₹300 application fee + ₹1000 registration) and Foundation Batch for ₹30,000 (10 months). We provide better value compared to other institutes with comprehensive study materials and expert faculty included.",
                   },
                 },
                 {
@@ -783,7 +783,7 @@ export default function RootLayout({ children }) {
                   },
                   priceRange: "₹₹",
                   description:
-                    "Leading IAS coaching institute with expert faculty and comprehensive study materials. Offers FREE coaching program and Foundation Batch for ₹30,000.",
+                    "Leading IAS coaching institute with expert faculty and comprehensive study materials. Offers Coaching Program and Foundation Batch for ₹30,000.",
                 },
                 {
                   "@type": "EducationalOrganization",

@@ -9,7 +9,7 @@ import { validateForm } from "@/lib/validation";
  * Per-Course Validation Logic:
  * - Users can register for multiple courses with the same email/phone
  * - Duplicate registrations are only prevented within the same course
- * - This allows users to apply for both "FREE Coaching Program" and "Foundation Batch for 12th Pass"
+ * - This allows users to apply for both "Coaching Program" and "Foundation Batch for 12th Pass"
  * - Database constraints ensure (course, phone) and (course, email) combinations are unique
  */
 export async function POST(request) {

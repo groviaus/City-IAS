@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Target, Play } from "lucide-react";
+import { Target, Play, CheckCircle } from "lucide-react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { NumberTicker } from "@/components/magicui/number-ticker";
@@ -131,7 +131,12 @@ export default function Hero() {
                 whileHover={{ scale: 1.02 }}
               >
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  🎯 FREE Coaching Available!
+                  <div className="flex items-center gap-2">
+                    <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-blue-600">
+                      <CheckCircle className="w-5 h-5" />
+                    </span>
+                    🎯 Best Coaching Available!
+                  </div>
                 </h3>
                 <p className="text-gray-700">
                   Yes, you read that right.{" "}

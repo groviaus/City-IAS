@@ -19,7 +19,7 @@ export default function Footer() {
     {
       title: "Programs",
       links: [
-        { name: "FREE Coaching", href: "#" },
+        { name: "Coaching", href: "#" },
         { name: "Foundation Batch", href: "#" },
         { name: "Test Series", href: "#" },
         { name: "Mock Interviews", href: "#" },

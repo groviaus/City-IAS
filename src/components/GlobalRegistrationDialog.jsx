@@ -108,13 +108,13 @@ function GlobalRegistrationDialog({
   const [applicationUpdateTrigger, setApplicationUpdateTrigger] = useState(0);
 
   const courseOptions = [
-    "FREE Coaching Program",
+    "Coaching Program",
     "Foundation Batch for 12th Pass",
   ];
 
   // Course prices configuration
   const coursePrices = {
-    "FREE Coaching Program": 300,
+    "Coaching Program": 300,
     "Foundation Batch for 12th Pass": 3000, // ₹3000
   };
 

@@ -21,7 +21,7 @@ export default function Courses() {
   const { openDialog } = useRegistrationDialog();
   const fallbackCourses = [
     {
-      title: "FREE Coaching Program",
+      title: "Coaching Program",
       subtitle: "Prelims + Mains",
       price: 200,
       registration: 1000,

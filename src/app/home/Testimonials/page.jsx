@@ -15,7 +15,7 @@ export default function Testimonials() {
       role: "IAS Officer",
       batch: "2023",
       content:
-        "City IAS Academy transformed my dream into reality. The FREE coaching program gave me the foundation I needed, and Mr. Khan's guidance was invaluable throughout my journey.",
+        "City IAS Academy transformed my dream into reality. The coaching program gave me the foundation I needed, and Mr. Khan's guidance was invaluable throughout my journey.",
       rating: 5,
       image:
         "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
