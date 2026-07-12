@@ -145,7 +145,7 @@ export default function Hero() {
                   </span>{" "}
                   coaching at{" "}
                   <span className="text-green-500 font-bold   animate-pulse mt-2">
-                    ZERO COST !
+                    AFFORDABLE COST !
                   </span>
                   <br />
                   Only{" "}
