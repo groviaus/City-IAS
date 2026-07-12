@@ -102,6 +102,7 @@ function GlobalRegistrationDialog({
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
+  const [paymentError, setPaymentError] = useState(null);
   const [currentApplicationId, setCurrentApplicationId] = useState(null);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const [applicationUpdateTrigger, setApplicationUpdateTrigger] = useState(0);
@@ -278,9 +279,10 @@ function GlobalRegistrationDialog({
 
   // Handle course selection
   const handleCourseSelect = (course) => {
-    // Check if user already has an application for this course
-    if (hasAppliedForCourse(course)) {
-      alert(`You have already applied for ${course}. Please select a different course.`);
+    // Check if user already has a completed application for this course
+    const status = hasAppliedForCourse(course);
+    if (status === "paid" || status === "approved") {
+      alert(`You have already successfully applied for ${course}. Please select a different course.`);
       return;
     }
 
@@ -358,14 +360,19 @@ function GlobalRegistrationDialog({
         },
         (error) => {
           // Payment failed or user closed dialog
-          console.error("Payment failed:", error);
-          // Just reset status to null so they can see the form and try again
-          setSubmitStatus(null);
+          if (error.message === "Payment cancelled") {
+            console.log("User cancelled the payment dialog");
+            setPaymentError("Payment was cancelled. You can try again below.");
+          } else {
+            console.error("Payment failed:", error);
+            setPaymentError("Payment failed. Please try again.");
+          }
+          // Do not change submitStatus so we don't break the current UI view
         }
       );
     } catch (error) {
       console.error("Payment error:", error);
-      setSubmitStatus("error");
+      setPaymentError("An error occurred during payment.");
     } finally {
       setIsProcessingPayment(false);
     }
@@ -431,8 +438,9 @@ function GlobalRegistrationDialog({
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Validate all fields
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+    setPaymentError(null);
     const newErrors = {};
     let hasErrors = false;
 
@@ -693,6 +701,18 @@ function GlobalRegistrationDialog({
                 </div>
 
                 <div className="space-y-3">
+                  {/* Show Payment Error if exists */}
+                  {paymentError && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg flex items-start space-x-2 text-left mb-3"
+                    >
+                      <XCircle className="h-4 w-4 text-yellow-600 mt-0.5 shrink-0" />
+                      <span className="text-yellow-800 text-sm">{paymentError}</span>
+                    </motion.div>
+                  )}
+
                   {/* Option 1: Register for Another Course */}
                   <Button
                     onClick={() => {
@@ -718,7 +738,10 @@ function GlobalRegistrationDialog({
                   {/* Option 2: Proceed to Payment (only for paid courses and pending status) */}
                   {coursePrices[formData.course] > 0 && submitStatus !== "paid" ? (
                     <Button
-                      onClick={handleDirectPayment}
+                      onClick={() => {
+                        setPaymentError(null);
+                        handleDirectPayment();
+                      }}
                       disabled={isProcessingPayment}
                       className="w-full bg-green-600 hover:bg-green-700 text-white"
                     >
@@ -840,6 +863,20 @@ function GlobalRegistrationDialog({
                     <XCircle className="h-5 w-5 text-red-600" />
                     <span className="text-red-800 font-medium">
                       Please check the form and try again.
+                    </span>
+                  </motion.div>
+                )}
+
+                {paymentError && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg flex items-center space-x-3"
+                  >
+                    <XCircle className="h-5 w-5 text-yellow-600" />
+                    <span className="text-yellow-800 font-medium">
+                      {paymentError}
                     </span>
                   </motion.div>
                 )}
