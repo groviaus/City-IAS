@@ -129,7 +129,7 @@ function GlobalRegistrationDialog({
   useEffect(() => {
     if (isOpen && typeof window !== 'undefined') {
       // Version control for localStorage to clear legacy states
-      const CURRENT_APP_VERSION = "v2.1"; // Increment this to force a reset for all users
+      const CURRENT_APP_VERSION = "v2.2"; // Increment this to force a reset for all users
       if (localStorage.getItem("app_version") !== CURRENT_APP_VERSION) {
         localStorage.removeItem("pendingApplications");
         localStorage.setItem("app_version", CURRENT_APP_VERSION);
@@ -595,8 +595,16 @@ function GlobalRegistrationDialog({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto scrollbar-hide">
+    <Dialog open={isOpen} onOpenChange={onOpenChange} modal={!isProcessingPayment}>
+      <DialogContent 
+        className="sm:max-w-md max-h-[90vh] overflow-y-auto scrollbar-hide"
+        onInteractOutside={(e) => {
+          // Do not close the dialog if the user is interacting with Razorpay
+          if (isProcessingPayment || e.target.closest('.razorpay-container')) {
+            e.preventDefault();
+          }
+        }}
+      >
         <motion.div
           initial={{ opacity: 0, y: -50, scale: 0.9 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
