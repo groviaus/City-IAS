@@ -8,7 +8,7 @@ import mysql from "mysql2/promise";
 export async function GET() {
   try {
     const connection = await mysql.createConnection({
-      host: process.env.DB_HOST || "srv1875.hstgr.io",
+      host: process.env.DB_HOST || "srv1668.hstgr.io",
       user: process.env.DB_USER || "u181984996_cityiasacademy",
       password: process.env.DB_PASSWORD || "D=a9whhW7@",
       database: process.env.DB_NAME || "u181984996_cityiasacademy",
@@ -124,7 +124,7 @@ export async function POST(request) {
     }
 
     const connection = await mysql.createConnection({
-      host: process.env.DB_HOST || "srv1875.hstgr.io",
+      host: process.env.DB_HOST || "srv1668.hstgr.io",
       user: process.env.DB_USER || "u181984996_cityiasacademy",
       password: process.env.DB_PASSWORD || "D=a9whhW7@",
       database: process.env.DB_NAME || "u181984996_cityiasacademy",

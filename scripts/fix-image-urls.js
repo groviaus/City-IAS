@@ -2,7 +2,7 @@ const mysql = require("mysql2/promise");
 
 // Configuration from src/lib/db.js logic
 const dbConfig = {
-  host: process.env.DB_HOST || "srv1875.hstgr.io",
+  host: process.env.DB_HOST || "srv1668.hstgr.io",
   user: process.env.DB_USER || "u181984996_cityiasacademy",
   password: process.env.DB_PASSWORD || "D=a9whhW7@",
   database: process.env.DB_NAME || "u181984996_cityiasacademy",
