@@ -36,7 +36,7 @@ export async function POST(request) {
 
     // Create new connection for serverless
     const connection = await mysql.createConnection({
-      host: process.env.DB_HOST || "srv1668.hstgr.io",
+      host: "srv1668.hstgr.io",
       user: process.env.DB_USER || "u181984996_cityiasacademy",
       password: process.env.DB_PASSWORD || "D=a9whhW7@",
       database: process.env.DB_NAME || "u181984996_cityiasacademy",
@@ -400,7 +400,7 @@ export async function GET(request) {
     // If query parameters are provided, check for existing applications
     if (email && phone) {
       const connection = await mysql.createConnection({
-        host: process.env.DB_HOST || "srv1668.hstgr.io",
+        host: "srv1668.hstgr.io",
         user: process.env.DB_USER || "u181984996_cityiasacademy",
         password: process.env.DB_PASSWORD || "D=a9whhW7@",
         database: process.env.DB_NAME || "u181984996_cityiasacademy",
@@ -456,7 +456,7 @@ export async function GET(request) {
 
     // Default health check if no query parameters
     const connection = await mysql.createConnection({
-      host: process.env.DB_HOST || "srv1668.hstgr.io",
+      host: "srv1668.hstgr.io",
       user: process.env.DB_USER || "u181984996_cityiasacademy",
       password: process.env.DB_PASSWORD || "D=a9whhW7@",
       database: process.env.DB_NAME || "u181984996_cityiasacademy",
@@ -484,7 +484,7 @@ export async function GET(request) {
     return NextResponse.json(
       {
         success: false,
-        message: "Database connection failed",
+        message: "Database connection failed TEST",
         error: error.message,
         code: error.code,
         host: process.env.DB_HOST,
