@@ -485,6 +485,10 @@ export async function GET(request) {
       {
         success: false,
         message: "Database connection failed",
+        error: error.message,
+        code: error.code,
+        host: process.env.DB_HOST,
+        user: process.env.DB_USER
       },
       { status: 503 }
     );
