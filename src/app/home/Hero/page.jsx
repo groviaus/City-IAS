@@ -152,7 +152,7 @@ export default function Hero() {
                   <span className="text-green-500 font-bold sm:text-xl px-[2px]  animate-pulse mt-2">
                     ₹{entranceFee}
                   </span>{" "}
-                  Entrance Test fee.
+                  Entrance Test Fee.
                 </p>
               </motion.div>
             </div>
