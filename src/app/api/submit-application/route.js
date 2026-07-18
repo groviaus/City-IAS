@@ -37,9 +37,9 @@ export async function POST(request) {
     // Create new connection for serverless
     const connection = await mysql.createConnection({
       host: "srv1668.hstgr.io",
-      user: "u181984996_cityiasacademy",
-      password: "D=a9whhW7@",
-      database: "u181984996_cityiasacademy",
+      user: "u181984996_city_ias",
+      password: "Mquh*$kz+rv87PF",
+      database: "u181984996_city_ias",
       port: process.env.DB_PORT || 3306,
       connectTimeout: 60000,
       acquireTimeout: 60000,
