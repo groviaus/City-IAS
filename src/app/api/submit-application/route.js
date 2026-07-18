@@ -36,10 +36,10 @@ export async function POST(request) {
 
     // Create new connection for serverless
     const connection = await mysql.createConnection({
-      host: process.env.DB_HOST || "srv1668.hstgr.io",
-      user: process.env.DB_USER || "u181984996_cityiasacademy",
-      password: process.env.DB_PASSWORD || "D=a9whhW7@",
-      database: process.env.DB_NAME || "u181984996_cityiasacademy",
+      host: "srv1668.hstgr.io",
+      user: "u181984996_cityiasacademy",
+      password: "D=a9whhW7@",
+      database: "u181984996_cityiasacademy",
       port: process.env.DB_PORT || 3306,
       connectTimeout: 60000,
       acquireTimeout: 60000,
